@@ -17,7 +17,7 @@ dependency=(
     "sudo apt-get install python3"
     "sudo apt-get install python3-pip"
     "sudo apt-get install python3-tk"
-    "sudo apt-get install python-3pil.imagetk"
+    "sudo apt-get install python3-pil.imagetk"
     "sudo pip3 install pygame"
     "sudo pip3 install box2d-py"
     )
