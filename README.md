@@ -14,6 +14,14 @@ Into the folder that contains the simultaror
 ```bash
 sudo chmod +x install_dependences.sh
 ```
+
+* Run the script install_dependences
+
+>Ubuntu:
+
+```bash 
+./install_dependences.sh
+```
     
 * Execute the main script:
 
