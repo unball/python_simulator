@@ -7,7 +7,7 @@ NO_COLOR='\033[0m'
 
 result(){
     if [ $? == 0 ]; then
-        printf "${GREEN}######### ---- Sucess ---- #########${NO_COLOR}\n\n"
+        printf "${GREEN}######### ---- Success ---- #########${NO_COLOR}\n\n"
     else
         printf "${RED}######### ---- Failure ---- #########${NO_COLOR}\n\n" 
     fi
