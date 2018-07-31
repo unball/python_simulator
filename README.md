@@ -5,7 +5,7 @@ Simulator is a open-source executable made with python language to simulate the 
 -> Simulator was create using the [Box-2D](https://github.com/pybox2d/pybox2d), [pygame](https://www.pygame.org/news), [tkinter](https://docs.python.org/3/library/tk.html) libraries.
 
 ## Installation ##
-Into the folder that contains the simultaror
+Into the folder that contains the simulator
 
 * Make executable the script install_dependences:
 
