@@ -14,13 +14,14 @@ result(){
 } 
 
 dependency=(
-    "sudo apt-get install python3"
-    "sudo apt-get install python3-pip"
-    "sudo apt-get install python3-tk"
-    "sudo apt-get install python3-pil.imagetk"
-    "apt-get install swig3.0"
-    "sudo apt-get install build-essential libssl-dev libffi-dev python3-dev"
-    "sudo apt-get install python3-setuptools"
+    "sudo apt-get --force-yes install python3"
+    "sudo apt-get --force-yes install python3-pip"
+    "sudo apt-get --force-yes install python3-tk"
+    "sudo apt-get --force-yes install python3-pil.imagetk"
+    "sudo apt-get --force-yes install swig"
+    "sudo apt-get --force-yes install swig3.0"
+    "sudo apt-get --force-yes install build-essential libssl-dev libffi-dev python3-dev"
+    "sudo apt-get --force-yes install python3-setuptools"
     "sudo pip3 install pygame"
     "sudo pip3 install box2d-py"
     )
