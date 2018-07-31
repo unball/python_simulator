@@ -103,10 +103,10 @@ class Field(object):
             self.robot_allie = [YELLOW, int(kargs.pop('n_allies')), 'allie']
         else:
             self.robot_allie = [BLUE, int(kargs.pop('n_allies')), 'allie']
-        self.create_robots(self.robot_allie)
+        self.robot_allie = self.create_robots(self.robot_allie)
 
         self.robot_oppo = [OPPON_COLOR, int(kargs.pop('n_opponents')), 'oppon']
-        self.create_robots(self.robot_oppo)
+        self.robot_oppo = self.create_robots(self.robot_oppo)
         
         pygame.display.init()
         self.bg_color = pygame.Color(0,0,0)
@@ -126,12 +126,11 @@ class Field(object):
             # Note: Python 3.x will enforce that pygame get the integers it requests,
             #       and it will not convert from float.
         circleShape.draw = my_draw_circle
-
+        self.i = 20
         self.game()
 
     def game(self):
         self.screen.fill(self.bg_color)
-
         self.draw_lines_and_circle() # draw lines in field
 
         # Make Box2D simulate the physics of our world for one step.
@@ -140,11 +139,16 @@ class Field(object):
             for fixture in body.fixtures:
                 fixture.shape.draw(body, fixture)
 
+        #self.i += 0.05
+        #self.robot_allie[0].item.linearVelocyti = self.i#, self.i
+        #self.robot_allie[0].item.angle = self.i
+
+
         # Make Box2D simulate the physics of our world for one step.
         self.world.Step(TIME_STEP, 10, 10)
         pygame.display.flip()
 
-        self.frame.after(5, self.game)
+        self.frame.after(5, self.game) # after 5 millisecond
 
     def create_walls(self):
         for x in self.walls.pos_and_tam:
@@ -169,8 +173,10 @@ class Field(object):
             body = self.world.CreateDynamicBody(position=self.pos_init_rob[name][x], 
                                                 angle=15)
             body.userData = name
-            robot[x].item = body.CreatePolygonFixture(box=(ROBOT_W/2, ROBOT_H/2), density=1, 
+            robot[x].item = body
+            body.CreatePolygonFixture(box=(ROBOT_W/2, ROBOT_H/2), density=1, 
                                                   friction=0.3, restitution=0.2)
+        return robot
 
     def draw_lines_and_circle(self):
         lines = (((FIELD_W/2, 0), (FIELD_W/2, FIELD_H)),                # linha de meio campo
