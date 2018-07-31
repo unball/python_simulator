@@ -33,7 +33,6 @@ dependency=(
     "rm pybox2d"
     )
 
-
 printf "${BLUE}######### ---- Updating packages... ---- #########${NO_COLOR}\n"
 sudo apt-get update
 result
