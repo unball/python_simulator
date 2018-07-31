@@ -131,6 +131,9 @@ class Field(object):
 
     def game(self):
         self.screen.fill(self.bg_color)
+
+        self.draw_lines_and_circle() # draw lines in field
+
         # Make Box2D simulate the physics of our world for one step.
         # Draw the world
         for body in self.world.bodies:
@@ -168,6 +171,26 @@ class Field(object):
             body.userData = name
             robot[x].item = body.CreatePolygonFixture(box=(ROBOT_W/2, ROBOT_H/2), density=1, 
                                                   friction=0.3, restitution=0.2)
+
+    def draw_lines_and_circle(self):
+        lines = (((FIELD_W/2, 0), (FIELD_W/2, FIELD_H)),                # linha de meio campo
+                 ((FIELD_W-(12*PPM), 0), (FIELD_W-(12*PPM), FIELD_H)),  # linha de meta direita
+                 ((12*PPM, 0), (12*PPM, FIELD_H)),                      # linha de meta esquerda
+                 ((12*PPM, (FIELD_H/2) - (35*PPM)), (27*PPM, (FIELD_H/2) - (35*PPM))),  # linha de
+                 ((12*PPM, (FIELD_H/2) + (35*PPM)), (27*PPM, (FIELD_H/2) + (35*PPM))),  # tiro penal 
+                 ((27*PPM, (FIELD_H/2) - (35*PPM)), (27*PPM, (FIELD_H/2) + (35*PPM))),  # esquerda
+                 ((FIELD_W-(12*PPM), (FIELD_H/2) - (35*PPM)), (FIELD_W-(27*PPM), (FIELD_H/2) - (35*PPM))), # linha de
+                 ((FIELD_W-(12*PPM), (FIELD_H/2) + (35*PPM)), (FIELD_W-(27*PPM), (FIELD_H/2) + (35*PPM))), # tiro penal
+                 ((FIELD_W-(27*PPM), (FIELD_H/2) - (35*PPM)), (FIELD_W-(27*PPM), (FIELD_H/2) + (35*PPM))), # direita
+                 )
+
+        # grande lua
+        pygame.draw.arc(self.screen, WHITE, (int((FIELD_W/2) - (BIG_FIELD_RADIUS*PPM)), 
+                        int((FIELD_H/2) - (BIG_FIELD_RADIUS*PPM)), BIG_FIELD_RADIUS*PPM*2, 
+                        BIG_FIELD_RADIUS*PPM*2), 0, 8)
+
+        for x in lines:
+            pygame.draw.line(self.screen, WHITE, x[0], x[1])
 
     def destroy(self):
         """Finish the pygame when quit button is pressed"""

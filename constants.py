@@ -17,12 +17,15 @@ TIME_STEP = 1.0 / TARGET_FPS
 # --- Units (cm) ---
 ROBOT_W = 7.5 
 ROBOT_H = 7.5         
-BALL_RADIUS = 2.135       
+BALL_RADIUS = 2.135
+BIG_FIELD_RADIUS = 20    
+SMALL_FIELD_RADIUS = 10
 
 # --- Colors ---
 ORANGE = (255,165,0)
 BLUE = (0,0,255)
 YELLOW = (255,255,0)
+WHITE = (255, 255, 255)
 OPPON_COLOR = (123, 122, 6)
 BACKGROUND_COLOR = '#e2873c'
 UnBall_blue  = (3, 63, 118) 
