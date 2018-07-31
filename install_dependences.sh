@@ -25,6 +25,12 @@ dependency=(
     "sudo pip3 install box2d-kengz"
     "sudo pip3 install pygame"
     "sudo pip3 install box2d-py"
+    "git clone https://github.com/pybox2d/pybox2d"
+    "cd pybox2d"
+    "python setup.py build"
+    "sudo python setup.py install"
+    "cd .."
+    "rm pybox2d"
     )
 
 
