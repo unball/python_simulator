@@ -12,7 +12,7 @@ Into the folder that contains the simultaror
 >Ubuntu:
     
 ```bash
-sudo chmod +x install_dependences.sh
+chmod +x install_dependences.sh
 ```
 
 * Run the script install_dependences
@@ -20,7 +20,7 @@ sudo chmod +x install_dependences.sh
 >Ubuntu:
 
 ```bash 
-./install_dependences.sh
+sudo ./install_dependences.sh
 ```
     
 * Execute the main script:
