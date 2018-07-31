@@ -22,9 +22,11 @@ dependency=(
     "sudo apt-get --yes --force-yes install swig3.0"
     "sudo apt-get --yes --force-yes install build-essential libssl-dev libffi-dev python3-dev"
     "sudo apt-get --yes --force-yes install python3-setuptools"
+    "sudo pip3 install box2d-kengz"
     "sudo pip3 install pygame"
     "sudo pip3 install box2d-py"
     )
+
 
 printf "${BLUE}######### ---- Updating packages... ---- #########${NO_COLOR}\n"
 sudo apt-get update
