@@ -11,8 +11,9 @@ FIELD_W = (1743/2)  # (1) Width of the screen pygame with the Box2D
 FIELD_H = (1341/2)  # (2) Height of the screen pygame with the Box2D
                     # Both (1) and (2) don't interfere in the bodies inside the field
 
+#TARGET_FPS = 60
 TARGET_FPS = 60
-TIME_STEP = 1.0 / TARGET_FPS
+TIME_STEP = 0.01 / TARGET_FPS # What does mean this part ?
 
 # --- Units (cm) ---
 ROBOT_W = 7.5 

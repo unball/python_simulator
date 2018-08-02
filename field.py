@@ -6,7 +6,7 @@
     used into the Field class.
     Based on 'https://github.com/pybox2d/pybox2d/blob/master/examples/simple/simple_02.py'
 """
-
+import math 
 from constants import *
 import sys
 
@@ -139,8 +139,14 @@ class Field(object):
             for fixture in body.fixtures:
                 fixture.shape.draw(body, fixture)
 
-        #self.i += 0.05
-        #self.robot_allie[0].item.linearVelocyti = self.i#, self.i
+        self.i = 0
+        self.vel_lin = (0.05, 6)
+        self.vel_ang = 0.01
+
+        self.robot_allie[0].item.position += self.vel_lin
+        #self.robot_allie[0].item.angle += self.vel_ang
+        
+        #print(self.robot_allie[0].item.position)
         #self.robot_allie[0].item.angle = self.i
 
 
@@ -148,7 +154,7 @@ class Field(object):
         self.world.Step(TIME_STEP, 10, 10)
         pygame.display.flip()
 
-        self.frame.after(5, self.game) # after 5 millisecond
+        self.frame.after(1, self.game) # after 5 millisecond
 
     def create_walls(self):
         for x in self.walls.pos_and_tam:
