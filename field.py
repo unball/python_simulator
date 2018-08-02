@@ -140,11 +140,11 @@ class Field(object):
                 fixture.shape.draw(body, fixture)
 
         self.i = 0
-        self.vel_lin = (0.05, 6)
+        self.vel_lin = (0.05, 0.06)
         self.vel_ang = 0.01
 
         self.robot_allie[0].item.position += self.vel_lin
-        #self.robot_allie[0].item.angle += self.vel_ang
+        self.robot_allie[0].item.angle += self.vel_ang
         
         #print(self.robot_allie[0].item.position)
         #self.robot_allie[0].item.angle = self.i
