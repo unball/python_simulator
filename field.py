@@ -6,9 +6,13 @@
     used into the Field class.
     Based on 'https://github.com/pybox2d/pybox2d/blob/master/examples/simple/simple_02.py'
 """
+
+import rospy
+from communication.msg import comm_msg
 import math 
 from constants import *
 import sys
+from communication_ros import *
 
 try:
     from PIL import Image as Img
@@ -40,7 +44,6 @@ class Ball(object):
 
 class Robot(object):
     """docstring for Ball"""
-
     def __init__(self):
         self.item = ''
         self.pos_x = ''
@@ -56,7 +59,14 @@ class Walls(object):
                             ((6, 24.5), (6,22.5)), ((1, 67), (1,20)),
                             ((6, 109.5), (6,22.5)), ((87, 133), (87,1)))
         self.color = UnBall_blue
- 
+
+
+
+# Class decorator, see: 
+# https://pt.stackoverflow.com/questions/23628/como-funcionam-decoradores-em-python
+# book: Luiz Eduardo Borges. Python para desenvolvedores, 2º ed. pg: 139
+
+@add_communication_with_system 
 class Field(object):
     """ *args - argumentos sem nome (lista)
         **kargs - argumentos com nome (dicionário)
@@ -127,7 +137,7 @@ class Field(object):
             #       and it will not convert from float.
         circleShape.draw = my_draw_circle
         self.i = 20
-        self.game()
+        #self.game()
 
     def game(self):
         self.screen.fill(self.bg_color)
@@ -154,7 +164,7 @@ class Field(object):
         self.world.Step(TIME_STEP, 10, 10)
         pygame.display.flip()
 
-        self.frame.after(1, self.game) # after 5 millisecond
+        #self.frame.after(1, self.game) # after 1 millisecond
 
     def create_walls(self):
         for x in self.walls.pos_and_tam:

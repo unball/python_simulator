@@ -23,18 +23,20 @@ dependency=(
     "sudo apt-get --yes --force-yes install build-essential libssl-dev libffi-dev python3-dev"
     "sudo apt-get --yes --force-yes install python3-setuptools"
     "sudo pip3 install pygame"
-    "sudo pip3 uninstall Box2D-kengz"
     "sudo pip3 install Box2D-kengz"
     "git clone https://github.com/pybox2d/pybox2d"
     "cd pybox2d"
     "sudo pip3 install -e ."
-    #"sudo pip3 install box2d-py"
+    "sudo pip3 install catkin_pkg"
+    "sudo pip3 install rospkg"
     #"sudo python setup.py install"
     )
 
 printf "${BLUE}######### ---- Updating packages... ---- #########${NO_COLOR}\n"
 sudo apt-get update
 result
+
+sudo pip3 uninstall Box2D-kengz
 
 for i in "${dependency[@]}"
 do
