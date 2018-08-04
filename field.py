@@ -137,7 +137,7 @@ class Field(object):
             #       and it will not convert from float.
         circleShape.draw = my_draw_circle
         self.i = 20
-        #self.game()
+        self.game()
 
     def game(self):
         self.screen.fill(self.bg_color)
@@ -164,7 +164,7 @@ class Field(object):
         self.world.Step(TIME_STEP, 10, 10)
         pygame.display.flip()
 
-        #self.frame.after(1, self.game) # after 1 millisecond
+        self.frame.after(1, self.game) # after 1 millisecond
 
     def create_walls(self):
         for x in self.walls.pos_and_tam:
