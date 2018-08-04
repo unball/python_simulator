@@ -9,7 +9,6 @@
 #from resolution import *
 from simulator import *
 
-
 def main():
     instance = Tk()
     Simulator(instance)

@@ -23,14 +23,14 @@ def add_communication_with_system(cls):
             self.pub1 = rospy.Publisher('robots_speeds', Float32, queue_size=1)
 
             #rate = rospy.Rate(30)
-            self.iterador()   
             self.j = 0
+            self.iterador()   
 
         def iterador(self):
                 if rospy.is_shutdown():               # Finish the communication if ctrl+c
                     return
                 self.j += 1
-                self.frame.after(2000, self.iterador) # 2 seconds
+                self.frame.after(2000, self.iterador) # 2000 milliseconds = 2 seconds
                 self.pub1.publish(self.j)
 
     return Run_ros
