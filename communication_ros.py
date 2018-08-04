@@ -12,8 +12,8 @@ def add_communication_with_system(cls):
     """
     class Run_ros(cls):
         def __init__(self, *arg, **kargs):
-            cls.__init__(self, *arg, **kargs)            
             try:
+                cls.__init__(self, *arg, **kargs)            
                 self.run_communication()
             except rospy.ROSInterruptException:
                 pass
@@ -23,14 +23,14 @@ def add_communication_with_system(cls):
             self.pub1 = rospy.Publisher('robots_speeds', Float32, queue_size=1)
 
             #rate = rospy.Rate(30)
-            self.i = 0
             self.iterador()   
+            self.j = 0
 
         def iterador(self):
-                if rospy.is_shutdown():
+                if rospy.is_shutdown():               # Finish the communication if ctrl+c
                     return
-                self.frame.after(2000, self.iterador)
-                self.pub1.publish(self.i)
-                self.i += 1
+                self.j += 1
+                self.frame.after(2000, self.iterador) # 2 seconds
+                self.pub1.publish(self.j)
 
     return Run_ros
