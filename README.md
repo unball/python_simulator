@@ -23,7 +23,7 @@ chmod +x install_dependences.sh
 sudo ./install_dependences.sh
 ```
 
-* Make sure roscore is running. If roscore isn't running
+* Make sure [roscore](http://wiki.ros.org/roscore) is running. If roscore isn't running
 >Ubuntu:
 
 ```bash 
