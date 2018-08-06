@@ -8,7 +8,7 @@
 """
 
 import rospy
-from communication.msg import comm_msg
+#from communication.msg import comm_msg
 import math 
 from constants import *
 import sys
