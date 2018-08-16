@@ -1,6 +1,6 @@
 <?xml version="1.0"?>
 <package format="2">
-  <name>simulator</name>
+  <name>python_simulator</name>
   <version>0.0.0</version>
   <description>The simulator package</description>
 
