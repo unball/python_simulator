@@ -58,6 +58,8 @@
 
 
   <!-- The export tag contains other, unspecified, tags -->
+  <build_depend>message_generation</build_depend>
+  <exec_depend>message_runtime</exec_depend>
   <export>
     <!-- Other tools can request additional information be placed here -->
 

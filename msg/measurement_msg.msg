@@ -1,9 +1,0 @@
-float32[6] x
-float32[6] y
-float32[6] th
-float32 ball_x
-float32 ball_y
-float32 ball_x_pred
-float32 ball_y_pred
-float32 ball_x_walls
-float32 ball_y_walls
