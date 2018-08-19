@@ -13,7 +13,7 @@ FIELD_H = (1341/2)  # (2) Height of the screen pygame with the Box2D
 
 #TARGET_FPS = 60
 TARGET_FPS = 60
-TIME_STEP = 0.01 / TARGET_FPS # What does mean this part ?
+TIME_STEP = 0.01 / TARGET_FPS # What does it mean this part ?
 
 # --- Units (cm) ---
 ROBOT_W = 7.5 

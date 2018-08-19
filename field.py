@@ -33,27 +33,56 @@ except ImportError as excessao:
     print(excessao)
     sys.exit()
 
+
+class Null(object):
+    def __init__(self):
+        pass
+
+class Vector(object):
+    def __init__(self, angle, norm):
+        self.angle = angle
+        self.norm = norm
+
+    @property
+    def coord_x(self):
+        return self.angle*math.cos(self.norm)
+
+    @property
+    def coord_y(self):
+        return self.angle*math.sin(self.norm)
+
+
 class Ball(object):
-    """docstring for Ball"""
     def __init__(self):
         self.item = ''
         self.name = 'ball'
         self.pos_init  = (174/2, 134/2) # (x, y)
-        self.color = ORANGE  
+        self.color = ORANGE 
+        self.pos_xy = ''     
+        
 
 class Robot(object):
-    """docstring for Ball"""
+    length_robot = 7.5 # cm
+
     def __init__(self):
-        self.item = ''
-        self.pos_x = ''
-        self.pos_y = ''        
+        self.item = Null()
+        self.item.angle = 0
+        self.pos_xy = ''
+        self.vel_ang = ''
+        self.vel_lin = ''
+
+    def convert_vel_wheels_for_lin_and_ang(self, vel_road_LR = [0, 0]):
+        vel_lin = Vector((vel_road_LR[0] + vel_road_LR[1]) / 2, self.item.angle)
+        
+        self.vel_lin = [vel_lin.coord_x, vel_lin.coord_y]
+        self.vel_ang = (vel_road_LR[1] - vel_road_LR[0]) / self.__class__.length_robot
+                
 
 class Walls(object):
-    """docstring for Wall"""
     def __init__(self):
         self.item = ''
         self.name = 'wall'
-        self.pos_and_tam = (((168, 109.5), (6,22.5)), ((173, 67), (1,20)),
+        self.pos_and_length = (((168, 109.5), (6,22.5)), ((173, 67), (1,20)),
                             ((168, 24.5), (6,22.5)), ((87, 1), (87,1)), 
                             ((6, 24.5), (6,22.5)), ((1, 67), (1,20)),
                             ((6, 109.5), (6,22.5)), ((87, 133), (87,1)))
@@ -92,11 +121,9 @@ class Field(object):
             'oppon': ((104, 87), (104, 67), (104, 47))
         }
 
-        # A static body to hold the wall
         self.walls = Walls()
         self.create_walls()
         
-        # Create some dynamic bodies
         self.ball = Ball()
         self.create_ball()
 
@@ -107,7 +134,6 @@ class Field(object):
             'oppon': (127, 127, 12) 
         }
 
-        # Change the list according to the paramater received
         if kargs.pop('color_team') == 'Yellow':
             self.robot_allie = [YELLOW, int(kargs.pop('n_allies')), 'allie']
         else:
@@ -148,25 +174,14 @@ class Field(object):
             for fixture in body.fixtures:
                 fixture.shape.draw(body, fixture)
 
-        self.i = 0
-        self.vel_lin = (0.05, 0.06)
-        self.vel_ang = 0.01
-
-        self.robot_allie[0].item.position += self.vel_lin
-        self.robot_allie[0].item.angle += self.vel_ang
-        
-        #print(self.robot_allie[0].item.position)
-        #self.robot_allie[0].item.angle = self.i
-
-
         # Make Box2D simulate the physics of our world for one step.
         self.world.Step(TIME_STEP, 10, 10)
         pygame.display.flip()
 
-        self.frame.after(1, self.game) # after 1 millisecond
+        self.frame.after(1, self.game)
 
     def create_walls(self):
-        for x in self.walls.pos_and_tam:
+        for x in self.walls.pos_and_length:
             wall = self.world.CreateStaticBody(
             position=x[0],
             shapes=polygonShape(box=x[1]) 
@@ -176,7 +191,8 @@ class Field(object):
     def create_ball(self):
         body = self.world.CreateDynamicBody(position=self.ball.pos_init)
         body.userData = self.ball.name
-        self.ball.item = body.CreateCircleFixture(radius=BALL_RADIUS, density=1, 
+        self.ball.item = body
+        body.CreateCircleFixture(radius=BALL_RADIUS, density=1, 
                                                   friction=0.3, restitution=0.8)
     
     def create_robots(self, robot):
@@ -186,11 +202,12 @@ class Field(object):
         robot = [Robot() for x in range(n)]
         for x in range(n):
             body = self.world.CreateDynamicBody(position=self.pos_init_rob[name][x], 
-                                                angle=15)
+                                                angle=1.5)
             body.userData = name
             robot[x].item = body
             body.CreatePolygonFixture(box=(ROBOT_W/2, ROBOT_H/2), density=1, 
                                                   friction=0.3, restitution=0.2)
+
         return robot
 
     def draw_lines_and_circle(self):
