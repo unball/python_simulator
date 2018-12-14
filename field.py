@@ -7,7 +7,6 @@
     Based on 'https://github.com/pybox2d/pybox2d/blob/master/examples/simple/simple_02.py'
 """
 
-import rospy
 import math 
 from constants import *
 import sys
