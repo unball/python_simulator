@@ -23,17 +23,10 @@ chmod +x install_dependences.sh
 sudo ./install_dependences.sh
 ```
 
-* Make sure [roscore](http://wiki.ros.org/roscore) is running. If roscore isn't running
->Ubuntu:
-
-```bash 
-roscore
-```
-
-* Execute the main script:
+* Execute the folder catkin_ws_unball run the script:
 
 > Ubuntu: 
 
 ```bash 
-python3 main.py
+./run_strategy_and_simulator.sh
 ```
