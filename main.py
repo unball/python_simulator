@@ -1,4 +1,4 @@
-#!usr/bin/env python3
+#!/usr/bin/env python3
 #-*- coding: utf-8 -*-
 """
     @author: Hiago dos Santos (hiagop22@gmail.com)

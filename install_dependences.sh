@@ -72,3 +72,5 @@ else
     sudo rm -r "$PYBOXDIR/"
     install-necessary pybox2d[@]
 fi
+
+sudo chmod +x main.py
