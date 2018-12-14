@@ -23,7 +23,7 @@ chmod +x install_dependences.sh
 sudo ./install_dependences.sh
 ```
 
-* Execute the folder catkin_ws_unball run the script:
+* Into the folder catkin_ws_unball run the script:
 
 > Ubuntu: 
 
