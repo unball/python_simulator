@@ -51,7 +51,7 @@ add_message_files(
    FILES
    robots_speeds_msg.msg
    VisionMessage.msg
-   wheels_speeds_msg
+   wheels_speeds_msg.msg
  )
 
 ## Generate services in the 'srv' folder

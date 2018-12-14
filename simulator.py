@@ -13,9 +13,11 @@ from field import * # Contain the Classes of the objects in field and tkinter
 class Simulator(object):
     """UnBall Simulator"""
     def __init__(self, instance):
+        self.directory = os.getcwd()
+        self.directory
         self.instance = instance
         self.instance.title('UnBall Simulator')                               # Defining the title
-        self.img1 = PhotoImage(file='images/UnBall.png')                      # Defining the ...
+        self.img1 = PhotoImage(file=self.directory + '/src/python_simulator/images/UnBall.png')                      # Defining the ...
         self.instance.tk.call('wm', 'iconphoto', self.instance._w, self.img1) # ... simulator ico
 
         SW = instance.winfo_screenwidth()
@@ -41,7 +43,7 @@ class Simulator(object):
         self.texts_first_window = (30, 1) # above:30   bellow:1 
 
         # Setting up the logo
-        img = Img.open('images/UnBall.png')
+        img = Img.open(self.directory + '/src/python_simulator/images/UnBall.png')
         img.thumbnail(LOGO_SIZE, Img.ANTIALIAS)
         img = ImageTk.PhotoImage(img)
         self.logo = Label(self.bg_frame)
@@ -190,7 +192,7 @@ class Simulator(object):
         self.side_team_box.current(1) 
 
         # Play/Pause button
-        img_play = Img.open('images/play.png') 
+        img_play = Img.open(self.directory + '/src/python_simulator/images/play.png') 
         img_play = img_play.resize((50, 50), Img.ANTIALIAS) 
         img_play = ImageTk.PhotoImage(img_play) # Turning possible use the image in GUI
 
