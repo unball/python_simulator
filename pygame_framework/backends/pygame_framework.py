@@ -232,7 +232,7 @@ class PygameFramework(FrameworkBase):
 
         print('Initializing pygame framework...')
         # Pygame Initialization
-        pygame.init()
+        pygame.display.init()
         caption = "Python Box2D Testbed - " + self.name
         pygame.display.set_caption(caption)
 

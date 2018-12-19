@@ -51,8 +51,9 @@ class Vector(object):
 
 #@add_communication_with_system 
 class Field(Framework):
-    name = "Top Down Car"
-    description = "Keys: accel = w, reverse = s, left = a, right = d"
+    name = "Field with ball and robots"
+    description = "Robot controled by ros"
+    #description = "If there is only one robot. Keys: accel = w, reverse = s, left = a, right = d"
 
     def __init__(self):
         super(Field, self).__init__()
@@ -184,7 +185,6 @@ class Field(object):
         
         pygame.display.init()
         self.bg_color = pygame.Color(0,0,0)
-        self.ball_color = ORANGE
         
         """
         def my_draw_polygon(polygon, body, fixture):
