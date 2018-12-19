@@ -142,7 +142,7 @@ class Field(object):
         self.robot_oppo = [OPPON_COLOR, int(kargs.pop('n_opponents')), 'oppon']
         self.robot_oppo = self.create_robots(self.robot_oppo)
         
-        pygame.display.init()
+        pygame.init()
         self.bg_color = pygame.Color(0,0,0)
         self.ball_color = ORANGE
         
