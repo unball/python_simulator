@@ -11,6 +11,7 @@ import math
 from constants import *
 import sys
 from communication_ros import *
+from objects_on_field.objects import (Ball, Walls, Robot)
 
 try:
     from PIL import Image as Img
@@ -50,50 +51,11 @@ class Vector(object):
     def coord_y(self):
         return self.angle*math.sin(self.norm)
 
-
-class Ball(object):
-    def __init__(self):
-        self.item = ''
-        self.name = 'ball'
-        self.pos_init  = (174/2, 134/2) # (x, y)
-        self.color = ORANGE 
-        self.pos_xy = ''     
-        
-
-class Robot(object):
-    length_robot = 7.5 # cm
-
-    def __init__(self):
-        self.item = Null()
-        self.item.angle = 0
-        self.pos_xy = ''
-        self.vel_ang = ''
-        self.vel_lin = ''
-
-    def convert_vel_wheels_for_lin_and_ang(self, vel_road_LR = [0, 0]):
-        vel_lin = Vector((vel_road_LR[0] + vel_road_LR[1]) / 2, self.item.angle)
-        
-        self.vel_lin = [vel_lin.coord_x, vel_lin.coord_y]
-        self.vel_ang = (vel_road_LR[1] - vel_road_LR[0]) / self.__class__.length_robot
-                
-
-class Walls(object):
-    def __init__(self):
-        self.item = ''
-        self.name = 'wall'
-        self.pos_and_length = (((168, 109.5), (6,22.5)), ((173, 67), (1,20)),
-                            ((168, 24.5), (6,22.5)), ((87, 1), (87,1)), 
-                            ((6, 24.5), (6,22.5)), ((1, 67), (1,20)),
-                            ((6, 109.5), (6,22.5)), ((87, 133), (87,1)))
-        self.color = UnBall_blue
-
-
-
 # Class decorator, see: 
 # https://pt.stackoverflow.com/questions/23628/como-funcionam-decoradores-em-python
 # book: Luiz Eduardo Borges. Python para desenvolvedores, 2º ed. pg: 139
 
-@add_communication_with_system 
+#@add_communication_with_system 
 class Field(object):
     """ *args - argumentos sem nome (lista)
         **kargs - argumentos com nome (dicionário)
@@ -110,21 +72,8 @@ class Field(object):
 
         self.world = world(gravity=(0, 0), doSleep=True)
 
-        # CAUTION: staticBody and Polygon create a body centered on position and 
-        #          box defines half-size; 
-        # i.e :
-        # box=(2, 40) => box with width: 4 and length: 80 
-        
-        self.pos_init_rob = {
-            'allie': ((70, 87), (70, 67), (70, 47)),
-            'oppon': ((104, 87), (104, 67), (104, 47))
-        }
-
-        self.walls = Walls()
-        self.create_walls()
-        
-        self.ball = Ball()
-        self.create_ball()
+        self.walls = Walls(self.world, UnBall_blue)
+        self.ball = Ball(self.world, BALL_RADIUS, ORANGE)
 
         self.colors = {
             'wall': self.walls.color,
@@ -133,14 +82,13 @@ class Field(object):
             'oppon': (127, 127, 12) 
         }
 
-        if kargs.pop('color_team') == 'Yellow':
-            self.robot_allie = [YELLOW, int(kargs.pop('n_allies')), 'allie']
-        else:
-            self.robot_allie = [BLUE, int(kargs.pop('n_allies')), 'allie']
-        self.robot_allie = self.create_robots(self.robot_allie)
+        collor_allie = YELLOW if kargs.pop('color_team') == 'Yellow' else BLUE
+        n_allies = int(kargs.pop('n_allies'))
+        n_oppo = int(kargs.pop('n_opponents'))
 
-        self.robot_oppo = [OPPON_COLOR, int(kargs.pop('n_opponents')), 'oppon']
-        self.robot_oppo = self.create_robots(self.robot_oppo)
+        self.robot_allie = [Robot(self.world, collor_allie, 'allie') for v in range(n_allies)]
+        self.robot_oppo = [OPPON_COLOR, n_oppo, 'oppon']
+        self.robot_oppo = [Robot(self.world, collor_allie, 'oppon') for v in range(n_oppo)]
         
         pygame.display.init()
         self.bg_color = pygame.Color(0,0,0)
@@ -160,7 +108,7 @@ class Field(object):
             # Note: Python 3.x will enforce that pygame get the integers it requests,
             #       and it will not convert from float.
         circleShape.draw = my_draw_circle
-        self.i = 20
+        #self.i = 20
         self.game()
 
     def game(self):
@@ -178,36 +126,6 @@ class Field(object):
         pygame.display.flip()
 
         self.frame.after(1, self.game)
-
-    def create_walls(self):
-        for x in self.walls.pos_and_length:
-            wall = self.world.CreateStaticBody(
-            position=x[0],
-            shapes=polygonShape(box=x[1]) 
-            )
-            wall.userData = self.walls.name
-
-    def create_ball(self):
-        body = self.world.CreateDynamicBody(position=self.ball.pos_init)
-        body.userData = self.ball.name
-        self.ball.item = body
-        body.CreateCircleFixture(radius=BALL_RADIUS, density=1, 
-                                                  friction=0.3, restitution=0.8)
-    
-    def create_robots(self, robot):
-        color = robot[0]
-        n = robot[1]
-        name = robot[2]
-        robot = [Robot() for x in range(n)]
-        for x in range(n):
-            body = self.world.CreateDynamicBody(position=self.pos_init_rob[name][x], 
-                                                angle=1.5)
-            body.userData = name
-            robot[x].item = body
-            body.CreatePolygonFixture(box=(ROBOT_W/2, ROBOT_H/2), density=1, 
-                                                  friction=0.3, restitution=0.2)
-
-        return robot
 
     def draw_lines_and_circle(self):
         lines = (((FIELD_W/2, 0), (FIELD_W/2, FIELD_H)),                # linha de meio campo
@@ -230,5 +148,8 @@ class Field(object):
             pygame.draw.line(self.screen, WHITE, x[0], x[1])
 
     def destroy(self):
-        """Finish the pygame when quit button is pressed"""
+        """Finish the pygame and bodies into world when quit button is pressed"""
+        for body in self.world.bodies:
+            self.world.DestroyBody(body)
+        Robot.reset_values_pos()
         pygame.quit()

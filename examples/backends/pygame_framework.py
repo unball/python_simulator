@@ -436,5 +436,3 @@ class PygameFramework(FrameworkBase):
         See Keyboard() for key information
         """
         pass
-
-PygameFramework()
