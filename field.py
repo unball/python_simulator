@@ -4,31 +4,23 @@
     @author: Hiago dos Santos (hiagop22@gmail.com)
     @description: This module describes the Class Field and others necessary classes
     used into the Field class.
-    Based on 'https://github.com/pybox2d/pybox2d/blob/master/examples/simple/simple_02.py'
+    Based on Chris Campbell's tutorial from iforce2d.net:
+    'http://www.iforce2d.net/b2dtut/top-down-car'
 """
 
 import math 
 from constants import *
 import sys
 from communication_ros import *
-from objects_on_field.objects import (Ball, Walls, Robot)
+from objects_on_field.objects import (Ball, Walls, Robot, Ground)
+from pygame_framework import (Framework, Keys, main)
+import math
 
 try:
-    from PIL import Image as Img
-    from PIL import ImageTk
     import pygame # Turn possible the relationship between tkinter and Box2D
     import Box2D  # The main library
     # Box2D.b2 maps Box2D.b2Vec2 to vec2 (and so on)
     from Box2D.b2 import (world, polygonShape, circleShape, staticBody, dynamicBody)
-
-    # Checking the version of python in other use the respective module
-    version_py = sys.version_info[0] < 3
-    if version_py:
-        from Tkinter import *
-        import ttk
-    else:
-        from tkinter import *
-        from tkinter import ttk
 except ImportError as excessao:
     print(excessao)
     sys.exit()
@@ -51,11 +43,111 @@ class Vector(object):
     def coord_y(self):
         return self.angle*math.sin(self.norm)
 
+
+
 # Class decorator, see: 
 # https://pt.stackoverflow.com/questions/23628/como-funcionam-decoradores-em-python
 # book: Luiz Eduardo Borges. Python para desenvolvedores, 2º ed. pg: 139
 
 #@add_communication_with_system 
+class Field(Framework):
+    name = "Top Down Car"
+    description = "Keys: accel = w, reverse = s, left = a, right = d"
+
+    def __init__(self):
+        super(Field, self).__init__()
+        # Top-down -- no gravity in the screen plane
+        self.world.gravity = (0, 0)
+
+        self.key_map = {Keys.K_w: 'up',
+                        Keys.K_s: 'down',
+                        Keys.K_a: 'left',
+                        Keys.K_d: 'right',
+                        }
+
+        # Keep track of the pressed keys
+        self.pressed_keys = set()
+
+        # The walls
+        boundary = self.world.CreateStaticBody(position=(0, 20))
+        boundary.CreateEdgeChain([(-30, -30),
+                                  (-30, 30),
+                                  (30, 30),
+                                  (30, -30),
+                                  (-30, -30)]
+                                 )
+
+        # A couple regions of differing traction
+        self.car = TDCar(self.world)
+        gnd1 = self.world.CreateStaticBody(userData={'obj': TDGroundArea(0.5)})
+        fixture = gnd1.CreatePolygonFixture(
+            box=(9, 7, (-10, 15), math.radians(20)))
+        # Set as sensors so that the car doesn't collide
+        fixture.sensor = True
+
+        gnd2 = self.world.CreateStaticBody(userData={'obj': TDGroundArea(0.2)})
+        fixture = gnd2.CreatePolygonFixture(
+            box=(9, 5, (5, 20), math.radians(-40)))
+        fixture.sensor = True
+
+    def Keyboard(self, key):
+        key_map = self.key_map
+        if key in key_map:
+            self.pressed_keys.add(key_map[key])
+        else:
+            super(TopDownCar, self).Keyboard(key)
+
+    def KeyboardUp(self, key):
+        key_map = self.key_map
+        if key in key_map:
+            self.pressed_keys.remove(key_map[key])
+        else:
+            super(TopDownCar, self).KeyboardUp(key)
+
+    def handle_contact(self, contact, began):
+        # A contact happened -- see if a wheel hit a
+        # ground area
+        fixture_a = contact.fixtureA
+        fixture_b = contact.fixtureB
+
+        body_a, body_b = fixture_a.body, fixture_b.body
+        ud_a, ud_b = body_a.userData, body_b.userData
+        if not ud_a or not ud_b:
+            return
+
+        tire = None
+        ground_area = None
+        for ud in (ud_a, ud_b):
+            obj = ud['obj']
+            if isinstance(obj, TDTire):
+                tire = obj
+            elif isinstance(obj, TDGroundArea):
+                ground_area = obj
+
+        if ground_area is not None and tire is not None:
+            if began:
+                tire.add_ground_area(ground_area)
+            else:
+                tire.remove_ground_area(ground_area)
+
+    def BeginContact(self, contact):
+        self.handle_contact(contact, True)
+
+    def EndContact(self, contact):
+        self.handle_contact(contact, False)
+
+    def Step(self, settings):
+        self.car.update(self.pressed_keys, settings.hz)
+
+        super(TopDownCar, self).Step(settings)
+
+        tractions = [tire.current_traction for tire in self.car.tires]
+        self.Print('Current tractions: %s' % tractions)
+
+if __name__ == "__main__":
+    main(TopDownCar)
+
+
 class Field(object):
     """ *args - argumentos sem nome (lista)
         **kargs - argumentos com nome (dicionário)
@@ -94,12 +186,33 @@ class Field(object):
         self.bg_color = pygame.Color(0,0,0)
         self.ball_color = ORANGE
         
+        """
         def my_draw_polygon(polygon, body, fixture):
             vertices = [(body.transform * v) * PPM for v in polygon.vertices]
             vertices = [(v[0], FIELD_H - v[1]) for v in vertices]
             pygame.draw.polygon(self.screen, self.colors[body.userData], vertices)
         polygonShape.draw = my_draw_polygon
+        """
 
+        """
+        def DrawSolidCircle(self, center, radius, axis, color):
+        
+            radius *= self.zoom
+            if radius < 1:
+                radius = 1
+            else:
+                radius = int(radius)
+
+            pygame.draw.circle(self.surface, (color / 2).bytes + [127],
+                               center, radius, 0)
+            pygame.draw.circle(self.surface, color.bytes, center, radius, 1)
+            pygame.draw.aaline(self.surface, (255, 0, 0), center,
+                               (center[0] - radius * axis[0],
+                                center[1] + radius * axis[1]))
+
+        """
+
+        """
         def my_draw_circle(circle, body, fixture):  
             position = body.transform * circle.pos * PPM
             position = (position[0], FIELD_H - position[1])
@@ -107,7 +220,9 @@ class Field(object):
                 x) for x in position], int(circle.radius * PPM))
             # Note: Python 3.x will enforce that pygame get the integers it requests,
             #       and it will not convert from float.
+
         circleShape.draw = my_draw_circle
+        """
         #self.i = 20
         self.game()
 

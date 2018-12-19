@@ -7,7 +7,7 @@
 """
 
 #from resolution import *
-from simulator import *
+from manage_widgets import *
 
 def main():
     instance = Tk()

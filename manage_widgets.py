@@ -9,6 +9,22 @@
 #from resolution import *
 import os
 from field import * # Contain the Classes of the objects in field and tkinter
+try:
+    from PIL import Image as Img
+    from PIL import ImageTk
+
+    # Checking the version of python in other use the respective module
+    version_py = sys.version_info[0] < 3
+    if version_py:
+        from Tkinter import *
+        import ttk
+    else:
+        from tkinter import *
+        from tkinter import ttk
+except ImportError as excessao:
+    print(excessao)
+    sys.exit()
+
 
 class Simulator(object):
     """UnBall Simulator"""

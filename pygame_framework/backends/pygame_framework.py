@@ -67,7 +67,7 @@ class PygameDraw(b2DrawExtended):
     drawing.  Debug drawing, as its name implies, is for debugging.
     """
     surface = None
-    axisScale = 10.0
+    #axisScale = 10.0
 
     def __init__(self, test=None, **kwargs):
         b2DrawExtended.__init__(self, **kwargs)
@@ -364,10 +364,6 @@ class PygameFramework(FrameworkBase):
                 self.viewZoom = min(1.1 * self.viewZoom, 50.0)
             elif key == Keys.K_x:     # Zoom out
                 self.viewZoom = max(0.9 * self.viewZoom, 0.02)
-            elif key == Keys.K_SPACE:  # Launch a bomb
-                self.LaunchRandomBomb()
-            elif key == Keys.K_F1:    # Toggle drawing the menu
-                self.settings.drawMenu = not self.settings.drawMenu
             elif key == Keys.K_F2:    # Do a single step
                 self.settings.singleStep = True
             else:              # Inform the test of the key press
