@@ -290,10 +290,10 @@ class PygameFramework(FrameworkBase):
                     pass
                 elif event.button == 3:  # right
                     self.rMouseDown = True
-                elif event.button == 4:
-                    self.viewZoom *= 1.1
-                elif event.button == 5:
-                    self.viewZoom /= 1.1
+                #elif event.button == 4:
+                #    self.viewZoom *= 1.1
+                #elif event.button == 5:
+                #    self.viewZoom /= 1.1
             elif event.type == MOUSEBUTTONUP:
                 p = self.ConvertScreenToWorld(*event.pos)
                 if event.button == 3:  # right
