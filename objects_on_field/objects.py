@@ -5,12 +5,12 @@ Based on Chris Campbell's tutorial from iforce2d.net:
 http://www.iforce2d.net/b2dtut/top-down-car
 """
 
-from objects_on_field.framework import Framework
-from Box2D import (b2World, b2CircleShape, b2PolygonShape, b2FixtureDef)
+from pygame_framework.framework import *
+from pygame_framework.backends.pygame_framework import *
 from pygame_framework.physics_engine import TDTire
 import math
 
-class Ball(Framework):
+class Ball(FrameworkBase):
     def __init__(self, world, radi, color, density=1, position=(174/2, 134/2)):
         super(Ball, self).__init__()
 
@@ -20,15 +20,18 @@ class Ball(Framework):
                                   restitution=0.1),
             bullet=True,
             position=position)
-        self.body.userData = 'ball'
+        self.body.userData = {'obj': self}
         self.color = color
 
 
-class Walls(Framework):
-    pos_and_length = (((168, 109.5), (6,22.5)), ((173, 67), (1,20)),
-                            ((168, 24.5), (6,22.5)), ((87, 1), (87,1)), 
-                            ((6, 24.5), (6,22.5)), ((1, 67), (1,20)),
-                            ((6, 109.5), (6,22.5)), ((87, 133), (87,1)))
+class Walls(FrameworkBase):
+    """
+    See images/Field.jpeg for more details
+    """
+    pos_and_length = (((81, 42.5), (6,22.5)), ((86, 0), (1,20)),
+                        ((81, -42.5), (6,22.5)), ((0, -66), (87,1)), 
+                        ((-81, -42.5), (6,22.5)), ((-86, 0), (1,20)),
+                        ((-81, 42.5), (6,22.5)), ((0, 66), (87,1)))
     
     def __init__(self, world, color):
         super(Walls, self).__init__()
@@ -40,7 +43,7 @@ class Walls(Framework):
             fixtures=b2FixtureDef(friction=0.8,
                                   shape=b2PolygonShape(box=x[1]))
             )
-            wall.userData = 'wall'
+            wall.userData = {'obj': self}
         self.color = color
 
 
@@ -53,7 +56,7 @@ class Ground(object):
         self.friction_modifier = friction_modifier
 
 
-class Robot(Framework):
+class Robot(FrameworkBase):
     length_robot = 7.5 # cm
     pos_init = {
     'allie': [70, 47],
@@ -65,7 +68,7 @@ class Robot(Framework):
                                             angle=1.5)
         self.body.CreatePolygonFixture(box=(__class__.length_robot/2,__class__.length_robot/2), 
                                   density=1, friction=0.3, restitution=0.2)
-        self.body.userData = team
+        self.body.userData = {'obj': self}
         self.color = color
         
         self.update_pos_init(team)

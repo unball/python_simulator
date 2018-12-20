@@ -161,6 +161,7 @@ class Simulator(object):
         ### Field inserted in center - Pygame ###
         # Tell pygame's SDL window which window ID to use
         os.environ['SDL_WINDOWID'] = str(self.frame2.winfo_id())
+        os.environ["SDL_VIDEODRIVER"] = "dummy"
         self.field_simul = Field(frame=self.frame2, color_team=self.color_team.get(), 
                              n_allies=self.n_allies.get(), 
                              n_opponents=self.n_opponents.get())

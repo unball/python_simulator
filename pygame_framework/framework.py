@@ -23,7 +23,7 @@ The framework's base is FrameworkBase. See its help for more information.
 """
 from time import time
 
-from Box2D import (b2World, b2AABB, b2CircleShape, b2Color, b2Vec2)
+from Box2D import (b2World, b2AABB, b2CircleShape, b2PolygonShape, b2Color, b2Vec2)
 from Box2D import (b2ContactListener, b2DestructionListener, b2DrawExtended)
 from Box2D import (b2Fixture, b2FixtureDef, b2Joint)
 from Box2D import (b2GetPointStates, b2QueryCallback, b2Random)

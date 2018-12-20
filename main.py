@@ -10,9 +10,10 @@
 from manage_widgets import *
 
 def main():
-    instance = Tk()
-    Simulator(instance)
-    instance.mainloop()       
+    #instance = Tk()
+    #Simulator(instance)
+    #instance.mainloop()       
+    Field((0,0,255), 3, 3)
     
 if __name__ == '__main__':
     main()

@@ -8,23 +8,14 @@
     'http://www.iforce2d.net/b2dtut/top-down-car'
 """
 
-import math 
 from constants import *
 import sys
 from communication_ros import *
 from objects_on_field.objects import (Ball, Walls, Robot, Ground, TDCar)
 from pygame_framework.physics_engine import TDTire
-from pygame_framework.framework import (Framework, Keys)
+from pygame_framework.framework import FrameworkBase as Framework
+from pygame_framework.framework import *
 import math
-
-try:
-    import pygame # Turn possible the relationship between tkinter and Box2D
-    import Box2D  # The main library
-    # Box2D.b2 maps Box2D.b2Vec2 to vec2 (and so on)
-    from Box2D.b2 import (world, polygonShape, circleShape, staticBody, dynamicBody)
-except ImportError as excessao:
-    print(excessao)
-    sys.exit()
 
 
 class Null(object):
@@ -57,7 +48,7 @@ class Field(Framework):
     #description = "If there is only one robot. Keys: accel = w, reverse = s, left = a, right = d"
 
     def __init__(self, *args, **kargs):
-        super(Field, self).__init__(frame=kargs.pop('frame'))
+        super(Field, self).__init__()
         # Top-down -- no gravity in the screen plane
         self.world.gravity = (0, 0)
 
@@ -71,13 +62,14 @@ class Field(Framework):
         self.pressed_keys = set()
 
         # The walls
-        boundary = self.world.CreateStaticBody(position=(0, 20))
-        boundary.CreateEdgeChain([(-30, -30),
-                                  (-30, 30),
-                                  (30, 30),
-                                  (30, -30),
-                                  (-30, -30)]
-                                 )
+        walls = Walls(self.world, BLUE)
+        #boundary = self.world.CreateStaticBody(position=(0, 20))
+        #boundary.CreateEdgeChain([(-30, -30),
+        #                          (-30, 30),
+        #                          (30, 30),
+        #                          (30, -30),
+        #                          (-30, -30)]
+        #                         )
 
         # A couple regions of differing traction
         self.car = TDCar(self.world)
@@ -146,6 +138,7 @@ class Field(Framework):
         super(Field, self).Step(settings)
 
         tractions = [tire.current_traction for tire in self.car.tires]
+        print(self.car.body.position)
         #self.Print('Current tractions: %s' % tractions)
 
 """

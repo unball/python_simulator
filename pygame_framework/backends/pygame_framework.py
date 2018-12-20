@@ -52,8 +52,8 @@ import pygame
 from pygame.locals import (QUIT, KEYDOWN, KEYUP, MOUSEBUTTONDOWN,
                            MOUSEBUTTONUP, MOUSEMOTION, KMOD_LSHIFT)
 
-from ..framework import (FrameworkBase, Keys)
-from ..settings import fwSettings
+from pygame_framework.framework import (FrameworkBase, Keys)
+from pygame_framework.settings import fwSettings
 from Box2D import (b2DrawExtended, b2Vec2)
 
 class PygameDraw(b2DrawExtended):
@@ -87,7 +87,7 @@ class PygameDraw(b2DrawExtended):
         """
         Draw a single point at point p given a pixel size and color.
         """
-        self.DrawCircle(p, size / self.zoom, color, drawwidth=0)
+        self.DrawCircle(p, size, self.zoom, color, drawwidth=0)
 
     def DrawAABB(self, aabb, color):
         """
@@ -149,18 +149,18 @@ class PygameDraw(b2DrawExtended):
                            (center[0] - radius * axis[0],
                             center[1] + radius * axis[1]))
 
-    def DrawPolygon(self, vertices, color):
+    #def DrawPolygon(self, vertices, color):
         """
         Draw a wireframe polygon given the screen vertices with the specified color.
         """
-        if not vertices:
-            return
+    #    if not vertices:
+    #        return
 
-        if len(vertices) == 2:
-            pygame.draw.aaline(self.surface, color.bytes,
-                               vertices[0], vertices)
-        else:
-            pygame.draw.polygon(self.surface, color.bytes, vertices, 1)
+    #    if len(vertices) == 2:
+    #        pygame.draw.aaline(self.surface, color.bytes,
+    #                           vertices[0], vertices)
+    #    else:
+    #        pygame.draw.polygon(self.surface, color.bytes, vertices, 1)
 
     def DrawSolidPolygon(self, vertices, color):
         """
@@ -207,7 +207,7 @@ class PygameFramework(FrameworkBase):
 
     def __reset(self):
         # Screen/rendering-related
-        self._viewZoom = 10.0
+        self._viewZoom = 5.0
         self._viewCenter = None
         self._viewOffset = None
         self.screenSize = None
@@ -242,10 +242,8 @@ class PygameFramework(FrameworkBase):
         self.renderer = PygameDraw(surface=self.screen, test=self)
         self.world.renderer = self.renderer
 
-        self.viewCenter = (0, 20.0)
+        self.viewCenter = (0, 0)
         self.groundbody = self.world.CreateBody()
-
-        self.running = True
 
 
     def setCenter(self, value):
@@ -321,9 +319,10 @@ class PygameFramework(FrameworkBase):
         requested to quit.
         """
 
+        running = True
         clock = pygame.time.Clock()
-        if self.running:
-            self.running = self.checkEvents()
+        while running:
+            running = self.checkEvents()
             self.screen.fill((0, 0, 0))
 
             # Check keys that should be checked every loop (not only on initial
@@ -336,8 +335,6 @@ class PygameFramework(FrameworkBase):
             pygame.display.flip()
             clock.tick(self.settings.hz)
             self.fps = clock.get_fps()
-
-            self.frame.after(1, self.run)
             
     def destroy(self):
         pygame.quit()
@@ -345,6 +342,7 @@ class PygameFramework(FrameworkBase):
         self.world.contactListener = None
         self.world.destructionListener = None
         self.world.renderer = None
+
 
     def _Keyboard_Event(self, key, down=True):
         """
