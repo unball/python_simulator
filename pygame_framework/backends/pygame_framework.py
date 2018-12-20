@@ -65,7 +65,7 @@ class PygameDraw(b2DrawExtended):
     drawing.  Debug drawing, as its name implies, is for debugging.
     """
     surface = None
-    #axisScale = 10.0
+    axisScale = 10.0
 
     def __init__(self, test=None, **kwargs):
         b2DrawExtended.__init__(self, **kwargs)
@@ -87,7 +87,7 @@ class PygameDraw(b2DrawExtended):
         """
         Draw a single point at point p given a pixel size and color.
         """
-        self.DrawCircle(p, size, self.zoom, color, drawwidth=0)
+        self.DrawCircle(p, size / self.zoom, color, drawwidth=0)
 
     def DrawAABB(self, aabb, color):
         """
@@ -149,18 +149,18 @@ class PygameDraw(b2DrawExtended):
                            (center[0] - radius * axis[0],
                             center[1] + radius * axis[1]))
 
-    #def DrawPolygon(self, vertices, color):
+    def DrawPolygon(self, vertices, color):
         """
         Draw a wireframe polygon given the screen vertices with the specified color.
         """
-    #    if not vertices:
-    #        return
+        if not vertices:
+            return
 
-    #    if len(vertices) == 2:
-    #        pygame.draw.aaline(self.surface, color.bytes,
-    #                           vertices[0], vertices)
-    #    else:
-    #        pygame.draw.polygon(self.surface, color.bytes, vertices, 1)
+        if len(vertices) == 2:
+            pygame.draw.aaline(self.surface, color.bytes,
+                               vertices[0], vertices)
+        else:
+            pygame.draw.polygon(self.surface, color.bytes, vertices, 1)
 
     def DrawSolidPolygon(self, vertices, color):
         """
@@ -302,9 +302,9 @@ class PygameFramework(FrameworkBase):
                     self.MouseUp(p)
             elif event.type == MOUSEMOTION:
                 p = self.ConvertScreenToWorld(*event.pos)
-
+            
                 self.MouseMove(p)
-
+            
                 if self.rMouseDown:
                     self.viewCenter -= (event.rel[0] /
                                         5.0, -event.rel[1] / 5.0)
@@ -352,11 +352,11 @@ class PygameFramework(FrameworkBase):
         ones onto the test via the Keyboard() function.
         """
         if down:
-            if key == Keys.K_z:       # Zoom in
-                self.viewZoom = min(1.1 * self.viewZoom, 50.0)
-            elif key == Keys.K_x:     # Zoom out
-                self.viewZoom = max(0.9 * self.viewZoom, 0.02)
-            elif key == Keys.K_F2:    # Do a single step
+            #if key == Keys.K_z:       # Zoom in
+            #    self.viewZoom = min(1.1 * self.viewZoom, 50.0)
+            #elif key == Keys.K_x:     # Zoom out
+            #    self.viewZoom = max(0.9 * self.viewZoom, 0.02)
+            if key == Keys.K_F2:    # Do a single step
                 self.settings.singleStep = True
             else:              # Inform the test of the key press
                 self.Keyboard(key)
@@ -370,20 +370,20 @@ class PygameFramework(FrameworkBase):
         """
 
         pygame.event.pump()
-        self.keys = keys = pygame.key.get_pressed()
-        if keys[Keys.K_LEFT]:
-            self.viewCenter -= (0.5, 0)
-        elif keys[Keys.K_RIGHT]:
-            self.viewCenter += (0.5, 0)
+        #self.keys = keys = pygame.key.get_pressed()
+        #if keys[Keys.K_LEFT]:
+        #    self.viewCenter -= (0.5, 0)
+        #elif keys[Keys.K_RIGHT]:
+        #    self.viewCenter += (0.5, 0)
 
-        if keys[Keys.K_UP]:
-            self.viewCenter += (0, 0.5)
-        elif keys[Keys.K_DOWN]:
-            self.viewCenter -= (0, 0.5)
+        #if keys[Keys.K_UP]:
+        #    self.viewCenter += (0, 0.5)
+        #elif keys[Keys.K_DOWN]:
+        #    self.viewCenter -= (0, 0.5)
 
-        if keys[Keys.K_HOME]:
-            self.viewZoom = 1.0
-            self.viewCenter = (0.0, 20.0)
+        #if keys[Keys.K_HOME]:
+        #    self.viewZoom = 1.0
+        #    self.viewCenter = (0.0, 20.0)
 
     def Step(self, settings):
         super(PygameFramework, self).Step(settings)
