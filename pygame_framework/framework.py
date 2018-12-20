@@ -155,7 +155,7 @@ class FrameworkBase(b2ContactListener):
             else:
                 timeStep = 0.0
 
-            self.Print("****PAUSED****", (200, 0, 0))
+            #self.Print("****PAUSED****", (200, 0, 0))
 
         # Set the flags based on what the settings show
         if renderer:
@@ -251,24 +251,6 @@ class FrameworkBase(b2ContactListener):
                 if len(self.t_steps) > 2:
                     self.t_steps.pop(0)
 
-            if settings.drawFPS:
-                self.Print("Combined FPS %d" % self.fps)
-
-            if settings.drawStats:
-                self.Print("bodies=%d contacts=%d joints=%d proxies=%d" %
-                           (self.world.bodyCount, self.world.contactCount,
-                            self.world.jointCount, self.world.proxyCount))
-
-                self.Print("hz %d vel/pos iterations %d/%d" %
-                           (settings.hz, settings.velocityIterations,
-                            settings.positionIterations))
-
-                if self.t_draws and self.t_steps:
-                    self.Print("Potential draw rate: %.2f fps Step rate: %.2f Hz"
-                               "" % (sum(self.t_draws) / len(self.t_draws),
-                                     sum(self.t_steps) / len(self.t_steps))
-                               )
-
     def MouseDown(self, p):
         """
         Indicates that there was a left click at point p (world coordinates)
@@ -320,12 +302,12 @@ class FrameworkBase(b2ContactListener):
         self.textLine = self.TEXTLINE_START
 
         # Draw the name of the test running
-        self.Print(self.name, (127, 127, 255))
+        #self.Print(self.name, (127, 127, 255))
 
-        if self.description:
+        #if self.description:
             # Draw the name of the test running
-            for s in self.description.split('\n'):
-                self.Print(s, (127, 255, 127))
+         #   for s in self.description.split('\n'):
+         #       self.Print(s, (127, 255, 127))
 
         # Do the main physics step
         self.Step(self.settings)
@@ -342,14 +324,6 @@ class FrameworkBase(b2ContactListener):
     def DrawStringAt(self, x, y, str, color=(229, 153, 153, 255)):
         """
         Draw some text, str, at screen coordinates (x, y).
-        NOTE: Renderer subclasses must implement this
-        """
-        raise NotImplementedError()
-
-    def Print(self, str, color=(229, 153, 153, 255)):
-        """
-        Draw some text at the top status lines
-        and advance to the next line.
         NOTE: Renderer subclasses must implement this
         """
         raise NotImplementedError()
@@ -383,6 +357,11 @@ class FrameworkBase(b2ContactListener):
                                  state=state2[i],
                                  )
                             for i, point in enumerate(state2)])
+
+    def destroy_bodies(self):
+        """Finish the bodies into world when quit button is pressed"""
+        for body in self.world.bodies:
+            self.world.DestroyBody(body)
 
     # These can/should be implemented in the test subclass: (Step() also if necessary)
     # See empty.py for a simple example.
@@ -418,23 +397,6 @@ class FrameworkBase(b2ContactListener):
         Callback indicating 'key' has been released.
         """
         pass
-
-
-def main(test_class):
-    """
-    Loads the test class and executes it.
-    """
-    print("Loading %s..." % test_class.name)
-    test = test_class()
-    if fwSettings.onlyInit:
-        return
-    test.run()
-
-
-if __name__ == '__main__':
-    print('Please run one of the examples directly. This is just the base for '
-          'all of the frameworks.')
-    exit(1)
 
 
 # Your framework classes should follow this format. If it is the 'foobar'

@@ -20,8 +20,6 @@
 
 """
 Global Keys:
-    F1     - toggle menu (can greatly improve fps)
-    Space  - shoot projectile
     Z/X    - zoom
     Escape - quit
 
@@ -30,7 +28,6 @@ Other keys can be set by the individual test.
 Mouse:
     Left click  - select/drag body (creates mouse joint)
     Right click - pan
-    Shift+Left  - drag to create a directed projectile
     Scroll      - zoom
 
 """
@@ -38,6 +35,7 @@ Mouse:
 from __future__ import (print_function, absolute_import, division)
 import sys
 import warnings
+from constants import *
 
 try:
     import pygame_sdl2
@@ -215,7 +213,6 @@ class PygameFramework(FrameworkBase):
         self.screenSize = None
         self.rMouseDown = False
         self.textLine = 30
-        self.font = None
         self.fps = 0
 
         # GUI-related (PGU)
@@ -223,8 +220,10 @@ class PygameFramework(FrameworkBase):
         self.gui_table = None
         self.setup_keys()
 
-    def __init__(self):
+    def __init__(self, frame=''):
         super(PygameFramework, self).__init__()
+
+        self.frame = frame
 
         self.__reset()
         if fwSettings.onlyInit:  # testing mode doesn't initialize pygame
@@ -232,30 +231,21 @@ class PygameFramework(FrameworkBase):
 
         print('Initializing pygame framework...')
         # Pygame Initialization
-        pygame.display.init()
-        caption = "Python Box2D Testbed - " + self.name
+        pygame.init()
+        caption = "UnBall - " + self.name
         pygame.display.set_caption(caption)
 
         # Screen and debug draw
-        self.screen = pygame.display.set_mode((640, 480))
+        self.screen = pygame.display.set_mode((int(FIELD_W), int(FIELD_H)))
         self.screenSize = b2Vec2(*self.screen.get_size())
 
         self.renderer = PygameDraw(surface=self.screen, test=self)
         self.world.renderer = self.renderer
 
-        try:
-            self.font = pygame.font.Font(None, 15)
-        except IOError:
-            try:
-                self.font = pygame.font.Font("freesansbold.ttf", 15)
-            except IOError:
-                print("Unable to load default font or 'freesansbold.ttf'")
-                print("Disabling text drawing.")
-                self.Print = lambda *args: 0
-                self.DrawStringAt = lambda *args: 0
-
         self.viewCenter = (0, 20.0)
         self.groundbody = self.world.CreateBody()
+
+        self.running = True
 
 
     def setCenter(self, value):
@@ -331,10 +321,9 @@ class PygameFramework(FrameworkBase):
         requested to quit.
         """
 
-        running = True
         clock = pygame.time.Clock()
-        while running:
-            running = self.checkEvents()
+        if self.running:
+            self.running = self.checkEvents()
             self.screen.fill((0, 0, 0))
 
             # Check keys that should be checked every loop (not only on initial
@@ -348,6 +337,11 @@ class PygameFramework(FrameworkBase):
             clock.tick(self.settings.hz)
             self.fps = clock.get_fps()
 
+            self.frame.after(1, self.run)
+            
+    def destroy(self):
+        pygame.quit()
+        super(PygameFramework, self).destroy_bodies()
         self.world.contactListener = None
         self.world.destructionListener = None
         self.world.renderer = None
@@ -399,21 +393,6 @@ class PygameFramework(FrameworkBase):
     def ConvertScreenToWorld(self, x, y):
         return b2Vec2((x + self.viewOffset.x) / self.viewZoom,
                       ((self.screenSize.y - y + self.viewOffset.y) / self.viewZoom))
-
-    def DrawStringAt(self, x, y, str, color=(229, 153, 153, 255)):
-        """
-        Draw some text, str, at screen coordinates (x, y).
-        """
-        self.screen.blit(self.font.render(str, True, color), (x, y))
-
-    def Print(self, str, color=(229, 153, 153, 255)):
-        """
-        Draw some text at the top status lines
-        and advance to the next line.
-        """
-        self.screen.blit(self.font.render(
-            str, True, color), (5, self.textLine))
-        self.textLine += 15
 
     def Keyboard(self, key):
         """

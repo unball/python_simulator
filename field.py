@@ -12,8 +12,9 @@ import math
 from constants import *
 import sys
 from communication_ros import *
-from objects_on_field.objects import (Ball, Walls, Robot, Ground)
-from pygame_framework import (Framework, Keys, main)
+from objects_on_field.objects import (Ball, Walls, Robot, Ground, TDCar)
+from pygame_framework.physics_engine import TDTire
+from pygame_framework.framework import (Framework, Keys)
 import math
 
 try:
@@ -51,12 +52,12 @@ class Vector(object):
 
 #@add_communication_with_system 
 class Field(Framework):
-    name = "Field with ball and robots"
+    name = "Python simulator"
     description = "Robot controled by ros"
     #description = "If there is only one robot. Keys: accel = w, reverse = s, left = a, right = d"
 
-    def __init__(self):
-        super(Field, self).__init__()
+    def __init__(self, *args, **kargs):
+        super(Field, self).__init__(frame=kargs.pop('frame'))
         # Top-down -- no gravity in the screen plane
         self.world.gravity = (0, 0)
 
@@ -80,30 +81,32 @@ class Field(Framework):
 
         # A couple regions of differing traction
         self.car = TDCar(self.world)
-        gnd1 = self.world.CreateStaticBody(userData={'obj': TDGroundArea(0.5)})
-        fixture = gnd1.CreatePolygonFixture(
-            box=(9, 7, (-10, 15), math.radians(20)))
+        #gnd1 = self.world.CreateStaticBody(userData={'obj': Ground(0.5)})
+        #fixture = gnd1.CreatePolygonFixture(
+        #    box=(9, 7, (-10, 15), math.radians(20)))
         # Set as sensors so that the car doesn't collide
-        fixture.sensor = True
+        #fixture.sensor = True
 
-        gnd2 = self.world.CreateStaticBody(userData={'obj': TDGroundArea(0.2)})
-        fixture = gnd2.CreatePolygonFixture(
-            box=(9, 5, (5, 20), math.radians(-40)))
-        fixture.sensor = True
+        #gnd2 = self.world.CreateStaticBody(userData={'obj': Ground(0.2)})
+        #fixture = gnd2.CreatePolygonFixture(
+        #    box=(9, 5, (5, 20), math.radians(-40)))
+        #fixture.sensor = True
+
+        super(Field, self).run()
 
     def Keyboard(self, key):
         key_map = self.key_map
         if key in key_map:
             self.pressed_keys.add(key_map[key])
         else:
-            super(TopDownCar, self).Keyboard(key)
+            super(Field, self).Keyboard(key)
 
     def KeyboardUp(self, key):
         key_map = self.key_map
         if key in key_map:
             self.pressed_keys.remove(key_map[key])
         else:
-            super(TopDownCar, self).KeyboardUp(key)
+            super(Field, self).KeyboardUp(key)
 
     def handle_contact(self, contact, began):
         # A contact happened -- see if a wheel hit a
@@ -122,7 +125,7 @@ class Field(Framework):
             obj = ud['obj']
             if isinstance(obj, TDTire):
                 tire = obj
-            elif isinstance(obj, TDGroundArea):
+            elif isinstance(obj, Ground):
                 ground_area = obj
 
         if ground_area is not None and tire is not None:
@@ -140,26 +143,20 @@ class Field(Framework):
     def Step(self, settings):
         self.car.update(self.pressed_keys, settings.hz)
 
-        super(TopDownCar, self).Step(settings)
+        super(Field, self).Step(settings)
 
         tractions = [tire.current_traction for tire in self.car.tires]
-        self.Print('Current tractions: %s' % tractions)
+        #self.Print('Current tractions: %s' % tractions)
 
-if __name__ == "__main__":
-    main(TopDownCar)
-
-
+"""
 class Field(object):
-    """ *args - argumentos sem nome (lista)
-        **kargs - argumentos com nome (dicionário)
-    """
     def __init__(self, *args, **kargs):
 
         self.frame=kargs.pop('frame')
 
         # --- pygame setup ---
 
-        self.screen = pygame.display.set_mode((int(FIELD_W), int(FIELD_H)) )
+        #self.screen = pygame.display.set_mode((int(FIELD_W), int(FIELD_H)) )
 
         # --- pybox2d world setup --- 
 
@@ -186,15 +183,13 @@ class Field(object):
         pygame.display.init()
         self.bg_color = pygame.Color(0,0,0)
         
-        """
+        
         def my_draw_polygon(polygon, body, fixture):
             vertices = [(body.transform * v) * PPM for v in polygon.vertices]
             vertices = [(v[0], FIELD_H - v[1]) for v in vertices]
             pygame.draw.polygon(self.screen, self.colors[body.userData], vertices)
         polygonShape.draw = my_draw_polygon
-        """
-
-        """
+        
         def DrawSolidCircle(self, center, radius, axis, color):
         
             radius *= self.zoom
@@ -210,9 +205,7 @@ class Field(object):
                                (center[0] - radius * axis[0],
                                 center[1] + radius * axis[1]))
 
-        """
-
-        """
+    
         def my_draw_circle(circle, body, fixture):  
             position = body.transform * circle.pos * PPM
             position = (position[0], FIELD_H - position[1])
@@ -222,8 +215,9 @@ class Field(object):
             #       and it will not convert from float.
 
         circleShape.draw = my_draw_circle
-        """
+        
         #self.i = 20
+        
         self.game()
 
     def game(self):
@@ -258,13 +252,6 @@ class Field(object):
         pygame.draw.arc(self.screen, WHITE, (int((FIELD_W/2) - (BIG_FIELD_RADIUS*PPM)), 
                         int((FIELD_H/2) - (BIG_FIELD_RADIUS*PPM)), BIG_FIELD_RADIUS*PPM*2, 
                         BIG_FIELD_RADIUS*PPM*2), 0, 8)
-
         for x in lines:
-            pygame.draw.line(self.screen, WHITE, x[0], x[1])
-
-    def destroy(self):
-        """Finish the pygame and bodies into world when quit button is pressed"""
-        for body in self.world.bodies:
-            self.world.DestroyBody(body)
-        Robot.reset_values_pos()
-        pygame.quit()
+            pygame.draw.line(self.screen, WHITE, x[0], x[1])     
+"""

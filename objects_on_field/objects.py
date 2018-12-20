@@ -7,6 +7,8 @@ http://www.iforce2d.net/b2dtut/top-down-car
 
 from objects_on_field.framework import Framework
 from Box2D import (b2World, b2CircleShape, b2PolygonShape, b2FixtureDef)
+from pygame_framework.physics_engine import TDTire
+import math
 
 class Ball(Framework):
     def __init__(self, world, radi, color, density=1, position=(174/2, 134/2)):
@@ -77,6 +79,9 @@ class Robot(Framework):
     def reset_values_pos(cls):
         cls.pos_init['allie'] = [70, 47]
         cls.pos_init['oppon'] = [104, 47]
+
+    def __del__(self):
+        self.__class__.reset_values_pos()
 
     def Keyboard(self, key):
         if key == Keys.K_d:
