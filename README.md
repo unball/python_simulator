@@ -47,7 +47,7 @@ Acess the bellow links in order to understanding how Python_Simulation works:
 
 After install Pybox2D don't forget to use 
 ```bash 
-python examples.top_down_car --backend=pygame
+python -m examples.top_down_car --backend=pygame
 ```
 into the folder Pybox2D to see "top_dow_car.py" working.
 Python_Simulation is based on script top_down_car.py
