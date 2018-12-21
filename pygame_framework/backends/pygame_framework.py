@@ -317,9 +317,9 @@ class PygameFramework(FrameworkBase):
             
                 self.MouseMove(p)
             
-                if self.rMouseDown:
-                    self.viewCenter -= (event.rel[0] /
-                                        5.0, -event.rel[1] / 5.0)
+                #if self.rMouseDown:
+                #    self.viewCenter -= (event.rel[0] /
+                #                        5.0, -event.rel[1] / 5.0)
 
         return True
 

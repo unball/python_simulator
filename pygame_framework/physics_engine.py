@@ -7,11 +7,33 @@
     'http://www.iforce2d.net/b2dtut/top-down-car'
 """
 
-class BodyMovingOnGround(object):
+class PhysicsEngineBase(object):
+
+    def __init__(self, body):
+
+        self.body = body
+
+    @property
+    def forward_velocity(self):
+        body = self.body
+        current_normal = body.GetWorldVector((0, 1))
+        return current_normal.dot(body.linearVelocity) * current_normal
+
+    @property
+    def lateral_velocity(self):
+        body = self.body
+
+        right_normal = body.GetWorldVector((1, 0))
+        return right_normal.dot(body.linearVelocity) * right_normal
+
+    def update_friction(self):
+        pass
+
+class PhysicsEngineRobot(PhysicsEngineBase):
 
     def __init__(self, car, max_forward_speed=100.0,
                  max_backward_speed=-20, max_drive_force=150,
-                 turn_torque=15, max_lateral_impulse=3,
+                 turn_torque=15, max_lateral_impulse=4,
                  dimensions=(0.5, 1.25), density=1.0,
                  position=(0, 0)):
 
@@ -29,27 +51,7 @@ class BodyMovingOnGround(object):
         self.body.CreatePolygonFixture(box=dimensions, density=density)
         self.body.userData = {'obj': self}
 
-    @property
-    def forward_velocity(self):
-        body = self.body
-        current_normal = body.GetWorldVector((0, 1))
-        return current_normal.dot(body.linearVelocity) * current_normal
-
-    @property
-    def lateral_velocity(self):
-        body = self.body
-
-        right_normal = body.GetWorldVector((1, 0))
-        return right_normal.dot(body.linearVelocity) * right_normal
-
     def update_friction(self):
-        impulse = -self.lateral_velocity * self.body.mass
-        if impulse.length > self.max_lateral_impulse:
-            impulse *= self.max_lateral_impulse / impulse.length
-
-        self.body.ApplyLinearImpulse(self.current_traction * impulse,
-                                     self.body.worldCenter, True)
-
         aimp = 0.1 * self.current_traction * \
             self.body.inertia * -self.body.angularVelocity
         self.body.ApplyAngularImpulse(aimp, True)
@@ -60,6 +62,13 @@ class BodyMovingOnGround(object):
         drag_force_magnitude = -2 * current_forward_speed
         self.body.ApplyForce(self.current_traction * drag_force_magnitude * current_forward_normal,
                              self.body.worldCenter, True)
+
+        impulse = -self.lateral_velocity * self.body.mass
+        if impulse.length > self.max_lateral_impulse:
+            impulse *= self.max_lateral_impulse / impulse.length
+
+        self.body.ApplyLinearImpulse(self.current_traction * impulse,
+                                     self.body.worldCenter, True)
 
     def update_drive(self, keys):
         if 'up' in keys:

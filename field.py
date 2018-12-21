@@ -12,31 +12,12 @@ from constants import *
 import sys
 from communication_ros import *
 from objects_on_field.objects import (Ball, Walls, Robot, Ground )#Lines_on_ground)
-from pygame_framework.physics_engine import BodyMovingOnGround
+from pygame_framework.physics_engine import *
 #from pygame_framework.framework import FrameworkBase
 from pygame_framework.framework import *
 import math
 
 N_ROBOTS = 3
-
-
-class Null(object):
-    def __init__(self):
-        pass
-
-class Vector(object):
-    def __init__(self, angle, norm):
-        self.angle = angle
-        self.norm = norm
-
-    @property
-    def coord_x(self):
-        return self.angle*math.cos(self.norm)
-
-    @property
-    def coord_y(self):
-        return self.angle*math.sin(self.norm)
-
 
 
 # Class decorator, see: 
@@ -119,7 +100,7 @@ class Field(PygameFramework):
         ground_area = None
         for ud in (ud_a, ud_b):
             obj = ud['obj']
-            if isinstance(obj, BodyMovingOnGround):
+            if isinstance(obj, PhysicsEngineRobot):
                 tire = obj
             elif isinstance(obj, Ground):
                 ground_area = obj
@@ -148,111 +129,3 @@ class Field(PygameFramework):
             tractions = [tire.current_traction for tire in self.car[x].tires]
             print(self.car[x].body.position)
         #self.Print('Current tractions: %s' % tractions)
-
-"""
-class Field(object):
-    def __init__(self, *args, **kargs):
-
-        self.frame=kargs.pop('frame')
-
-        # --- pygame setup ---
-
-        #self.screen = pygame.display.set_mode((int(FIELD_W), int(FIELD_H)) )
-
-        # --- pybox2d world setup --- 
-
-        self.world = world(gravity=(0, 0), doSleep=True)
-
-        self.walls = Walls(self.world, UnBall_blue)
-        self.ball = Ball(self.world, BALL_RADIUS, ORANGE)
-
-        self.colors = {
-            'wall': self.walls.color,
-            'ball': self.ball.color,
-            'allie': (127, 127, 127),
-            'oppon': (127, 127, 12) 
-        }
-
-        collor_allie = YELLOW if kargs.pop('color_team') == 'Yellow' else BLUE
-        n_allies = int(kargs.pop('n_allies'))
-        n_oppo = int(kargs.pop('n_opponents'))
-
-        self.robot_allie = [Robot(self.world, collor_allie, 'allie') for v in range(n_allies)]
-        self.robot_oppo = [OPPON_COLOR, n_oppo, 'oppon']
-        self.robot_oppo = [Robot(self.world, collor_allie, 'oppon') for v in range(n_oppo)]
-        
-        pygame.display.init()
-        self.bg_color = pygame.Color(0,0,0)
-        
-        
-        def my_draw_polygon(polygon, body, fixture):
-            vertices = [(body.transform * v) * PPM for v in polygon.vertices]
-            vertices = [(v[0], FIELD_H - v[1]) for v in vertices]
-            pygame.draw.polygon(self.screen, self.colors[body.userData], vertices)
-        polygonShape.draw = my_draw_polygon
-        
-        def DrawSolidCircle(self, center, radius, axis, color):
-        
-            radius *= self.zoom
-            if radius < 1:
-                radius = 1
-            else:
-                radius = int(radius)
-
-            pygame.draw.circle(self.surface, (color / 2).bytes + [127],
-                               center, radius, 0)
-            pygame.draw.circle(self.surface, color.bytes, center, radius, 1)
-            pygame.draw.aaline(self.surface, (255, 0, 0), center,
-                               (center[0] - radius * axis[0],
-                                center[1] + radius * axis[1]))
-
-    
-        def my_draw_circle(circle, body, fixture):  
-            position = body.transform * circle.pos * PPM
-            position = (position[0], FIELD_H - position[1])
-            pygame.draw.circle(self.screen, self.colors[body.userData], [int(
-                x) for x in position], int(circle.radius * PPM))
-            # Note: Python 3.x will enforce that pygame get the integers it requests,
-            #       and it will not convert from float.
-
-        circleShape.draw = my_draw_circle
-        
-        #self.i = 20
-        
-        self.game()
-
-    def game(self):
-        self.screen.fill(self.bg_color)
-        self.draw_lines_and_circle() # draw lines in field
-
-        # Make Box2D simulate the physics of our world for one step.
-        # Draw the world
-        for body in self.world.bodies:
-            for fixture in body.fixtures:
-                fixture.shape.draw(body, fixture)
-
-        # Make Box2D simulate the physics of our world for one step.
-        self.world.Step(TIME_STEP, 10, 10)
-        pygame.display.flip()
-
-        self.frame.after(1, self.game)
-
-    def draw_lines_and_circle(self):
-        lines = (((FIELD_W/2, 0), (FIELD_W/2, FIELD_H)),                # linha de meio campo
-                 ((FIELD_W-(12*PPM), 0), (FIELD_W-(12*PPM), FIELD_H)),  # linha de meta direita
-                 ((12*PPM, 0), (12*PPM, FIELD_H)),                      # linha de meta esquerda
-                 ((12*PPM, (FIELD_H/2) - (35*PPM)), (27*PPM, (FIELD_H/2) - (35*PPM))),  # linha de
-                 ((12*PPM, (FIELD_H/2) + (35*PPM)), (27*PPM, (FIELD_H/2) + (35*PPM))),  # tiro penal 
-                 ((27*PPM, (FIELD_H/2) - (35*PPM)), (27*PPM, (FIELD_H/2) + (35*PPM))),  # esquerda
-                 ((FIELD_W-(12*PPM), (FIELD_H/2) - (35*PPM)), (FIELD_W-(27*PPM), (FIELD_H/2) - (35*PPM))), # linha de
-                 ((FIELD_W-(12*PPM), (FIELD_H/2) + (35*PPM)), (FIELD_W-(27*PPM), (FIELD_H/2) + (35*PPM))), # tiro penal
-                 ((FIELD_W-(27*PPM), (FIELD_H/2) - (35*PPM)), (FIELD_W-(27*PPM), (FIELD_H/2) + (35*PPM))), # direita
-                 )
-
-        # grande lua
-        pygame.draw.arc(self.screen, WHITE, (int((FIELD_W/2) - (BIG_FIELD_RADIUS*PPM)), 
-                        int((FIELD_H/2) - (BIG_FIELD_RADIUS*PPM)), BIG_FIELD_RADIUS*PPM*2, 
-                        BIG_FIELD_RADIUS*PPM*2), 0, 8)
-        for x in lines:
-            pygame.draw.line(self.screen, WHITE, x[0], x[1])     
-"""
