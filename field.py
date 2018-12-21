@@ -11,11 +11,13 @@
 from constants import *
 import sys
 from communication_ros import *
-from objects_on_field.objects import (Ball, Walls, Robot, Ground, TDCar)
-from pygame_framework.physics_engine import TDTire
-from pygame_framework.framework import FrameworkBase as Framework
+from objects_on_field.objects import (Ball, Walls, Robot, Ground )#Lines_on_ground)
+from pygame_framework.physics_engine import BodyMovingOnGround
+#from pygame_framework.framework import FrameworkBase
 from pygame_framework.framework import *
 import math
+
+N_ROBOTS = 3
 
 
 class Null(object):
@@ -42,7 +44,7 @@ class Vector(object):
 # book: Luiz Eduardo Borges. Python para desenvolvedores, 2º ed. pg: 139
 
 #@add_communication_with_system 
-class Field(Framework):
+class Field(PygameFramework):
     name = "Python simulator"
     description = "Robot controled by ros"
     #description = "If there is only one robot. Keys: accel = w, reverse = s, left = a, right = d"
@@ -63,6 +65,7 @@ class Field(Framework):
 
         # The walls
         walls = Walls(self.world, BLUE)
+        self.ball = Ball(self.world, BLUE)
         #boundary = self.world.CreateStaticBody(position=(0, 20))
         #boundary.CreateEdgeChain([(-30, -30),
         #                          (-30, 30),
@@ -72,7 +75,7 @@ class Field(Framework):
         #                         )
 
         # A couple regions of differing traction
-        self.car = TDCar(self.world)
+        self.car = [Robot(self.world, position=(0,10*x)) for x in range(N_ROBOTS)]
         #gnd1 = self.world.CreateStaticBody(userData={'obj': Ground(0.5)})
         #fixture = gnd1.CreatePolygonFixture(
         #    box=(9, 7, (-10, 15), math.radians(20)))
@@ -85,6 +88,7 @@ class Field(Framework):
         #fixture.sensor = True
 
         super(Field, self).run()
+        
 
     def Keyboard(self, key):
         key_map = self.key_map
@@ -115,7 +119,7 @@ class Field(Framework):
         ground_area = None
         for ud in (ud_a, ud_b):
             obj = ud['obj']
-            if isinstance(obj, TDTire):
+            if isinstance(obj, BodyMovingOnGround):
                 tire = obj
             elif isinstance(obj, Ground):
                 ground_area = obj
@@ -133,12 +137,16 @@ class Field(Framework):
         self.handle_contact(contact, False)
 
     def Step(self, settings):
-        self.car.update(self.pressed_keys, settings.hz)
+        for x in range(N_ROBOTS):
+            self.car[x].update(self.pressed_keys, settings.hz)
 
+        self.ball.update()
         super(Field, self).Step(settings)
 
-        tractions = [tire.current_traction for tire in self.car.tires]
-        print(self.car.body.position)
+        
+        for x in range(N_ROBOTS):
+            tractions = [tire.current_traction for tire in self.car[x].tires]
+            print(self.car[x].body.position)
         #self.Print('Current tractions: %s' % tractions)
 
 """

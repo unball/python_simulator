@@ -7,7 +7,7 @@
     'http://www.iforce2d.net/b2dtut/top-down-car'
 """
 
-class TDTire(object):
+class BodyMovingOnGround(object):
 
     def __init__(self, car, max_forward_speed=100.0,
                  max_backward_speed=-20, max_drive_force=150,
@@ -95,23 +95,14 @@ class TDTire(object):
 
         self.body.ApplyTorque(desired_torque, True)
 
-    def add_ground_area(self, ud):
-        if ud not in self.ground_areas:
-            self.ground_areas.append(ud)
-            self.update_traction()
-
-    def remove_ground_area(self, ud):
-        if ud in self.ground_areas:
-            self.ground_areas.remove(ud)
-            self.update_traction()
 
     def update_traction(self):
-        if not self.ground_areas:
+        #if not self.ground_areas:
             self.current_traction = 1
-        else:
-            self.current_traction = 0
-            mods = [ga.friction_modifier for ga in self.ground_areas]
+        #else:
+        #    self.current_traction = 0
+        #    mods = [ga.friction_modifier for ga in self.ground_areas]
 
-            max_mod = max(mods)
-            if max_mod > self.current_traction:
-                self.current_traction = max_mod
+        #    max_mod = max(mods)
+        #    if max_mod > self.current_traction:
+        #        self.current_traction = max_mod

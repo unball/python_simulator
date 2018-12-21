@@ -7,24 +7,56 @@ http://www.iforce2d.net/b2dtut/top-down-car
 
 from pygame_framework.framework import *
 from pygame_framework.backends.pygame_framework import *
-from pygame_framework.physics_engine import TDTire
+from pygame_framework.physics_engine import BodyMovingOnGround
 import math
 
-class Ball(FrameworkBase):
-    def __init__(self, world, radi, color, density=1, position=(174/2, 134/2)):
+class Ball(PygameFramework):
+    def __init__(self, world, color, density=1, position=(20 , 20)):
         super(Ball, self).__init__()
 
         self.body = world.CreateDynamicBody(
-            fixtures=b2FixtureDef(shape=b2CircleShape(radius=radi), 
+            fixtures=b2FixtureDef(shape=b2CircleShape(radius=2), 
                                   density=1.0,
+                                  friction=0.2,
                                   restitution=0.1),
             bullet=True,
             position=position)
         self.body.userData = {'obj': self}
         self.color = color
 
+    def update(self):
+        self.update_friction()
 
-class Walls(FrameworkBase):
+    @property
+    def forward_velocity(self):
+        body = self.body
+        current_normal = body.GetWorldVector((0, 1))
+        return current_normal.dot(body.linearVelocity) * current_normal
+
+    def update_friction(self):
+        #impulse = -self.lateral_velocity * self.body.mass
+        #if impulse.length > self.max_lateral_impulse:
+        #    impulse *= self.max_lateral_impulse / impulse.length
+
+        #self.body.ApplyLinearImpulse(self.current_traction * impulse,
+        #                             self.body.worldCenter, True)
+
+        #aimp = 0.1 * self.current_traction * \
+        #Remove AngularMoment
+        aimp = 0.1 * \
+            self.body.inertia * -self.body.angularVelocity
+        self.body.ApplyAngularImpulse(aimp, True)
+
+        #Remove LinearMoment
+        current_forward_normal = self.forward_velocity
+        current_forward_speed = current_forward_normal.Normalize()
+
+        drag_force_magnitude = -6 * current_forward_speed
+        self.body.ApplyForce(drag_force_magnitude * current_forward_normal,
+                             self.body.worldCenter, True)
+
+
+class Walls(PygameFramework):
     """
     See images/Field.jpeg for more details
     """
@@ -55,8 +87,35 @@ class Ground(object):
     def __init__(self, friction_modifier):
         self.friction_modifier = friction_modifier
 
+class Lines_on_ground(PygameFramework):
+    """
+    Lines that there are on field
+    """
+    def __init__(self, world, color):
+        super(Lines_on_ground, self).__init__()
+        #pygame.draw.circle(self.screen, (255,255,255), (0,20), 40, 5)
+        world.rendered.DrawArc((int((FIELD_W/2) - (BIG_FIELD_RADIUS*PPM)), 
+                        int((FIELD_H/2) - (BIG_FIELD_RADIUS*PPM)), BIG_FIELD_RADIUS*PPM*2, 
+                        BIG_FIELD_RADIUS*PPM*2), 0, 8, b2Color(0.3, 0.4, 0.1))
 
-class Robot(FrameworkBase):
+        #world.renderer.DrawCircle((0,0), 20, b2Color(0, 1, 0.6))
+        """
+        lines = (((FIELD_W/2, 0), (FIELD_W/2, FIELD_H)),                # linha de meio campo
+                 ((FIELD_W-(12*PPM), 0), (FIELD_W-(12*PPM), FIELD_H)),  # linha de meta direita
+                 ((12*PPM, 0), (12*PPM, FIELD_H)),                      # linha de meta esquerda
+                 ((12*PPM, (FIELD_H/2) - (35*PPM)), (27*PPM, (FIELD_H/2) - (35*PPM))),  # linha de
+                 ((12*PPM, (FIELD_H/2) + (35*PPM)), (27*PPM, (FIELD_H/2) + (35*PPM))),  # tiro penal 
+                 ((27*PPM, (FIELD_H/2) - (35*PPM)), (27*PPM, (FIELD_H/2) + (35*PPM))),  # esquerda
+                 ((FIELD_W-(12*PPM), (FIELD_H/2) - (35*PPM)), (FIELD_W-(27*PPM), (FIELD_H/2) - (35*PPM))), # linha de
+                 ((FIELD_W-(12*PPM), (FIELD_H/2) + (35*PPM)), (FIELD_W-(27*PPM), (FIELD_H/2) + (35*PPM))), # tiro penal
+                 ((FIELD_W-(27*PPM), (FIELD_H/2) - (35*PPM)), (FIELD_W-(27*PPM), (FIELD_H/2) + (35*PPM))), # direita
+                 )
+        """
+        self.color = color
+
+
+
+class Robots(PygameFramework):
     length_robot = 7.5 # cm
     pos_init = {
     'allie': [70, 47],
@@ -104,7 +163,7 @@ class Robot(FrameworkBase):
         self.vel_ang = (vel_road_LR[1] - vel_road_LR[0]) / self.__class__.length_robot
 
 
-class TDCar(object):
+class Robot(PygameFramework):
     vertices = [(3.75, 0.0),
                 (3.75, 7.5),
                 (-3.75, 7.5),
@@ -121,16 +180,16 @@ class TDCar(object):
                  tire_anchors=None, density=0.1, position=(0, 0),
                  **tire_kws):
         if vertices is None:
-            vertices = TDCar.vertices
+            vertices = Robot.vertices
 
         self.body = world.CreateDynamicBody(position=position)
         self.body.CreatePolygonFixture(vertices=vertices, density=density)
         self.body.userData = {'obj': self}
 
-        self.tires = [TDTire(self, **tire_kws) for i in range(4)]
+        self.tires = [BodyMovingOnGround(self, **tire_kws) for i in range(4)]
 
         if tire_anchors is None:
-            anchors = TDCar.tire_anchors
+            anchors = Robot.tire_anchors
 
         joints = self.joints = []
         for tire, anchor in zip(self.tires, anchors):

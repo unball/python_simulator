@@ -131,6 +131,20 @@ class PygameDraw(b2DrawExtended):
         pygame.draw.circle(self.surface, color.bytes,
                            center, radius, drawwidth)
 
+    def DrawArc(self, rect, start_angle, stop_angle, color, drawwidth=1):
+        """
+        
+        """
+        rect = list(rect)
+        rect = [self.zoom* i for i in rect]
+        #if radius < 1:
+        #    radius = 1
+        #else:
+        #    radius = int(radius)
+
+        pygame.draw.arc(self.surface, color.bytes,
+                           rect, start_angle, stop_angle, drawwidth)
+
     def DrawSolidCircle(self, center, radius, axis, color):
         """
         Draw a solid circle given the center, radius, axis of orientation and
@@ -197,7 +211,7 @@ class PygameDraw(b2DrawExtended):
 
 
 class PygameFramework(FrameworkBase):
-    TEXTLINE_START = 30
+    #TEXTLINE_START = 30
 
     def setup_keys(self):
         keys = [s for s in dir(pygame.locals) if s.startswith('K_')]
@@ -212,18 +226,16 @@ class PygameFramework(FrameworkBase):
         self._viewOffset = None
         self.screenSize = None
         self.rMouseDown = False
-        self.textLine = 30
+        #self.textLine = 30
         self.fps = 0
 
         # GUI-related (PGU)
-        self.gui_app = None
-        self.gui_table = None
+        #self.gui_app = None
+        #self.gui_table = None
         self.setup_keys()
 
-    def __init__(self, frame=''):
+    def __init__(self):
         super(PygameFramework, self).__init__()
-
-        self.frame = frame
 
         self.__reset()
         if fwSettings.onlyInit:  # testing mode doesn't initialize pygame
@@ -241,7 +253,7 @@ class PygameFramework(FrameworkBase):
 
         self.renderer = PygameDraw(surface=self.screen, test=self)
         self.world.renderer = self.renderer
-
+        
         self.viewCenter = (0, 0)
         self.groundbody = self.world.CreateBody()
 
@@ -327,7 +339,7 @@ class PygameFramework(FrameworkBase):
 
             # Check keys that should be checked every loop (not only on initial
             # keydown)
-            self.CheckKeys()
+            #self.CheckKeys()
 
             # Run the simulation loop
             self.SimulationLoop()
@@ -336,12 +348,12 @@ class PygameFramework(FrameworkBase):
             clock.tick(self.settings.hz)
             self.fps = clock.get_fps()
             
-    def destroy(self):
         pygame.quit()
         super(PygameFramework, self).destroy_bodies()
         self.world.contactListener = None
         self.world.destructionListener = None
         self.world.renderer = None
+
 
 
     def _Keyboard_Event(self, key, down=True):
@@ -356,20 +368,20 @@ class PygameFramework(FrameworkBase):
             #    self.viewZoom = min(1.1 * self.viewZoom, 50.0)
             #elif key == Keys.K_x:     # Zoom out
             #    self.viewZoom = max(0.9 * self.viewZoom, 0.02)
-            if key == Keys.K_F2:    # Do a single step
-                self.settings.singleStep = True
-            else:              # Inform the test of the key press
-                self.Keyboard(key)
+            #if key == Keys.K_F2:    # Do a single step
+            #    self.settings.singleStep = True
+        #    else:              # Inform the test of the key press
+            self.Keyboard(key)
         else:
             self.KeyboardUp(key)
 
-    def CheckKeys(self):
+    #def CheckKeys(self):
         """
         Check the keys that are evaluated on every main loop iteration.
         I.e., they aren't just evaluated when first pressed down
         """
 
-        pygame.event.pump()
+        #pygame.event.pump()
         #self.keys = keys = pygame.key.get_pressed()
         #if keys[Keys.K_LEFT]:
         #    self.viewCenter -= (0.5, 0)
