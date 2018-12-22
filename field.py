@@ -45,6 +45,7 @@ class Field(PygameFramework):
         self.pressed_keys = set()
 
         # The walls
+        self.ground = Ground(self.world)
         walls = Walls(self.world, BLUE)
         self.ball = Ball(self.world, BLUE)
         #boundary = self.world.CreateStaticBody(position=(0, 20))
@@ -123,6 +124,7 @@ class Field(PygameFramework):
             self.car[x].update(self.pressed_keys, settings.hz)
 
         self.ball.update()
+        self.ground.update()
         super(Field, self).Step(settings)
 
         

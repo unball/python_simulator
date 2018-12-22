@@ -8,6 +8,7 @@ http://www.iforce2d.net/b2dtut/top-down-car
 from pygame_framework.framework import *
 from pygame_framework.backends.pygame_framework import *
 from pygame_framework.physics_engine import *
+from constants import *
 import math
 
 class Ball(PhysicsBall):
@@ -53,8 +54,15 @@ class Ground(object):
     An area on the ground that the robots can run over
     """
 
-    def __init__(self, friction_modifier):
-        self.friction_modifier = friction_modifier
+    def __init__(self, world, friction_modifier = ''):
+        self.world = world
+
+    def update(self):
+        self.world.renderer.DrawCircle(self.world.renderer.to_screen(b2Vec2(0,0)),
+                                         20, WHITE)
+        self.world.renderer.DrawSegment(self.world.renderer.to_screen(b2Vec2(0,65)), 
+                                        self.world.renderer.to_screen(b2Vec2(0,-65)), 
+                                        WHITE)
 
 
 class Robot(PhysicsRobot):

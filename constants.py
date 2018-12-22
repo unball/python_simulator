@@ -1,3 +1,5 @@
+from Box2D import b2Color
+
 # --- Random values ---
 OPPONENT = 0
 ALLIE = 1
@@ -26,7 +28,7 @@ SMALL_FIELD_RADIUS = 10
 ORANGE = (255,165,0)
 BLUE = (0,0,255)
 YELLOW = (255,255,0)
-WHITE = (255, 255, 255)
+WHITE = b2Color(1, 1, 1)
 OPPON_COLOR = (123, 122, 6)
 BACKGROUND_COLOR = '#e2873c'
 UnBall_blue  = (3, 63, 118) 

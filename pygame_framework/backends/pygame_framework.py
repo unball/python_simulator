@@ -129,8 +129,8 @@ class PygameDraw(b2DrawExtended):
         else:
             radius = int(radius)
 
-        pygame.draw.circle(self.surface, color,
-                           self.to_screen(b2Vec2(center)), radius, drawwidth)
+        pygame.draw.circle(self.surface, color.bytes,
+                           center, radius, drawwidth)
 
     def DrawArc(self, rect, start_angle, stop_angle, color, drawwidth=1):
         """
@@ -343,7 +343,6 @@ class PygameFramework(FrameworkBase):
             #self.CheckKeys()
 
             # Run the simulation loop
-            self.world.renderer.DrawCircle((0,0), 20, (255, 255, 255), 1)
             self.SimulationLoop()
             #def DrawCircle(self, center, radius, color, drawwidth=1):
             #pygame.draw.circle(self.world.renderer.surface, b2Color(0, 0.9, 0.4).bytes,
