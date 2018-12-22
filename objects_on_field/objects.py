@@ -48,7 +48,6 @@ class Walls(object):
             wall.userData = {'obj': self}
         self.color = color
 
-
 class Ground(object):
     """
     An area on the ground that the robots can run over
@@ -66,6 +65,7 @@ class Robot(PhysicsRobot):
                  turn_torque=1500, max_lateral_impulse=20,
                  density=0.1, position=(0, 0)):
 
+        self.main_world = world
         self.body = world.CreateDynamicBody(position=position)
         self.body.CreatePolygonFixture(box=Robot.dimensions, density=density)
         self.body.userData = {'obj': self}
@@ -78,6 +78,7 @@ class Robot(PhysicsRobot):
         super(Robot, self).update_friction()
         super(Robot, self).update_drive(keys)
         super(Robot, self).update_turn(keys)
+
 
 """
 class Lines_on_ground(object):
