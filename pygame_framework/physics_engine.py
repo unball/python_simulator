@@ -7,37 +7,22 @@
     'http://www.iforce2d.net/b2dtut/top-down-car'
 """
 
-class PhysicsEngineBase(object):
+class PhysicsBall(object):
 
     def __init__(self, body):
-
-        self.body = body
-
-    @property
-    def forward_velocity(self):
-        body = self.body
-        current_normal = body.GetWorldVector((0, 1))
-        return current_normal.dot(body.linearVelocity) * current_normal
-
-    @property
-    def lateral_velocity(self):
-        body = self.body
-
-        right_normal = body.GetWorldVector((1, 0))
-        return right_normal.dot(body.linearVelocity) * right_normal
+        pass
 
     def update_friction(self):
         pass
 
-class PhysicsEngineRobot(PhysicsEngineBase):
+class PhysicsRobot(object):
 
-    def __init__(self, car, max_forward_speed=100.0,
-                 max_backward_speed=-20, max_drive_force=150,
-                 turn_torque=15, max_lateral_impulse=4,
-                 dimensions=(0.02, 3.00), density=1.0,
-                 position=(0, 0)):
+    def __init__(self, robot, max_forward_speed,
+                 max_backward_speed, max_drive_force,
+                 turn_torque, max_lateral_impulse,
+                 density, position):
 
-        world = car.body.world
+        self.world = robot
 
         self.current_traction = 1
         self.turn_torque = turn_torque
@@ -47,9 +32,19 @@ class PhysicsEngineRobot(PhysicsEngineBase):
         self.max_lateral_impulse = max_lateral_impulse
         self.ground_areas = []
 
-        self.body = world.CreateDynamicBody(position=position)
-        self.body.CreatePolygonFixture(box=dimensions, density=density)
-        self.body.userData = {'obj': self}
+    @property
+    def forward_velocity(self):
+        body = self.world
+        current_normal = body.GetWorldVector((0, 1))
+        return current_normal.dot(body.linearVelocity) * current_normal
+
+    @property
+    def lateral_velocity(self):
+        body = self.world
+
+        right_normal = body.GetWorldVector((1, 0))
+        return right_normal.dot(body.linearVelocity) * right_normal
+
 
     def update_friction(self):
         aimp = 0.1 * self.current_traction * \

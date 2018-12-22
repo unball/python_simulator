@@ -10,7 +10,7 @@ from pygame_framework.backends.pygame_framework import *
 from pygame_framework.physics_engine import *
 import math
 
-class Ball(PhysicsEngineBase):
+class Ball(PhysicsBall):
     def __init__(self, world, color, density=1, position=(20 , 20)):
         self.body = world.CreateDynamicBody(
             fixtures=b2FixtureDef(shape=b2CircleShape(radius=2), 
@@ -58,7 +58,7 @@ class Ground(object):
         self.friction_modifier = friction_modifier
 
 
-class Robot(PhysicsEngineRobot):
+class Robot(PhysicsRobot):
     dimensions = (3.60, 3.60)
 
     def __init__(self, world, max_forward_speed=100.0,
@@ -70,233 +70,14 @@ class Robot(PhysicsEngineRobot):
         self.body.CreatePolygonFixture(box=Robot.dimensions, density=density)
         self.body.userData = {'obj': self}
 
-        world = self.body.world
-
-        self.current_traction = 1
-        self.turn_torque = turn_torque
-        self.max_forward_speed = max_forward_speed
-        self.max_backward_speed = max_backward_speed
-        self.max_drive_force = max_drive_force
-        self.max_lateral_impulse = max_lateral_impulse
-        self.ground_areas = []
-
-
-    def update_friction(self):
-        aimp = 0.1 * self.current_traction * \
-            self.body.inertia * -self.body.angularVelocity
-        self.body.ApplyAngularImpulse(aimp, True)
-
-        current_forward_normal = self.forward_velocity
-        current_forward_speed = current_forward_normal.Normalize()
-
-        drag_force_magnitude = -2 * current_forward_speed
-        self.body.ApplyForce(self.current_traction * drag_force_magnitude * current_forward_normal,
-                             self.body.worldCenter, True)
-
-        impulse = -self.lateral_velocity * self.body.mass
-        if impulse.length > self.max_lateral_impulse:
-            impulse *= self.max_lateral_impulse / impulse.length
-
-        self.body.ApplyLinearImpulse(self.current_traction * impulse,
-                                     self.body.worldCenter, True)
-
-    def update_drive(self, keys):
-        if 'up' in keys:
-            desired_speed = self.max_forward_speed
-        elif 'down' in keys:
-            desired_speed = self.max_backward_speed
-        else:
-            return
-
-        # find the current speed in the forward direction
-        current_forward_normal = self.body.GetWorldVector((0, 1))
-        current_speed = self.forward_velocity.dot(current_forward_normal)
-
-        # apply necessary force
-        force = 0.0
-        if desired_speed > current_speed:
-            force = self.max_drive_force
-        elif desired_speed < current_speed:
-            force = -self.max_drive_force
-        else:
-            return
-
-        self.body.ApplyForce(self.current_traction * force * current_forward_normal,
-                             self.body.worldCenter, True)
-
-    def update_turn(self, keys):
-        if 'left' in keys:
-            desired_torque = self.turn_torque
-        elif 'right' in keys:
-            desired_torque = -self.turn_torque
-        else:
-            return
-
-        self.body.ApplyTorque(desired_torque, True)
-
-
-    def update_traction(self):
-        #if not self.ground_areas:
-            self.current_traction = 1
-        #else:
-        #    self.current_traction = 0
-        #    mods = [ga.friction_modifier for ga in self.ground_areas]
-
-        #    max_mod = max(mods)
-        #    if max_mod > self.current_traction:
-        #        self.current_traction = max_mod
+        super(Robot, self).__init__(self.body, max_forward_speed, max_backward_speed,
+                                    max_drive_force, turn_torque, max_lateral_impulse, 
+                                    density, position)
 
     def update(self, keys, hz):
-        self.update_friction()
-        self.update_drive(keys)
-        self.update_turn(keys)
-        
-        """
-        # control steering
-        lock_angle = math.radians(40.)
-        # from lock to lock in 0.5 sec
-        turn_speed_per_sec = math.radians(160.)
-        turn_per_timestep = turn_speed_per_sec / hz
-        desired_angle = 0.0
-
-        if 'left' in keys:
-            desired_angle = lock_angle
-        elif 'right' in keys:
-            desired_angle = -lock_angle
-
-        front_left_joint, front_right_joint = self.joints
-        angle_now = front_left_joint.angle
-        angle_to_turn = desired_angle - angle_now
-
-        # TODO fix b2Clamp for non-b2Vec2 types
-        if angle_to_turn < -turn_per_timestep:
-            angle_to_turn = -turn_per_timestep
-        elif angle_to_turn > turn_per_timestep:
-            angle_to_turn = turn_per_timestep
-
-        new_angle = angle_now + angle_to_turn
-        # Rotate the tires by locking the limits:
-        front_left_joint.SetLimits(new_angle, new_angle)
-        front_right_joint.SetLimits(new_angle, new_angle)
-    """
-
-"""
-    def __init__(self, world, vertices=None,
-                 tire_anchors=None, density=0.1, position=(0, 0),
-                 **tire_kws):
-        if vertices is None:
-            vertices = Robot.vertices
-
-        self.body = world.CreateDynamicBody(position=position)
-        self.body.CreatePolygonFixture(vertices=vertices, density=density)
-        self.body.userData = {'obj': self}
-
-        self.tires = [PhysicsEngineRobot(self, **tire_kws) for i in range(2)]
-
-        if tire_anchors is None:
-            anchors = Robot.tire_anchors
-
-        joints = self.joints = []
-        for tire, anchor in zip(self.tires, anchors):
-            j = world.CreateRevoluteJoint(bodyA=self.body,
-                                          bodyB=tire.body,
-                                          localAnchorA=anchor,
-                                          # center of tire
-                                          localAnchorB=(0, 0),
-                                          enableMotor=False,
-                                          maxMotorTorque=1000,
-                                          enableLimit=True,
-                                          lowerAngle=0,
-                                          upperAngle=0,
-                                          )
-
-            tire.body.position = self.body.worldCenter + anchor
-            joints.append(j)
-
-    def update(self, keys, hz):
-        for tire in self.tires:
-            tire.update_friction()
-
-        for tire in self.tires:
-            tire.update_drive(keys)
-
-        # control steering
-        lock_angle = math.radians(40.)
-        # from lock to lock in 0.5 sec
-        turn_speed_per_sec = math.radians(160.)
-        turn_per_timestep = turn_speed_per_sec / hz
-        desired_angle = 0.0
-
-        if 'left' in keys:
-            desired_angle = lock_angle
-        elif 'right' in keys:
-            desired_angle = -lock_angle
-
-        front_left_joint, front_right_joint = self.joints
-        angle_now = front_left_joint.angle
-        angle_to_turn = desired_angle - angle_now
-
-        # TODO fix b2Clamp for non-b2Vec2 types
-        if angle_to_turn < -turn_per_timestep:
-            angle_to_turn = -turn_per_timestep
-        elif angle_to_turn > turn_per_timestep:
-            angle_to_turn = turn_per_timestep
-
-        new_angle = angle_now + angle_to_turn
-        # Rotate the tires by locking the limits:
-        front_left_joint.SetLimits(new_angle, new_angle)
-        front_right_joint.SetLimits(new_angle, new_angle)
-
-"""
-
-"""
-class Robots(PhysicsEngineBallRobot):
-    length_robot = 7.5 # cm
-    pos_init = {
-    'allie': [70, 47],
-    'oppon':  [104, 47]
-    }
-
-    def __init__(self,world, color = '', team=''):
-        self.body = world.CreateDynamicBody(position=self.__class__.pos_init[team], 
-                                            angle=1.5)
-        self.body.CreatePolygonFixture(box=(__class__.length_robot/2,__class__.length_robot/2), 
-                                  density=1, friction=0.3, restitution=0.2)
-        self.body.userData = {'obj': self}
-        self.color = color
-        
-        self.update_pos_init(team)
-
-    def update_pos_init(self, team):
-        pos = __class__.pos_init[team]
-        pos[1] += 20
-        __class__.pos_init[team] = pos
-
-    @classmethod
-    def reset_values_pos(cls):
-        cls.pos_init['allie'] = [70, 47]
-        cls.pos_init['oppon'] = [104, 47]
-
-    def __del__(self):
-        self.__class__.reset_values_pos()
-
-    def Keyboard(self, key):
-        if key == Keys.K_d:
-            self.platform.type = b2_dynamicBody
-        elif key == Keys.K_s:
-            self.platform.type = b2_staticBody
-        elif key == Keys.K_k:
-            self.platform.type = b2_kinematicBody
-            self.platform.linearVelocity = (-self.speed, 0)
-            self.platform.angularVelocity = 0
-
-
-    def convert_vel_wheels_for_lin_and_ang(self, vel_road_LR = [0, 0]):
-        vel_lin = Vector((vel_road_LR[0] + vel_road_LR[1]) / 2, self.item.angle)
-        
-        self.vel_lin = [vel_lin.coord_x, vel_lin.coord_y]
-        self.vel_ang = (vel_road_LR[1] - vel_road_LR[0]) / self.__class__.length_robot
-"""
+        super(Robot, self).update_friction()
+        super(Robot, self).update_drive(keys)
+        super(Robot, self).update_turn(keys)
 
 """
 class Lines_on_ground(object):
