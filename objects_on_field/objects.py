@@ -63,7 +63,7 @@ class Robot(PhysicsEngineRobot):
 
     def __init__(self, world, max_forward_speed=100.0,
                  max_backward_speed=-20, max_drive_force=150,
-                 turn_torque=1500, max_lateral_impulse=4,
+                 turn_torque=1500, max_lateral_impulse=20,
                  density=0.1, position=(0, 0)):
 
         self.body = world.CreateDynamicBody(position=position)
