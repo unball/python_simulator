@@ -53,6 +53,11 @@ class Ground(object):
     """
     An area on the ground that the robots can run over
     """
+    pos_lines = (((0,65),(0, -65)), ((75,20), (75,-20)), ((-75,20), (-75,-20)), 
+                ((60,35), (60,-35)), ((-60,35), (-60,-35)), 
+                ((75,35), (60, 35)), ((-75,35), (-60, 35)),
+                ((75,-35), (60, -35)), ((-75,-35), (-60, -35)))
+
 
     def __init__(self, world, friction_modifier = ''):
         self.world = world
@@ -60,9 +65,10 @@ class Ground(object):
     def update(self):
         self.world.renderer.DrawCircle(self.world.renderer.to_screen(b2Vec2(0,0)),
                                          20, WHITE)
-        self.world.renderer.DrawSegment(self.world.renderer.to_screen(b2Vec2(0,65)), 
-                                        self.world.renderer.to_screen(b2Vec2(0,-65)), 
-                                        WHITE)
+        for x in range(len(Ground.pos_lines)):
+            self.world.renderer.DrawSegment(self.world.renderer.to_screen(b2Vec2(Ground.pos_lines[x][0])), 
+                                            self.world.renderer.to_screen(b2Vec2(Ground.pos_lines[x][1])), 
+                                            WHITE)
 
 
 class Robot(PhysicsRobot):
@@ -86,31 +92,3 @@ class Robot(PhysicsRobot):
         super(Robot, self).update_friction()
         super(Robot, self).update_drive(keys)
         super(Robot, self).update_turn(keys)
-
-
-"""
-class Lines_on_ground(object):
-    
-    def __init__(self, world, color):
-        super(Lines_on_ground, self).__init__()
-        #PhysicsEnginecle(self.screen, (255,255,255), (0,20), 40, 5)
-        world.rendered.DrawArc((int((FIELD_W/2) - (BIG_FIELD_RADIUS*PPM)), 
-                        int((FIELD_H/2) - (BIG_FIELD_RADIUS*PPM)), BIG_FIELD_RADIUS*PPM*2, 
-                        BIG_FIELD_RADIUS*PPM*2), 0, 8, b2Color(0.3, 0.4, 0.1))
-
-        #world.renderer.DrawCircle((0,0), 20, b2Color(0, 1, 0.6))
-        
-        lines = (((FIELD_W/2, 0), (FIELD_W/2, FIELD_H)),                # linha de meio campo
-                 ((FIELD_W-(12*PPM), 0), (FIELD_W-(12*PPM), FIELD_H)),  # linha de meta direita
-                 ((12*PPM, 0), (12*PPM, FIELD_H)),                      # linha de meta esquerda
-                 ((12*PPM, (FIELD_H/2) - (35*PPM)), (27*PPM, (FIELD_H/2) - (35*PPM))),  # linha de
-                 ((12*PPM, (FIELD_H/2) + (35*PPM)), (27*PPM, (FIELD_H/2) + (35*PPM))),  # tiro penal 
-                 ((27*PPM, (FIELD_H/2) - (35*PPM)), (27*PPM, (FIELD_H/2) + (35*PPM))),  # esquerda
-                 ((FIELD_W-(12*PPM), (FIELD_H/2) - (35*PPM)), (FIELD_W-(27*PPM), (FIELD_H/2) - (35*PPM))), # linha de
-                 ((FIELD_W-(12*PPM), (FIELD_H/2) + (35*PPM)), (FIELD_W-(27*PPM), (FIELD_H/2) + (35*PPM))), # tiro penal
-                 ((FIELD_W-(27*PPM), (FIELD_H/2) - (35*PPM)), (FIELD_W-(27*PPM), (FIELD_H/2) + (35*PPM))), # direita
-                 )
-        
-        self.color = color
-
-"""
