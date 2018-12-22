@@ -34,7 +34,7 @@ class PhysicsEngineRobot(PhysicsEngineBase):
     def __init__(self, car, max_forward_speed=100.0,
                  max_backward_speed=-20, max_drive_force=150,
                  turn_torque=15, max_lateral_impulse=4,
-                 dimensions=(0.5, 1.25), density=1.0,
+                 dimensions=(0.02, 3.00), density=1.0,
                  position=(0, 0)):
 
         world = car.body.world

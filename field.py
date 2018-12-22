@@ -10,7 +10,7 @@
 
 from constants import *
 import sys
-from communication_ros import *
+#from communication_ros import *
 from objects_on_field.objects import (Ball, Walls, Robot, Ground )#Lines_on_ground)
 from pygame_framework.physics_engine import *
 #from pygame_framework.framework import FrameworkBase
@@ -84,7 +84,7 @@ class Field(PygameFramework):
             self.pressed_keys.remove(key_map[key])
         else:
             super(Field, self).KeyboardUp(key)
-
+    """
     def handle_contact(self, contact, began):
         # A contact happened -- see if a wheel hit a
         # ground area
@@ -110,12 +110,13 @@ class Field(PygameFramework):
                 tire.add_ground_area(ground_area)
             else:
                 tire.remove_ground_area(ground_area)
-
+    
     def BeginContact(self, contact):
         self.handle_contact(contact, True)
 
     def EndContact(self, contact):
         self.handle_contact(contact, False)
+    """
 
     def Step(self, settings):
         for x in range(N_ROBOTS):
@@ -126,6 +127,6 @@ class Field(PygameFramework):
 
         
         for x in range(N_ROBOTS):
-            tractions = [tire.current_traction for tire in self.car[x].tires]
+            #tractions = [self.robot.current_traction for tire in self.car[x].tires]
             print(self.car[x].body.position)
         #self.Print('Current tractions: %s' % tractions)

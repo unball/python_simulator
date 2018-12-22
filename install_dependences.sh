@@ -16,6 +16,7 @@ dependency=(
     "sudo apt-get --yes --force-yes install build-essential libssl-dev libffi-dev python3-dev"
     "sudo apt-get --yes --force-yes install python3-setuptools"
     "sudo pip3 install pygame"
+    "sudo pip3 install box2d-py"
 )
 
 remove_dependences=(
@@ -64,13 +65,13 @@ sudo apt-get update
 result
 
 install-necessary dependency[@]
-remove-not-necessary remove_dependences[@]
+#remove-not-necessary remove_dependences[@]
 
-if [ ! -d "$PYBOXDIR" ]; then
-    install-necessary pybox2d[@]
-else
-    sudo rm -r "$PYBOXDIR/"
-    install-necessary pybox2d[@]
-fi
+#if [ ! -d "$PYBOXDIR" ]; then
+#    install-necessary pybox2d[@]
+#else
+#    sudo rm -r "$PYBOXDIR/"
+#    install-necessary pybox2d[@]
+#fi
 
-sudo chmod +x main.py
+#sudo chmod +x main.py
