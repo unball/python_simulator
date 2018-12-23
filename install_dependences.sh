@@ -17,6 +17,7 @@ dependency=(
     "sudo apt-get --yes --force-yes install python3-setuptools"
     "sudo pip3 install pygame"
     "sudo pip3 install box2d-py"
+    "sudo pip3 install pygame-menu"
 )
 
 remove_dependences=(

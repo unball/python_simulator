@@ -132,20 +132,6 @@ class PygameDraw(b2DrawExtended):
         pygame.draw.circle(self.surface, color.bytes,
                            center, radius, drawwidth)
 
-    def DrawArc(self, rect, start_angle, stop_angle, color, drawwidth=1):
-        """
-        
-        """
-        rect = list(rect)
-        rect = [self.zoom* i for i in rect]
-        #if radius < 1:
-        #    radius = 1
-        #else:
-        #    radius = int(radius)
-
-        pygame.draw.arc(self.surface, color.bytes,
-                           rect, start_angle, stop_angle, drawwidth)
-
     def DrawSolidCircle(self, center, radius, axis, color):
         """
         Draw a solid circle given the center, radius, axis of orientation and
@@ -344,9 +330,6 @@ class PygameFramework(FrameworkBase):
 
             # Run the simulation loop
             self.SimulationLoop()
-            #def DrawCircle(self, center, radius, color, drawwidth=1):
-            #pygame.draw.circle(self.world.renderer.surface, b2Color(0, 0.9, 0.4).bytes,
-            #               (0,0), 50, 1)
 
             pygame.display.flip()
             clock.tick(self.settings.hz)

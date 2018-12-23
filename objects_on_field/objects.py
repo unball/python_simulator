@@ -92,3 +92,8 @@ class Robot(PhysicsRobot):
         super(Robot, self).update_friction()
         super(Robot, self).update_drive(keys)
         super(Robot, self).update_turn(keys)
+        #self.update_sprite()
+
+    #def update_sprite(self):
+    #    self.main_world.renderer.DrawSolidCircleInRobot(
+    #        self.main_world.renderer.to_screen(b2Vec2(self.body.position)), 4.0, WHITE)
