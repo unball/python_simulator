@@ -9,6 +9,22 @@
 #from resolution import *
 import os
 from field import * # Contain the Classes of the objects in field and tkinter
+try:
+    from PIL import Image as Img
+    from PIL import ImageTk
+
+    # Checking the version of python in other use the respective module
+    version_py = sys.version_info[0] < 3
+    if version_py:
+        from Tkinter import *
+        import ttk
+    else:
+        from tkinter import *
+        from tkinter import ttk
+except ImportError as excessao:
+    print(excessao)
+    sys.exit()
+
 
 class Simulator(object):
     """UnBall Simulator"""
@@ -145,6 +161,7 @@ class Simulator(object):
         ### Field inserted in center - Pygame ###
         # Tell pygame's SDL window which window ID to use
         os.environ['SDL_WINDOWID'] = str(self.frame2.winfo_id())
+        os.environ["SDL_VIDEODRIVER"] = "dummy"
         self.field_simul = Field(frame=self.frame2, color_team=self.color_team.get(), 
                              n_allies=self.n_allies.get(), 
                              n_opponents=self.n_opponents.get())

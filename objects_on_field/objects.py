@@ -1,0 +1,99 @@
+#!/usr/bin/env python
+# -*- coding: utf-8 -*-
+"""
+Based on Chris Campbell's tutorial from iforce2d.net:
+http://www.iforce2d.net/b2dtut/top-down-car
+"""
+
+from pygame_framework.framework import *
+from pygame_framework.backends.pygame_framework import *
+from objects_on_field.physics_engine import *
+from constants import *
+import math
+
+class Ball(PhysicsBall):
+    def __init__(self, world, color, density=1, position=(20 , 20)):
+        self.body = world.CreateDynamicBody(
+            fixtures=b2FixtureDef(shape=b2CircleShape(radius=2), 
+                                  density=1.0,
+                                  friction=0.1,
+                                  restitution=0.1),
+            bullet=True,
+            position=position)
+        self.body.userData = {'obj': self}
+        self.color = color
+        super(Ball, self).__init__(self.body)
+
+    def update(self):
+        self.update_friction()
+    
+class Walls(object):
+    """
+    See images/Field.jpeg for more details
+    """
+    pos_and_length = (((81, 42.5), (6,22.5)), ((86, 0), (1,20)),
+                        ((81, -42.5), (6,22.5)), ((0, -66), (87,1)), 
+                        ((-81, -42.5), (6,22.5)), ((-86, 0), (1,20)),
+                        ((-81, 42.5), (6,22.5)), ((0, 66), (87,1)))
+    
+    def __init__(self, world, color):
+        super(Walls, self).__init__()
+
+        self.body = ''
+        for x in self.__class__.pos_and_length:
+            wall = world.CreateStaticBody(
+            position=x[0],
+            fixtures=b2FixtureDef(friction=0.8,
+                                  shape=b2PolygonShape(box=x[1]))
+            )
+            wall.userData = {'obj': self}
+        self.color = color
+
+class Ground(object):
+    """
+    An area on the ground that the robots can run over
+    """
+    pos_lines = (((0,65),(0, -65)), ((75,20), (75,-20)), ((-75,20), (-75,-20)), 
+                ((60,35), (60,-35)), ((-60,35), (-60,-35)), 
+                ((75,35), (60, 35)), ((-75,35), (-60, 35)),
+                ((75,-35), (60, -35)), ((-75,-35), (-60, -35)))
+
+
+    def __init__(self, world, friction_modifier = ''):
+        self.world = world
+
+    def update(self):
+        self.world.renderer.DrawCircle(self.world.renderer.to_screen(b2Vec2(0,0)),
+                                         20, WHITE)
+        for x in range(len(Ground.pos_lines)):
+            self.world.renderer.DrawSegment(self.world.renderer.to_screen(b2Vec2(Ground.pos_lines[x][0])), 
+                                            self.world.renderer.to_screen(b2Vec2(Ground.pos_lines[x][1])), 
+                                            WHITE)
+
+
+class Robot(PhysicsRobot):
+    dimensions = (3.60, 3.60)
+
+    def __init__(self, world, max_forward_speed=100.0,
+                 max_backward_speed=-20, max_drive_force=150,
+                 turn_torque=1500, max_lateral_impulse=20,
+                 density=0.1, position=(0, 0)):
+
+        self.main_world = world
+        self.body = world.CreateDynamicBody(position=position)
+        self.body.CreatePolygonFixture(box=Robot.dimensions, density=density)
+        self.body.userData = {'obj': self}
+
+        super(Robot, self).__init__(self.body, max_forward_speed, max_backward_speed,
+                                    max_drive_force, turn_torque, max_lateral_impulse, 
+                                    density, position)
+
+    def update(self, keys, hz):
+        super(Robot, self).update_friction()
+        super(Robot, self).update_drive(keys)
+        super(Robot, self).update_turn(keys)
+        #self.update_sprite()
+
+    #def update_sprite(self):
+    #    self.main_world.renderer.DrawSolidCircleInRobot(
+    #        self.main_world.renderer.to_screen(b2Vec2(self.body.position)), 4.0, WHITE)

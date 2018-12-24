@@ -7,12 +7,11 @@
 """
 
 #from resolution import *
-from simulator import *
+from manage_widgets import *
 
-def main():
-    instance = Tk()
-    Simulator(instance)
-    instance.mainloop()       
+def main():     
+    
+    Field((0,0,255), 3, 3)
     
 if __name__ == '__main__':
     main()
