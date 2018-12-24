@@ -66,9 +66,10 @@ class Ground(object):
         self.world.renderer.DrawCircle(self.world.renderer.to_screen(b2Vec2(0,0)),
                                          20, WHITE)
         for x in range(len(Ground.pos_lines)):
-            self.world.renderer.DrawSegment(self.world.renderer.to_screen(b2Vec2(Ground.pos_lines[x][0])), 
-                                            self.world.renderer.to_screen(b2Vec2(Ground.pos_lines[x][1])), 
-                                            WHITE)
+            self.world.renderer.DrawSegment(
+                self.world.renderer.to_screen(b2Vec2(Ground.pos_lines[x][0])), 
+                self.world.renderer.to_screen(b2Vec2(Ground.pos_lines[x][1])), 
+                WHITE)
 
 
 class Robot(PhysicsRobot):
@@ -88,12 +89,11 @@ class Robot(PhysicsRobot):
                                     max_drive_force, turn_torque, max_lateral_impulse, 
                                     density, position)
 
-    def update(self, keys, hz):
+    def update(self, desired_velocity, hz): 
+        """
+        desired_velocity[0] = angular velocity
+        desired_velocity[1] = linear velocity
+        """
         super(Robot, self).update_friction()
-        super(Robot, self).update_drive(keys)
-        super(Robot, self).update_turn(keys)
-        #self.update_sprite()
-
-    #def update_sprite(self):
-    #    self.main_world.renderer.DrawSolidCircleInRobot(
-    #        self.main_world.renderer.to_screen(b2Vec2(self.body.position)), 4.0, WHITE)
+        super(Robot, self).update_turn(desired_velocity[0])
+        super(Robot, self).update_drive(desired_velocity[1])

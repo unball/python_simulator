@@ -62,7 +62,7 @@ class Field(PygameFramework, RunRos):
 
     def Step(self, settings):
         for x in range(N_ROBOTS):
-            self.robots[x].update(self.pressed_keys, settings.hz)
+            self.robots[x].update(self.ang_and_lin_speed[x], settings.hz)
 
         self.ball.update()
         self.ground.update()

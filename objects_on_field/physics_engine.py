@@ -67,23 +67,23 @@ class PhysicsRobot(object):
         self.body.ApplyLinearImpulse(self.current_traction * impulse,
                                      self.body.worldCenter, True)
 
-    def update_drive(self, keys):
-        if 'up' in keys:
-            desired_speed = self.max_forward_speed
-        elif 'down' in keys:
-            desired_speed = self.max_backward_speed
-        else:
-            return
+    def update_drive(self, desired_linear_velocity):
 
+        # Saturation
+        if desired_linear_velocity > 0 and desired_linear_velocity > self.max_forward_speed:
+            desired_linear_velocity = self.max_forward_speed
+        elif desired_linear_velocity < 0 and desired_linear_velocity < self.max_backward_speed:
+            desired_linear_velocity = self.max_backward_speed
+        
         # find the current speed in the forward direction
         current_forward_normal = self.body.GetWorldVector((0, 1))
         current_speed = self.forward_velocity.dot(current_forward_normal)
 
         # apply necessary force
         force = 0.0
-        if desired_speed > current_speed:
+        if desired_linear_velocity > current_speed:
             force = self.max_drive_force
-        elif desired_speed < current_speed:
+        elif desired_linear_velocity < current_speed:
             force = -self.max_drive_force
         else:
             return
@@ -91,15 +91,29 @@ class PhysicsRobot(object):
         self.body.ApplyForce(self.current_traction * force * current_forward_normal,
                              self.body.worldCenter, True)
 
-    def update_turn(self, keys):
-        if 'left' in keys:
-            desired_torque = self.turn_torque
-        elif 'right' in keys:
-            desired_torque = -self.turn_torque
-        else:
-            return
+    def update_turn(self, desired_angular_velocity):
 
-        self.body.ApplyTorque(desired_torque, True)
+        # Saturation
+        if desired_angular_velocity > 0 and desired_angular_velocity > self.max_forward_speed:
+            desired_angular_velocity = self.max_angular_speed
+        elif desired_angular_velocity < 0 and desired_angular_velocity < self.max_backward_speed:
+            desired_angular_velocity = self.max_angular_speed
+
+        torque = 0.0
+        if desired_angular_velocity > self.body.angularVelocity:
+            torque = self.turn_torque
+        elif desired_angular_velocity < self.body.angularVelocity:
+            torque = -self.turn_torque
+        
+        #if 'left' in keys:
+        #    desired_torque = self.turn_torque
+        #elif 'right' in keys:
+        #    desired_torque = -self.turn_torque
+        #else:
+        #    return
+        #self.body.angularVelocity - desired_angular_velocity
+        self.body.ApplyTorque(torque, True)
+        #self.body.ApplyAngularInpulse(inpulse=desired_inpulse, True)
 
 
     def update_traction(self):
@@ -118,7 +132,7 @@ class PhysicsRobot(object):
 #which microcontroller is used reduction is the motor to wheels reduction. This paramter depends on
 #the physical structure of the robot encoder is the encoder resolution. This parameter depends on 
 #which motor brand and model is used
-def motor_voltage_to_wheels_speed(motorA,motorB, max_tics=(700/0.01),reduction=(1./3.),encoder=512.*19.):
+def motor_voltage_to_wheels_speed(motorA,motorB, max_tics=(700/0.01),reduction=(1./1.),encoder=512.*19.):
     motorA_rad_per_s = (motorA/255.0)*(max_tics/encoder)*m.pi;
     wheelA = motorA_rad_per_s*reduction;
     motorB_rad_per_s = (motorB/255.0)*(max_tics/encoder)*m.pi;

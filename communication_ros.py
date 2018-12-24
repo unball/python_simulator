@@ -10,25 +10,23 @@ N_ROBOTS = 3
 
 class RunRos(object):
     def __init__(self, *arg, **kargs):
-
         self.vision_message = VisionMessage()
-        self.motors = comm_msg()
+        self.ang_and_lin_speed = [(0,0), (0,0), (0,0), (0,0), (0,0), (0,0)]
 
         print('simulator node started....')
 
         rospy.init_node('simulator_node', anonymous=True)
-
         self.pub = rospy.Publisher('vision_output_topic', VisionMessage, queue_size=1)
-        rospy.Subscriber('radio_topic', comm_msg, self.callback)    
-
+        self.sub = rospy.Subscriber('radio_topic', comm_msg, self.callback)    
 
     def callback(self, data):
-        wheels = [motor_voltage_to_wheels_speed(data.MotorA, data.MotorB) for x in range(N_ROBOTS)]
-        ang_and_lin_speed = [wheels_speeds_to_robots_speeds(wheels[x][0], wheels[x][1]) for x in range(N_ROBOTS)]
-
+        print(data)
+        wheels = [motor_voltage_to_wheels_speed(data.MotorA[x], data.MotorB[x]) 
+                                                     for x in range(N_ROBOTS)]
+        self.ang_and_lin_speed = [wheels_speeds_to_robots_speeds(wheels[x][0], wheels[x][1]) 
+                                                                for x in range(N_ROBOTS)]
 
     def update(self, pos_robots, pos_ball):
-
         self.update_vision_message(pos_robots, pos_ball)
         self.pub.publish(self.vision_message)
 
