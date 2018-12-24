@@ -7,7 +7,7 @@ http://www.iforce2d.net/b2dtut/top-down-car
 
 from pygame_framework.framework import *
 from pygame_framework.backends.pygame_framework import *
-from pygame_framework.physics_engine import *
+from objects_on_field.physics_engine import *
 from constants import *
 import math
 

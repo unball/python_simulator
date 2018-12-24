@@ -37,6 +37,7 @@ import sys
 import warnings
 from constants import *
 from Box2D import b2Color
+import rospy
 
 try:
     import pygame_sdl2
@@ -320,20 +321,25 @@ class PygameFramework(FrameworkBase):
 
         running = True
         clock = pygame.time.Clock()
-        while running:
-            running = self.checkEvents()
-            self.screen.fill((0, 0, 0))
+        try:
+            while running and not rospy.is_shutdown():
+                running = self.checkEvents()
+                self.screen.fill((0, 0, 0))
 
-            # Check keys that should be checked every loop (not only on initial
-            # keydown)
-            #self.CheckKeys()
+                # Check keys that should be checked every loop (not only on initial
+                # keydown)
+                #self.CheckKeys()
 
-            # Run the simulation loop
-            self.SimulationLoop()
+                # Run the simulation loop
+                self.SimulationLoop()
 
-            pygame.display.flip()
-            clock.tick(self.settings.hz)
-            self.fps = clock.get_fps()
+                pygame.display.flip()
+                clock.tick(self.settings.hz)
+                self.fps = clock.get_fps()
+                
+        except Exception as inst:
+            print(inst)
+            exit(1)
             
         pygame.quit()
         super(PygameFramework, self).destroy_bodies()

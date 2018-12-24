@@ -8,24 +8,24 @@
     'http://www.iforce2d.net/b2dtut/top-down-car'
 """
 
-from constants import *
 import sys
-#from communication_ros import *
-from objects_on_field.objects import (Ball, Walls, Robot, Ground )
-from pygame_framework.physics_engine import *
-from pygame_framework.framework import *
 import math
+from constants import *
+from communication_ros import *
+from objects_on_field.objects import *
+from pygame_framework.framework import *
 
 N_ROBOTS = 3
 
 
-class Field(PygameFramework):
+class Field(PygameFramework, RunRos):
     name = "Python simulator"
     description = "Robots controled by ros"
     #description = "If there is only one robot. Keys: accel = w, reverse = s, left = a, right = d"
 
     def __init__(self, *args, **kargs):
-        super(Field, self).__init__()
+        PygameFramework.__init__(self)
+        RunRos.__init__(self)
         # Top-down -- no gravity in the screen plane
         self.world.gravity = (0, 0)
 
@@ -66,12 +66,16 @@ class Field(PygameFramework):
 
         self.ball.update()
         self.ground.update()
+
+        robots = [(self.robots[x].body.position, self.robots[x].body.angle) for x in range(N_ROBOTS)]
+        RunRos.update(self, robots, self.ball.body.position)
+
         super(Field, self).Step(settings)
 
         
-        for x in range(N_ROBOTS):
+        #for x in range(N_ROBOTS):
             #tractions = [self.robot.current_traction for tire in self.robots[x].tires]
-            print(self.robots[x].body.position)
+            #print(self.robots[x].body.position)
         #self.Print('Current tractions: %s' % tractions)
 
     

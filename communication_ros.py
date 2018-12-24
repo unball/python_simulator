@@ -1,67 +1,53 @@
 #!/usr/bin/env python3
 
 import rospy
-from python_simulator.msg import robots_speeds_msg
-from python_simulator.msg import wheels_speeds_msg
+from python_simulator.msg import comm_msg
 from python_simulator.msg import VisionMessage
+from objects_on_field.physics_engine import (motor_voltage_to_wheels_speed, 
+                                            wheels_speeds_to_robots_speeds)
 
-n_robots = 3
+N_ROBOTS = 3
 
-class CommunicationWithSystem(object):
-    def __init__(self):
-        
-        if __name__ == '__main__':
-            try:
-                talker()
-            except rospy.ROSInterruptException:
-                pass
+class RunRos(object):
+    def __init__(self, *arg, **kargs):
 
-    def run_communication(self):
-        rospy.init_node('Simulator')
-        self.pub1 = rospy.Publisher('vision_output_topic', VisionMessage, queue_size=1)
-        rospy.Subscriber('radio_topic', wheels_speeds_msg, self.update_speeds)
-
-        #rate = rospy.Rate(30) está esse valor mesmo ? 
         self.vision_message = VisionMessage()
-        self.iterador()   
-    
-    def iterador(self):
-        if rospy.is_shutdown():               
-            return                            
+        self.motors = comm_msg()
 
-        self.update_output_message()
-        self.pub1.publish(self.vision_message)
+        print('simulator node started....')
 
-        self.frame.after(2000, self.iterador) # 2000 milliseconds = 2 seconds
+        rospy.init_node('simulator_node', anonymous=True)
 
-    def update_output_message(self):
+        self.pub = rospy.Publisher('vision_output_topic', VisionMessage, queue_size=1)
+        rospy.Subscriber('radio_topic', comm_msg, self.callback)    
 
-        self.update_positions_because_the_walls()
 
-        self.vision_message.x = [self.robot_allie[x].pos_xy[0] for x in range(n_robots)] 
-        self.vision_message.x += [self.robot_oppo[x].pos_xy[0] for x in range(n_robots)]
+    def callback(self, data):
+        wheels = [motor_voltage_to_wheels_speed(data.MotorA, data.MotorB) for x in range(N_ROBOTS)]
+        ang_and_lin_speed = [wheels_speeds_to_robots_speeds(wheels[x][0], wheels[x][1]) for x in range(N_ROBOTS)]
 
-        self.vision_message.y = [self.robot_allie[x].pos_xy[1] for x in range(n_robots)] 
-        self.vision_message.y += [self.robot_oppo[x].pos_xy[1] for x in range(n_robots)]
 
-        self.vision_message.th = [self.robot_allie[x].item.angle for x in range(n_robots)]
-        self.vision_message.th += [self.robot_oppo[x].item.angle for x in range(n_robots)]
+    def update(self, pos_robots, pos_ball):
 
-        self.vision_message.ball_x, self.vision_message.ball_y = self.ball.pos_xy 
+        self.update_vision_message(pos_robots, pos_ball)
+        self.pub.publish(self.vision_message)
 
-        print(self.vision_message)
+    def update_vision_message(self, pos_robots, pos_ball):
+        for x in range(N_ROBOTS):
+            self.vision_message.x[x] = pos_robots[x][0][0]
+            self.vision_message.y[x] = pos_robots[x][0][1]
+            self.vision_message.th[x] = pos_robots[x][1]
+            self.vision_message.found[x] = True
 
-    def update_speeds(self, data):
-        self.convert_vel_weels_for_vel_ang_lin(data)   
+        self.vision_message.ball_x = pos_ball[0]
+        self.vision_message.ball_y = pos_ball[1]
 
-        for x in range(n_robots):
-            self.robot_allie[x].item.position += self.vel_lin[x]
-            self.robot_allie[0].item.angle += self.vel_ang[x]
-            print(self.vel_ang[x])
+"""
+if paused:
+for i in range(3):
+    speeds.linear_vel[i] = 0
+    speeds.angular_vel[i] = 0
+    motors.MotorA[i] = 0
+    motors.MotorB[i] = 0
 
-    def update_positions_because_the_walls(self):
-
-        for x in range(n_robots):
-            self.robot_allie[x].pos_xy = self.robot_allie[x].item.position - (12, 2)
-            self.robot_oppo[x].pos_xy = self.robot_oppo[x].item.position - (12, 2)
-            self.ball.pos_xy = self.ball.item.position - (12, 2)
+"""
