@@ -12,7 +12,7 @@ from constants import *
 import math
 
 class Ball(PhysicsBall):
-    def __init__(self, world, color, density=1, position=(20 , 20)):
+    def __init__(self, world, color, density=1, position=(0 , 0)):
         self.body = world.CreateDynamicBody(
             fixtures=b2FixtureDef(shape=b2CircleShape(radius=2.135), 
                                   density=1.0,
@@ -74,6 +74,7 @@ class Ground(object):
 
 class Robot(PhysicsRobot):
     dimensions = (3.60, 3.60)
+    position = [('', 0), ('', -10), ('', 10)]
 
     def __init__(self, world, max_forward_speed=100.0,
                  max_backward_speed=-20, max_drive_force=150,
@@ -81,7 +82,7 @@ class Robot(PhysicsRobot):
                  density=0.1, position=(0, 0)):
 
         self.main_world = world
-        self.body = world.CreateDynamicBody(position=position)
+        self.body = world.CreateDynamicBody(position=(position[0], Robot.position[position[1]][1]))
         self.body.CreatePolygonFixture(box=Robot.dimensions, density=density)
         self.body.userData = {'obj': self}
 
