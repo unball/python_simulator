@@ -89,6 +89,7 @@ class Robot(PhysicsRobot):
         super(Robot, self).__init__(self.body, max_forward_speed, max_backward_speed,
                                     max_drive_force, turn_torque, max_lateral_impulse, 
                                     density, position)
+        self.body.angle = 1 * math.pi
 
     def update(self, desired_velocity, hz): 
         """
