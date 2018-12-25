@@ -341,7 +341,7 @@ class PygameFramework(FrameworkBase):
             print(inst)
             exit(1)
             
-        pygame.quit()
+        #pygame.quit()
         super(PygameFramework, self).destroy_bodies()
         self.world.contactListener = None
         self.world.destructionListener = None

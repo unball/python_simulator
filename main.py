@@ -7,11 +7,11 @@
 """
 
 #from resolution import *
-from manage_widgets import *
+from start_menu import *
 
 def main():     
-    
-    Field((0,0,255), 3, 3)
+    start_menu()
+    #Field((0,0,255), 3, 3)
     
 if __name__ == '__main__':
     main()
