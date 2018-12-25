@@ -53,7 +53,7 @@ COLOR_BLACK = (0, 0, 0)
 COLOR_WHITE = (255, 255, 255)
 FPS = 60.0
 MENU_BACKGROUND_COLOR = (228, 55, 36)
-WINDOW_SIZE = (640, 480)
+WINDOW_SIZE = (int(FIELD_H*ZOOM), int(FIELD_W*ZOOM))
 
 # -----------------------------------------------------------------------------
 # Init pygame

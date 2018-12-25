@@ -14,7 +14,7 @@ import math
 class Ball(PhysicsBall):
     def __init__(self, world, color, density=1, position=(20 , 20)):
         self.body = world.CreateDynamicBody(
-            fixtures=b2FixtureDef(shape=b2CircleShape(radius=2), 
+            fixtures=b2FixtureDef(shape=b2CircleShape(radius=2.135), 
                                   density=1.0,
                                   friction=0.1,
                                   restitution=0.1),

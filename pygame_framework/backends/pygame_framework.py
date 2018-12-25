@@ -209,7 +209,7 @@ class PygameFramework(FrameworkBase):
 
     def __reset(self):
         # Screen/rendering-related
-        self._viewZoom = 5.0
+        self._viewZoom = ZOOM
         self._viewCenter = None
         self._viewOffset = None
         self.screenSize = None
@@ -236,7 +236,7 @@ class PygameFramework(FrameworkBase):
         pygame.display.set_caption(caption)
 
         # Screen and debug draw
-        self.screen = pygame.display.set_mode((int(FIELD_W), int(FIELD_H)))
+        self.screen = pygame.display.set_mode((int(FIELD_H*ZOOM), int(FIELD_W*ZOOM)))
         self.screenSize = b2Vec2(*self.screen.get_size())
 
         self.renderer = PygameDraw(surface=self.screen, test=self)

@@ -1,21 +1,12 @@
 from Box2D import b2Color
 
-# --- Random values ---
-OPPONENT = 0
-ALLIE = 1
-
-# --- General units ---
-LOGO_SIZE = 150, 150
-BUTTON_SEPARATOR = (50, 2)
-
-PPM = 5             # Pixel per centimeter               
-FIELD_W = (1743/2)  # (1) Width of the screen pygame with the Box2D 
-FIELD_H = (1341/2)  # (2) Height of the screen pygame with the Box2D
-                    # Both (1) and (2) don't interfere in the bodies inside the field
+TARGET_FPS = 60
+TIME_STEP = 0.01 / TARGET_FPS 
 
 #TARGET_FPS = 60
-TARGET_FPS = 60
-TIME_STEP = 0.01 / TARGET_FPS # What does it mean this part ?
+ZOOM = 5.0                      
+FIELD_H = (174)  # (1) Height of the screen pygame with the Box2D 
+FIELD_W = (134)  # (2) Width of the screen pygame with the Box2D
 
 # --- Units (cm) ---
 ROBOT_W = 7.5 
