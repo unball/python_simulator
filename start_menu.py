@@ -61,38 +61,48 @@ pygame.init()
 os.environ['SDL_VIDEO_CENTERED'] = '1'
 
 # Create pygame screen and objects
+directory = os.getcwd()
+logo = pygame.image.load(directory + '/src/python_simulator/images/UnBall.png') 
+pygame.display.set_icon(logo)
 surface = pygame.display.set_mode(WINDOW_SIZE)
-pygame.display.set_caption('Python Simulation')
+pygame.display.set_caption('UnBall - Python Simulation')
+
 clock = pygame.time.Clock()
 dt = 1 / FPS
 
 # Global variables
-DIFFICULTY = ['EASY']
-num_allies = []
-num_opponents = []
-team_color = []
+num_allies = 0
+num_opponents = 0
+team_color = BLUE
 
 # -----------------------------------------------------------------------------
 def change_num_allies(d):
     print ('Selected number allies: {0}'.format(d))
-    num_allies[0] = d
+    global num_allies
+    num_allies = d
 
 def change_num_opponents(d):
     print ('Selected number opponents: {0}'.format(d))
-    num_opponents[0] = d
+    global num_opponents
+    num_opponents = d
 
 def change_team_color(d):
     print ('Selected number opponents: {0}'.format(d))
-    team_color[0] = d
+    global team_color
+    team_color = d
 
 def change_publish_topic(d):
     print ('Selected publish topic: {0}'.format(d))
-    publish_topic[0] = d
+    global publish_topic
+    publish_topic = d
 
-def play_function(difficulty, font):
+def play_function():
     main_menu.disable()
     main_menu.reset(1)
-    Field()
+    print(num_allies)
+    print(num_opponents)
+    print(team_color)
+    Field(num_allies, num_opponents, team_color)
     main_menu.enable()
 """
 def play_function(difficulty, font):
@@ -173,8 +183,7 @@ run_simulation = pygameMenu.Menu(surface,
                             window_width=WINDOW_SIZE[0]
                             )
 
-run_simulation.add_option('Start', play_function, DIFFICULTY,
-                     pygame.font.Font(pygameMenu.fonts.FONT_FRANCHISE, 30))
+run_simulation.add_option('Start', play_function)
 run_simulation.add_selector('Number allies', [('0', 0),
                                              ('1', 1),
                                              ('2', 2),

@@ -15,15 +15,13 @@ from communication_ros import *
 from objects_on_field.objects import *
 from pygame_framework.framework import *
 
-N_ROBOTS = 3
-
 
 class Field(PygameFramework, RunRos):
     name = "Python simulator"
     description = "Robots controled by ros"
     #description = "If there is only one robot. Keys: accel = w, reverse = s, left = a, right = d"
 
-    def __init__(self, *args, **kargs):
+    def __init__(self, num_allies, num_opponents, team_color='', *args, **kargs):
         PygameFramework.__init__(self)
         RunRos.__init__(self)
         # Top-down -- no gravity in the screen plane
@@ -37,11 +35,15 @@ class Field(PygameFramework, RunRos):
 
         # Keep track of the pressed keys
         self.pressed_keys = set()
+        
+        self.num_allies = num_allies
+        self.num_opponents = num_opponents
 
         self.ground = Ground(self.world)
         walls = Walls(self.world, BLUE)
         self.ball = Ball(self.world, BLUE)
-        self.robots = [Robot(self.world, position=(0,10*x)) for x in range(N_ROBOTS)]
+        self.robots_allies = [Robot(self.world, position=(-10,10*x)) for x in range(self.num_allies)]
+        self.robots_opponents = [Robot(self.world, position=(10,10*x)) for x in range(self.num_opponents)]
 
         super(Field, self).run()
         
@@ -61,13 +63,17 @@ class Field(PygameFramework, RunRos):
             super(Field, self).KeyboardUp(key)
 
     def Step(self, settings):
-        for x in range(N_ROBOTS):
-            self.robots[x].update(self.ang_and_lin_speed[x], settings.hz)
+        for x in range(self.num_allies):
+            self.robots_allies[x].update(self.ang_and_lin_speed[x], settings.hz)
+        for x in range(self.num_opponents):
+            self.robots_opponents[x].update(self.ang_and_lin_speed[x], settings.hz)
+
 
         self.ball.update()
         self.ground.update()
 
-        robots = [(self.robots[x].body.position, self.robots[x].body.angle) for x in range(N_ROBOTS)]
+        robots = [(self.robots_allies[x].body.position, 
+                    self.robots_allies[x].body.angle) for x in range(self.num_allies)]
         RunRos.update(self, robots, self.ball.body.position)
 
         super(Field, self).Step(settings)
