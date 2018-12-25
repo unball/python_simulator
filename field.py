@@ -62,11 +62,14 @@ class Field(PygameFramework, RunRos):
             super(Field, self).KeyboardUp(key)
 
     def Step(self, settings):
-        for x in range(self.num_allies):
-            self.robots_allies[x].update(self.ang_and_lin_speed[x], settings.hz)
-        for x in range(self.num_opponents):
-            self.robots_opponents[x].update(self.ang_and_lin_speed[x], settings.hz)
-
+        if not self.pause:
+            for x in range(self.num_allies):
+                self.robots_allies[x].update(self.ang_and_lin_speed[x], settings.hz)
+            #for x in range(self.num_opponents):
+            #    self.robots_opponents[x].update(self.ang_and_lin_speed[x], settings.hz)
+        else:
+            for x in range(self.num_allies):
+                self.robots_allies[x].update((0,0), settings.hz)
 
         self.ball.update()
         self.ground.update()
@@ -76,6 +79,7 @@ class Field(PygameFramework, RunRos):
         RunRos.update(self, robots, self.ball.body.position)
 
         super(Field, self).Step(settings)
+        #else:
 
         
         #for x in range(N_ROBOTS):

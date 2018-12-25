@@ -22,7 +22,6 @@ class RunRos(object):
         self.num_opponents = 0
 
     def callback(self, data):
-        print(data)
         wheels = [motor_voltage_to_wheels_speed(data.MotorA[x], data.MotorB[x]) 
                                                      for x in range(self.num_allies)]
         self.ang_and_lin_speed = [wheels_speeds_to_robots_speeds(wheels[x][0], wheels[x][1]) 
@@ -41,13 +40,3 @@ class RunRos(object):
 
         self.vision_message.ball_x = pos_ball[0]
         self.vision_message.ball_y = pos_ball[1]
-
-"""
-if paused:
-for i in range(3):
-    speeds.linear_vel[i] = 0
-    speeds.angular_vel[i] = 0
-    motors.MotorA[i] = 0
-    motors.MotorB[i] = 0
-
-"""

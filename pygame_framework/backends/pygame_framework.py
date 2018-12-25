@@ -216,6 +216,7 @@ class PygameFramework(FrameworkBase):
         self.rMouseDown = False
         #self.textLine = 30
         self.fps = 0
+        self.pause = False
 
         # GUI-related (PGU)
         #self.gui_app = None
@@ -300,6 +301,9 @@ class PygameFramework(FrameworkBase):
                     self.rMouseDown = False
                 else:
                     self.MouseUp(p)
+                #p = self.ConvertScreenToWorld(*event.pos)
+            
+                #self.MouseMove(p)
             elif event.type == MOUSEMOTION:
                 p = self.ConvertScreenToWorld(*event.pos)
             
@@ -357,6 +361,8 @@ class PygameFramework(FrameworkBase):
         ones onto the test via the Keyboard() function.
         """
         if down:
+            if key == Keys.K_SPACE:
+                self.pause = not self.pause
             #if key == Keys.K_z:       # Zoom in
             #    self.viewZoom = min(1.1 * self.viewZoom, 50.0)
             #elif key == Keys.K_x:     # Zoom out
