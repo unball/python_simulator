@@ -1,0 +1,13 @@
+  - ajustar constantes;
+  - colocar cor no time;
+  - colocar física na bola;
+  - ajustar ângulo inicial dos robôs;
+ *- colocar física nos robôs inimigos;
+ *- como controlar os robôs inimigos;
+  - ajustar o nó que lê de acordo como menu;
+  - ajustar velocidades de acordo com o fator de escala (cm);
+  - fazer a mudança do sistema de coordenadas para o desejado da UnBall;
+
+ OBS:
+ *- = Já feito
+ -  = Falta fazer

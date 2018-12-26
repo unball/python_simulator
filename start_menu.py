@@ -43,7 +43,13 @@ ABOUT = ['Python Simulation',
          'Author: Hiago dos Santos Rabelo',
          PYGAMEMENU_TEXT_NEWLINE,
          'Email: hiagop22@gmail.com']
-HELP = ['Press SPACE to Pause/Play into Simulation',
+HELP = ['>>MENU',
+        'Press UP/DOWN to navigate on menu',
+        'Press LEFT/RIGHT to change the option',
+        'Press ENTER to enter in a topic',
+        PYGAMEMENU_TEXT_NEWLINE,
+        '>>SIMULATION:',
+        'Press SPACE to Pause/Play into Simulation',
         'Press ESC to return to main menu',
         'Click on a object and keep pressed to move it']
 

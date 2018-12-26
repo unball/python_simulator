@@ -65,11 +65,12 @@ class Field(PygameFramework, RunRos):
         if not self.pause:
             for x in range(self.num_allies):
                 self.robots_allies[x].update(self.ang_and_lin_speed[x], settings.hz)
-            #for x in range(self.num_opponents):
-            #    self.robots_opponents[x].update(self.ang_and_lin_speed[x], settings.hz)
         else:
             for x in range(self.num_allies):
                 self.robots_allies[x].update((0,0), settings.hz)
+
+        for x in range(self.num_opponents):
+                self.robots_opponents[x].update((0,0), settings.hz)
 
         self.ball.update()
         self.ground.update()
