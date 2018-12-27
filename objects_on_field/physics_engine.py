@@ -1,11 +1,10 @@
 #!usr/bin/env python3
-#-*- coding: utf-8 -*-
-"""
-    @author: Hiago dos Santos (hiagop22@gmail.com)
-    @description: 
-    Based on Chris Campbell's tutorial from iforce2d.net:
-    'http://www.iforce2d.net/b2dtut/top-down-car'
-"""
+#
+#   -*- coding: utf-8 -*-
+#      @author: UnBall (equipe.unball@gmail.com)
+# @description: Based on Chris Campbell's tutorial from iforce2d.net:
+#               'http://www.iforce2d.net/b2dtut/top-down-car'
+
 
 import math as m
 from constants import *

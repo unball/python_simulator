@@ -20,20 +20,6 @@ dependency=(
     "sudo pip3 install pygame-menu"
 )
 
-remove_dependences=(
-    "sudo pip3 uninstall Box2D-kengz"
-    "sudo pip3 uninstall pybox2d"
-    "sudo pip3 uninstall box2d"
-    )
-
-pybox2d=(
-    "git clone https://github.com/pybox2d/pybox2d"
-    "cd pybox2d"
-    "sudo pip3 install -e ."
-    "sudo pip3 install catkin_pkg"
-    "sudo pip3 install rospkg"
-)
-
 result(){
     if [ $? == 0 ]; then
         printf "${GREEN}######### ---- Success ---- #########${NO_COLOR}\n\n"
@@ -66,13 +52,3 @@ sudo apt-get update
 result
 
 install-necessary dependency[@]
-#remove-not-necessary remove_dependences[@]
-
-#if [ ! -d "$PYBOXDIR" ]; then
-#    install-necessary pybox2d[@]
-#else
-#    sudo rm -r "$PYBOXDIR/"
-#    install-necessary pybox2d[@]
-#fi
-
-#sudo chmod +x main.py

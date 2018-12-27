@@ -133,24 +133,6 @@ class PygameDraw(b2DrawExtended):
         pygame.draw.circle(self.surface, color.bytes,
                            center, radius, drawwidth)
 
-    def DrawSolidCircle(self, center, radius, axis, color):
-        """
-        Draw a solid circle given the center, radius, axis of orientation and
-        color.
-        """
-        radius *= self.zoom
-        if radius < 1:
-            radius = 1
-        else:
-            radius = int(radius)
-
-        pygame.draw.circle(self.surface, (color / 2).bytes + [127],
-                           center, radius, 0)
-        pygame.draw.circle(self.surface, color.bytes, center, radius, 1)
-        pygame.draw.aaline(self.surface, (255, 0, 0), center,
-                           (center[0] - radius * axis[0],
-                            center[1] + radius * axis[1]))
-
     def DrawPolygon(self, vertices, color):
         """
         Draw a wireframe polygon given the screen vertices with the specified color.

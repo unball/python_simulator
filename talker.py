@@ -1,5 +1,10 @@
 #!/usr/bin/env python
-# -*- coding: utf-8 -*-
+# 
+#   -*- coding: utf-8 -*-
+#      @author: UnBall (equipe.unball@gmail.com)
+# @description: This module have the only purpose simulate the system unball and publish velocitys
+#               in node radio_topic
+
 
 import rospy
 from python_simulator.msg import comm_msg

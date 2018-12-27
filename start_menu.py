@@ -1,31 +1,31 @@
-#!usr/bin/env python3
-#-*- coding: utf-8 -*-
-"""
-    @author: Hiago dos Santos (hiagop22@gmail.com)
-    @description: This is the main-menu 
-    Based on Pablo Pizarro R. pygame-menu:
-    https://github.com/ppizarror/pygame-menu/blob/master/example2.py
+#!/usr/bin/env python
+# 
+#   -*- coding: utf-8 -*-
+#      @author: UnBall (equipe.unball@gmail.com)
+# @description: This is the main-menu 
+# Based on Pablo Pizarro R. pygame-menu:
+# https://github.com/ppizarror/pygame-menu/blob/master/example2.py
+#
+# The MIT License (MIT)
+# Copyright 2017-2018 Pablo Pizarro R. @ppizarror
+#
+# Permission is hereby granted, free of charge, to any person obtaining a
+# copy of this software and associated documentation files (the "Software"),
+# to deal in the Software without restriction, including without limitation
+# the rights to use, copy, modify, merge, publish, distribute, sublicense,
+# and/or sell copies of the Software, and to permit persons to whom the Software
+# is furnished to do so, subject to the following conditions:
+#
+# The above copyright notice and this permission notice shall be included in all
+# copies or substantial portions of the Software.
+#
+# THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+# IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+# FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+# AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY,
+# WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN
+# CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
-The MIT License (MIT)
-Copyright 2017-2018 Pablo Pizarro R. @ppizarror
-
-Permission is hereby granted, free of charge, to any person obtaining a
-copy of this software and associated documentation files (the "Software"),
-to deal in the Software without restriction, including without limitation
-the rights to use, copy, modify, merge, publish, distribute, sublicense,
-and/or sell copies of the Software, and to permit persons to whom the Software
-is furnished to do so, subject to the following conditions:
-
-The above copyright notice and this permission notice shall be included in all
-copies or substantial portions of the Software.
-
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY,
-WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN
-CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
-"""
 
 # Import pygame and libraries
 from pygame.locals import *
@@ -40,9 +40,9 @@ import pygameMenu
 from pygameMenu.locals import *
 
 ABOUT = ['Python Simulation',
-         'Author: Hiago dos Santos Rabelo',
+         'Author: UnBall - Futebol de Robôs',
          PYGAMEMENU_TEXT_NEWLINE,
-         'Email: hiagop22@gmail.com']
+         'Email: equipe.unball@gmail.com']
 HELP = ['>>MENU',
         'Press UP/DOWN to navigate on menu',
         'Press LEFT/RIGHT to change the option',
@@ -111,56 +111,7 @@ def play_function():
     print(team_color)
     Field(num_allies, num_opponents, team_color, publish_topic)
     main_menu.enable()
-"""
-def play_function(difficulty, font):
-    difficulty = difficulty[0]
-    assert isinstance(difficulty, str)
-
-    if difficulty == 'EASY':
-        f = font.render('Playing as baby', 1, COLOR_WHITE)
-    elif difficulty == 'MEDIUM':
-        f = font.render('Playing as normie', 1, COLOR_WHITE)
-    elif difficulty == 'HARD':
-        f = font.render('Playing as god', 1, COLOR_WHITE)
-    else:
-        raise Exception('Unknown difficulty {0}'.format(difficulty))
-
-    # Draw random color and text
-    bg_color = COLOR_BACKGROUND
-    f_width = f.get_size()[0]
-
-    # Reset main menu and disable
-    # You also can set another menu, like a 'pause menu', or just use the same
-    # main_menu as the menu that will check all your input.
-    main_menu.disable()
-    main_menu.reset(1)
-
-    while True:
-
-        # Clock tick
-        clock.tick(60)
-
-        # Application events
-        playevents = pygame.event.get()
-        for e in playevents:
-            if e.type == QUIT:
-                exit()
-            elif e.type == KEYDOWN:
-                if e.key == K_ESCAPE and main_menu.is_disabled():
-                    main_menu.enable()
-
-                    # Quit this function, then skip to loop of main-menu on line 217
-                    return
-
-        # Pass events to main_menu
-        main_menu.mainloop(playevents)
-
-        # Continue playing
-        surface.fill(bg_color)
-        surface.blit(f, ((WINDOW_SIZE[0] - f_width) / 2, WINDOW_SIZE[1] / 2))
-        pygame.display.flip()
-"""
-
+    
 
 def main_background():
     """
