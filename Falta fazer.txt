@@ -1,7 +1,7 @@
   - ajustar constantes;
   - colocar cor no time;
   - colocar física na bola;
-  - ajustar ângulo inicial dos robôs;
+ *- ajustar ângulo inicial dos robôs;
  *- colocar física nos robôs inimigos;
  *- como controlar os robôs inimigos;
   - ajustar o nó que lê de acordo como menu;

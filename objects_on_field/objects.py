@@ -40,20 +40,20 @@ class Walls(object):
                                [(-68, 65), (-75, 58), (-75, 65)],
                                [(-68, -65), (-75, -58), (-75, -65)]]
 
-    def __init__(self, world, color):
+    def __init__(self, world, color, friction=0.8):
         super(Walls, self).__init__()
 
         self.body = ''
         for x in self.__class__.pos_and_length_walls:
             wall = world.CreateStaticBody(
             position=x[0],
-            fixtures=b2FixtureDef(friction=0.8,
+            fixtures=b2FixtureDef(friction=friction,
                                   shape=b2PolygonShape(box=x[1]))
             )
             wall.userData = {'obj': self}
         for vertices in self.__class__.vertices_triangle_walls:
             wall = world.CreateStaticBody(
-            fixtures=b2FixtureDef(friction=0.8,
+            fixtures=b2FixtureDef(friction=friction,
                                   shape=b2PolygonShape(vertices=vertices))
             )
             wall.userData = {'obj': self}

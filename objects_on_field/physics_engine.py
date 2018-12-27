@@ -8,6 +8,7 @@
 """
 
 import math as m
+from constants import *
 
 class PhysicsBall(object):
 
@@ -37,14 +38,14 @@ class PhysicsRobot(object):
     @property
     def forward_velocity(self):
         body = self.world
-        current_normal = body.GetWorldVector((0, 1))
+        current_normal = body.GetWorldVector((1, 0))
         return current_normal.dot(body.linearVelocity) * current_normal
 
     @property
     def lateral_velocity(self):
         body = self.world
 
-        right_normal = body.GetWorldVector((1, 0))
+        right_normal = body.GetWorldVector((0, 1))
         return right_normal.dot(body.linearVelocity) * right_normal
 
 
@@ -76,7 +77,7 @@ class PhysicsRobot(object):
             desired_linear_velocity = self.max_backward_speed
         
         # find the current speed in the forward direction
-        current_forward_normal = self.body.GetWorldVector((0, 1))
+        current_forward_normal = self.body.GetWorldVector((1, 0))
         current_speed = self.forward_velocity.dot(current_forward_normal)
 
         # apply necessary force
@@ -146,4 +147,4 @@ def wheels_speeds_to_robots_speeds(wheelA,wheelB,wheel_radius=0.03,robot_lenght=
     angular_speed = wheel_radius*(wheelA - wheelB)/robot_lenght;
     linear_speed = wheel_radius*(wheelA + wheelB)/2;
 
-    return angular_speed, linear_speed
+    return angular_speed*FATOR_DE_CORRECAO_METRO_CM, linear_speed*FATOR_DE_CORRECAO_METRO_CM

@@ -7,13 +7,7 @@ TIME_STEP = 0.01 / TARGET_FPS
 ZOOM = 5.0                      
 FIELD_H = (174)  # (1) Height of the screen pygame with the Box2D 
 FIELD_W = (134)  # (2) Width of the screen pygame with the Box2D
-
-# --- Units (cm) ---
-ROBOT_W = 7.5 
-ROBOT_H = 7.5         
-BALL_RADIUS = 2.135
-BIG_FIELD_RADIUS = 20    
-SMALL_FIELD_RADIUS = 10
+FATOR_DE_CORRECAO_METRO_CM = 10**2 # <==== Very important: 1 m = 1*10^2 cm
 
 # --- Colors ---
 ORANGE = (255,165,0)
