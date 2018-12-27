@@ -1,5 +1,4 @@
-#!/usr/bin/env python
-# 
+#!/usr/bin/env python3
 #   -*- coding: utf-8 -*-
 #      @author: UnBall (equipe.unball@gmail.com)
 # @description: This is the main-menu 
@@ -40,7 +39,7 @@ import pygameMenu
 from pygameMenu.locals import *
 
 ABOUT = ['Python Simulation',
-         'Author: UnBall - Futebol de Robôs',
+         'Author: UnBall ',
          PYGAMEMENU_TEXT_NEWLINE,
          'Email: equipe.unball@gmail.com']
 HELP = ['>>MENU',

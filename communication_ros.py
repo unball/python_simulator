@@ -1,5 +1,4 @@
-# !/usr/bin/env python3
-#
+#!/usr/bin/env python3
 #   -*- coding: utf-8 -*-
 #      @author: UnBall (equipe.unball@gmail.com)
 # @description: This module run the Ros publishing in node chosen on start_menu 
