@@ -13,10 +13,12 @@ from constants import *
 class PhysicsBall(object):
 
     def __init__(self, body):
-        pass
+        self.body = body
 
     def update_friction(self):
-        pass
+        self.body.linearDamping = 0.2
+        self.body.angularDamping = 0.2
+
 
 class PhysicsRobot(object):
 
@@ -147,4 +149,23 @@ def wheels_speeds_to_robots_speeds(wheelA,wheelB,wheel_radius=0.03,robot_lenght=
     angular_speed = wheel_radius*(wheelA - wheelB)/robot_lenght;
     linear_speed = wheel_radius*(wheelA + wheelB)/2;
 
-    return angular_speed*FATOR_DE_CORRECAO_METRO_CM, linear_speed*FATOR_DE_CORRECAO_METRO_CM
+    return angular_speed*CORRECTION_FATOR_METER_TO_CM, linear_speed*CORRECTION_FATOR_METER_TO_CM
+
+
+def actual_axis_to_axis_unball(pos_robots_allies, pos_robots_opponents, pos_ball):
+    new_pos_robots_allies = []
+    new_pos_robots_opponents = []
+
+    for x in range(len(pos_robots_allies)):
+        new_pos_robots_allies.append(((pos_robots_allies[x][0][0] - CENTER_AXIS_X, 
+                                      pos_robots_allies[x][0][1] - CENTER_AXIS_Y), 
+                                      pos_robots_allies[x][1]))
+
+    for x in range(len(pos_robots_opponents)):
+        new_pos_robots_opponents.append(((pos_robots_opponents[x][0][0] - CENTER_AXIS_X, 
+                                      pos_robots_opponents[x][0][1] - CENTER_AXIS_Y), 
+                                      pos_robots_opponents[x][1]))
+
+    new_pos_ball = (pos_ball[0] - CENTER_AXIS_X, pos_ball[1] - CENTER_AXIS_Y)
+
+    return new_pos_robots_allies, new_pos_robots_opponents, new_pos_ball

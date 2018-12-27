@@ -26,9 +26,7 @@ class Field(PygameFramework, RunRos):
         # Top-down -- no gravity in the screen plane
         self.world.gravity = (0, 0)
 
-        # Keep track of the pressed keys
-        self.pressed_keys = set()
-        
+        # Objects on field 
         self.num_allies = num_allies
         self.num_opponents = num_opponents
 
@@ -61,16 +59,11 @@ class Field(PygameFramework, RunRos):
         self.ball.update()
         self.ground.update()
 
-        robots = [(self.robots_allies[x].body.position, 
+        robots_allies = [(self.robots_allies[x].body.position, 
                     self.robots_allies[x].body.angle) for x in range(self.num_allies)]
-        RunRos.update(self, robots, self.ball.body.position)
+        robots_opponents = [(self.robots_opponents[x].body.position, 
+                    self.robots_opponents[x].body.angle) for x in range(self.num_opponents)]
+
+        RunRos.update(self, robots_allies, robots_opponents, self.ball.body.position)
 
         super(Field, self).Step(settings)
-        #else:
-
-        
-        #for x in range(N_ROBOTS):
-            #tractions = [self.robot.current_traction for tire in self.robots[x].tires]
-            #print(self.robots[x].body.position)
-        #self.Print('Current tractions: %s' % tractions)
-

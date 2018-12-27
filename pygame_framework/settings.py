@@ -45,8 +45,8 @@ class fwSettings(object):
     drawContactPoints = False
     maxContactPoints = 100
     drawContactNormals = False
-    drawFPS = True
-    drawMenu = True             # toggle by pressing F1
+    drawFPS = False
+    drawMenu = False             # toggle by pressing F1
     drawCOMs = False            # Centers of mass
     pointSize = 2.5             # pixel radius for drawing points
 
