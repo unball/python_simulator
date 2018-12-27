@@ -6,7 +6,7 @@
  *- como controlar os robôs inimigos;
  *- ajustar o nó que lê de acordo como menu;
  *- ajustar velocidades de acordo com o fator de escala (cm);
-  - fazer a mudança do sistema de coordenadas para o desejado da UnBall;
+ *- fazer a mudança do sistema de coordenadas para o desejado da UnBall (depois da modificação, o eixo y está  para baixo e o ângulo em radianos cresce no sentido anti-horário);
   - lado do campo em que ficam os robôs;
 
  OBS:
