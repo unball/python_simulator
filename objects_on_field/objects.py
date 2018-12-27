@@ -107,5 +107,6 @@ class Robot(PhysicsRobot):
         desired_velocity[1] = linear velocity
         """
         super(Robot, self).update_friction()
-        super(Robot, self).update_turn(desired_velocity[0])
-        super(Robot, self).update_drive(desired_velocity[1])
+        if desired_velocity:
+            super(Robot, self).update_turn(desired_velocity[0])
+            super(Robot, self).update_drive(desired_velocity[1])

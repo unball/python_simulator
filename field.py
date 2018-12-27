@@ -70,7 +70,7 @@ class Field(PygameFramework, RunRos):
                 self.robots_allies[x].update((0,0), settings.hz)
 
         for x in range(self.num_opponents):
-                self.robots_opponents[x].update((0,0), settings.hz)
+                self.robots_opponents[x].update((), settings.hz)
 
         self.ball.update()
         self.ground.update()
