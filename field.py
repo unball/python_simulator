@@ -26,12 +26,6 @@ class Field(PygameFramework, RunRos):
         # Top-down -- no gravity in the screen plane
         self.world.gravity = (0, 0)
 
-        self.key_map = {Keys.K_w: 'up',
-                        Keys.K_s: 'down',
-                        Keys.K_a: 'left',
-                        Keys.K_d: 'right',
-                        }
-
         # Keep track of the pressed keys
         self.pressed_keys = set()
         
@@ -48,18 +42,10 @@ class Field(PygameFramework, RunRos):
         
 
     def Keyboard(self, key):
-        key_map = self.key_map
-        if key in key_map:
-            self.pressed_keys.add(key_map[key])
-        else:
-            super(Field, self).Keyboard(key)
+        super(Field, self).Keyboard(key)
 
     def KeyboardUp(self, key):
-        key_map = self.key_map
-        if key in key_map:
-            self.pressed_keys.remove(key_map[key])
-        else:
-            super(Field, self).KeyboardUp(key)
+        super(Field, self).KeyboardUp(key)
 
     def Step(self, settings):
         if not self.pause:

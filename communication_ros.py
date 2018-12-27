@@ -17,7 +17,10 @@ class RunRos(object):
         rospy.init_node('simulator_node', anonymous=True)
         if publish_topic == 'vision_output_topic':
             self.pub = rospy.Publisher('vision_output_topic', VisionMessage, queue_size=1)
-            
+        else:
+            pass # Inserir aqui o outro nó para ser publicado caso seja mudado no menu inicial
+                 # Obs.: é necessário inserir a outra opção de nó tanto aqui quanto no menu inicial
+
         self.sub = rospy.Subscriber('radio_topic', comm_msg, self.callback)
 
         self.num_allies = 0    
