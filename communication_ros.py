@@ -8,14 +8,16 @@ from objects_on_field.physics_engine import (motor_voltage_to_wheels_speed,
 
 
 class RunRos(object):
-    def __init__(self, *arg, **kargs):
+    def __init__(self, publish_topic):
         self.vision_message = VisionMessage()
         self.ang_and_lin_speed = [(0,0), (0,0), (0,0), (0,0), (0,0), (0,0)]
 
         print('simulator node started....')
 
         rospy.init_node('simulator_node', anonymous=True)
-        self.pub = rospy.Publisher('vision_output_topic', VisionMessage, queue_size=1)
+        if publish_topic == 'vision_output_topic':
+            self.pub = rospy.Publisher('vision_output_topic', VisionMessage, queue_size=1)
+            
         self.sub = rospy.Subscriber('radio_topic', comm_msg, self.callback)
 
         self.num_allies = 0    

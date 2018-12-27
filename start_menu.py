@@ -80,6 +80,7 @@ dt = 1 / FPS
 num_allies = 0
 num_opponents = 0
 team_color = BLUE
+publish_topic = 'vision_output_topic'
 
 # -----------------------------------------------------------------------------
 def change_num_allies(d):
@@ -108,7 +109,7 @@ def play_function():
     print(num_allies)
     print(num_opponents)
     print(team_color)
-    Field(num_allies, num_opponents, team_color)
+    Field(num_allies, num_opponents, team_color, publish_topic)
     main_menu.enable()
 """
 def play_function(difficulty, font):
@@ -225,7 +226,7 @@ setting = pygameMenu.Menu(surface,
                             window_height=WINDOW_SIZE[1],
                             window_width=WINDOW_SIZE[0]
                             )
-setting.add_selector('Publish topic', [('VisionMessage', 'VISIONMESSAGE')],
+setting.add_selector('Publish topic', [('VisionMessage', 'vision_output_topic')],
                         onreturn=None,
                         onchange=change_publish_topic)
 setting.add_option('Return to main menu', PYGAME_MENU_BACK)

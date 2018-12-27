@@ -20,9 +20,9 @@ class Field(PygameFramework, RunRos):
     name = "Python simulator"
     description = "Robots controled by ros"
 
-    def __init__(self, num_allies, num_opponents, team_color=''):
+    def __init__(self, num_allies, num_opponents, team_color, publish_topic):
         PygameFramework.__init__(self)
-        RunRos.__init__(self)
+        RunRos.__init__(self, publish_topic)
         # Top-down -- no gravity in the screen plane
         self.world.gravity = (0, 0)
 
