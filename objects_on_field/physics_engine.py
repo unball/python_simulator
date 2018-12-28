@@ -24,7 +24,7 @@ class PhysicsRobot(object):
     def __init__(self, robot, max_forward_speed,
                  max_backward_speed, max_drive_force,
                  turn_torque, max_lateral_impulse,
-                 density, position):
+                 density, position, vector_right_normal, vector_forward_normal):
 
         self.world = robot
 
@@ -32,21 +32,24 @@ class PhysicsRobot(object):
         self.turn_torque = turn_torque
         self.max_forward_speed = max_forward_speed
         self.max_backward_speed = max_backward_speed
+        self.max_angular_speed = 20
         self.max_drive_force = max_drive_force
         self.max_lateral_impulse = max_lateral_impulse
         self.ground_areas = []
+        self.vector_right_normal = vector_right_normal
+        self.vector_forward_normal = vector_forward_normal
 
     @property
     def forward_velocity(self):
         body = self.world
-        current_normal = body.GetWorldVector((1, 0))
+        current_normal = body.GetWorldVector(self.vector_forward_normal)
         return current_normal.dot(body.linearVelocity) * current_normal
 
     @property
     def lateral_velocity(self):
         body = self.world
 
-        right_normal = body.GetWorldVector((0, 1))
+        right_normal = body.GetWorldVector(self.vector_right_normal)
         return right_normal.dot(body.linearVelocity) * right_normal
 
 
@@ -78,7 +81,7 @@ class PhysicsRobot(object):
             desired_linear_velocity = self.max_backward_speed
         
         # find the current speed in the forward direction
-        current_forward_normal = self.body.GetWorldVector((1, 0))
+        current_forward_normal = self.body.GetWorldVector(self.vector_forward_normal)
         current_speed = self.forward_velocity.dot(current_forward_normal)
 
         # apply necessary force

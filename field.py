@@ -19,7 +19,7 @@ class Field(PygameFramework, RunRos):
     name = "Python simulator"
     description = "Robots controled by ros"
 
-    def __init__(self, num_allies, num_opponents, team_color, publish_topic):
+    def __init__(self, num_allies, num_opponents, team_color, field_side, publish_topic):
         PygameFramework.__init__(self)
         RunRos.__init__(self, publish_topic)
         # Top-down -- no gravity in the screen plane
@@ -32,9 +32,23 @@ class Field(PygameFramework, RunRos):
         self.ground = Ground(self.world)
         walls = Walls(self.world, BLUE)
         self.ball = Ball(self.world, BLUE)
-        self.robots_allies = [Robot(self.world, position=(-10, x)) for x in range(self.num_allies)]
-        self.robots_opponents = [Robot(self.world, position=(10, x)) for x in range(self.num_opponents)]
 
+        if field_side == 'left':
+            self.robots_allies = [Robot(self.world, vector_right_normal=(0, -1), 
+                                 vector_forward_normal=(1, 0), position=(-10, x)
+                                 ) for x in range(self.num_allies)]
+            self.robots_opponents = [Robot(self.world, vector_right_normal=(0, 1), 
+                                 vector_forward_normal=(-1, 0), position=(10, x)
+                                 ) for x in range(self.num_opponents)]
+        else:
+            self.robots_allies = [Robot(self.world, vector_right_normal=(0, 1), 
+                                 vector_forward_normal=(-1, 0), position=(10, x)
+                                 ) for x in range(self.num_allies)]
+            self.robots_opponents = [Robot(self.world, vector_right_normal=(0, -1), 
+                                 vector_forward_normal=(1, 0), position=(-10, x)
+                                 ) for x in range(self.num_opponents)]
+
+        self.robots_allies[0].body.angle = 1.5
         super(Field, self).run()
         
 
