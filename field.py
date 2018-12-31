@@ -68,9 +68,9 @@ class Field(PygameFramework, RunRos):
         self.ground.update()
 
         robots_allies = [(self.robots_allies[x].body.position, 
-                    self.robots_allies[x].body.angle) for x in range(self.num_allies)]
+                    self.robots_allies[x].body.angle%(2*math.pi)) for x in range(self.num_allies)]
         robots_opponents = [(self.robots_opponents[x].body.position, 
-                    self.robots_opponents[x].body.angle) for x in range(self.num_opponents)]
+                    self.robots_opponents[x].body.angle%(2*math.pi)) for x in range(self.num_opponents)]
 
         RunRos.update(self, robots_allies, robots_opponents, self.ball.body.position)
 
