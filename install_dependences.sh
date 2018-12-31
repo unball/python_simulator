@@ -18,6 +18,7 @@ dependency=(
     "sudo pip3 install pygame"
     "sudo pip3 install box2d-py"
     "sudo pip3 install pygame-menu"
+    "sudo pip3 install rospkg"
 )
 
 result(){
