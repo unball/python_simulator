@@ -34,21 +34,16 @@ class Field(PygameFramework, RunRos):
         self.ball = Ball(self.world, BLUE)
 
         if field_side == 'left':
-            self.robots_allies = [Robot(self.world, vector_right_normal=(0, -1), 
-                                 vector_forward_normal=(1, 0), position=(-10, x)
+            self.robots_allies = [Robot(self.world, position=(-10, x), angle=0
                                  ) for x in range(self.num_allies)]
-            self.robots_opponents = [Robot(self.world, vector_right_normal=(0, 1), 
-                                 vector_forward_normal=(-1, 0), position=(10, x)
+            self.robots_opponents = [Robot(self.world, position=(10, x), angle=math.pi
                                  ) for x in range(self.num_opponents)]
         else:
-            self.robots_allies = [Robot(self.world, vector_right_normal=(0, 1), 
-                                 vector_forward_normal=(-1, 0), position=(10, x)
+            self.robots_allies = [Robot(self.world, position=(10, x), angle=math.pi
                                  ) for x in range(self.num_allies)]
-            self.robots_opponents = [Robot(self.world, vector_right_normal=(0, -1), 
-                                 vector_forward_normal=(1, 0), position=(-10, x)
+            self.robots_opponents = [Robot(self.world, position=(-10, x), angle=0
                                  ) for x in range(self.num_opponents)]
 
-        self.robots_allies[0].body.angle = 1.5
         super(Field, self).run()
         
 
