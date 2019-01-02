@@ -46,7 +46,7 @@ class PhysicsRobot(object):
     def lateral_velocity(self):
         body = self.world
 
-        right_normal = body.GetWorldVector((0, 1))
+        right_normal = body.GetWorldVector((0, -1))
         return right_normal.dot(body.linearVelocity) * right_normal
 
 

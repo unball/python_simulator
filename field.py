@@ -32,8 +32,10 @@ class Field(PygameFramework, RunRos):
         self.ground = Ground(self.world)
         walls = Walls(self.world, BLUE)
         self.ball = Ball(self.world, BLUE)
-        self.robots_allies = [Robot(self.world, position=(-10, x)) for x in range(self.num_allies)]
-        self.robots_opponents = [Robot(self.world, position=(10, x)) for x in range(self.num_opponents)]
+        self.robots_allies = [Robot(self.world, position=(-10, x))
+        					 for x in range(self.num_allies)]
+        self.robots_opponents = [Robot(self.world, position=(10, x))
+        						for x in range(self.num_opponents)]
 
         super(Field, self).run()
         
