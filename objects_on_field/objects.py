@@ -87,10 +87,9 @@ class Robot(PhysicsRobot):
     dimensions = (3.60, 3.60)
     position = [('', 0), ('', -10), ('', 10)]
 
-    def __init__(self, world, max_forward_speed=100.0,
-                 max_backward_speed=-20, max_drive_force=150,
-                 turn_torque=1500, max_lateral_impulse=20,
-                 density=0.1, position=(0, 0)):
+    def __init__(self, world, max_forward_speed=100.0, max_backward_speed=-20, 
+                max_drive_force=150, turn_torque=1500, max_lateral_impulse=20,
+                density=0.1, position=(0, 0), angle=0):
 
         self.main_world = world
         self.body = world.CreateDynamicBody(position=(position[0], Robot.position[position[1]][1]))
@@ -100,7 +99,7 @@ class Robot(PhysicsRobot):
         super(Robot, self).__init__(self.body, max_forward_speed, max_backward_speed,
                                     max_drive_force, turn_torque, max_lateral_impulse, 
                                     density, position)
-        #self.body.angle = 1 * math.pi
+        self.body.angle = angle
 
     def update(self, desired_velocity, hz): 
         """

@@ -69,6 +69,7 @@ os.environ['SDL_VIDEO_CENTERED'] = '1'
 directory = os.getcwd()
 logo = pygame.image.load(directory + '/src/python_simulator/images/UnBall.png') 
 pygame.display.set_icon(logo)
+
 surface = pygame.display.set_mode(WINDOW_SIZE)
 pygame.display.set_caption('UnBall - Python Simulation')
 
@@ -80,6 +81,7 @@ num_allies = 0
 num_opponents = 0
 team_color = BLUE
 publish_topic = 'vision_output_topic'
+field_side = 'left'
 
 # -----------------------------------------------------------------------------
 def change_num_allies(d):
@@ -97,6 +99,11 @@ def change_team_color(d):
     global team_color
     team_color = d
 
+def change_field_side(d):
+    print ('Selected field side: {0}'.format(d))
+    global field_side
+    field_side = d
+
 def change_publish_topic(d):
     print ('Selected publish topic: {0}'.format(d))
     global publish_topic
@@ -108,7 +115,7 @@ def play_function():
     print(num_allies)
     print(num_opponents)
     print(team_color)
-    Field(num_allies, num_opponents, team_color, publish_topic)
+    Field(num_allies, num_opponents, team_color, field_side, publish_topic)
     main_menu.enable()
     
 
@@ -157,6 +164,10 @@ run_simulation.add_selector('Team color', [('Blue', BLUE),
                                              ('Yellow', YELLOW)],
                         onreturn=None,
                         onchange=change_team_color)                                          
+run_simulation.add_selector('Field side', [('left', 'left'),
+                                             ('right', 'right')],
+                        onreturn=None,
+                        onchange=change_field_side)                                          
 run_simulation.add_option('Return to main menu', PYGAME_MENU_BACK)
 
 # CONFIG MENU

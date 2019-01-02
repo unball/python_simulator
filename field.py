@@ -19,7 +19,7 @@ class Field(PygameFramework, RunRos):
     name = "Python simulator"
     description = "Robots controled by ros"
 
-    def __init__(self, num_allies, num_opponents, team_color, publish_topic):
+    def __init__(self, num_allies, num_opponents, team_color, field_side, publish_topic):
         PygameFramework.__init__(self)
         RunRos.__init__(self, publish_topic)
         # Top-down -- no gravity in the screen plane
@@ -32,10 +32,18 @@ class Field(PygameFramework, RunRos):
         self.ground = Ground(self.world)
         walls = Walls(self.world, BLUE)
         self.ball = Ball(self.world, BLUE)
-        self.robots_allies = [Robot(self.world, position=(-10, x))
-        					 for x in range(self.num_allies)]
-        self.robots_opponents = [Robot(self.world, position=(10, x))
-        						for x in range(self.num_opponents)]
+
+        if field_side == 'left':
+            self.robots_allies = [Robot(self.world, position=(-10, x), angle=0
+                                 ) for x in range(self.num_allies)]
+            self.robots_opponents = [Robot(self.world, position=(10, x), angle=math.pi
+                                 ) for x in range(self.num_opponents)]
+        else:
+            self.robots_allies = [Robot(self.world, position=(10, x), angle=math.pi
+                                 ) for x in range(self.num_allies)]
+            self.robots_opponents = [Robot(self.world, position=(-10, x), angle=0
+                                 ) for x in range(self.num_opponents)]
+
 
         super(Field, self).run()
         
@@ -61,9 +69,9 @@ class Field(PygameFramework, RunRos):
         self.ground.update()
 
         robots_allies = [(self.robots_allies[x].body.position, 
-                    self.robots_allies[x].body.angle) for x in range(self.num_allies)]
+                    self.robots_allies[x].body.angle%(2*math.pi)) for x in range(self.num_allies)]
         robots_opponents = [(self.robots_opponents[x].body.position, 
-                    self.robots_opponents[x].body.angle) for x in range(self.num_opponents)]
+                    self.robots_opponents[x].body.angle%(2*math.pi)) for x in range(self.num_opponents)]
 
         RunRos.update(self, robots_allies, robots_opponents, self.ball.body.position)
 

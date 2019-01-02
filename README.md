@@ -32,7 +32,7 @@ sudo ./install_dependences.sh
 ```
 
 ## References ##
-Acess the bellow links in order to understanding how Python_Simulation works:
+Python_Simulation is based on script top_down_car.py, so access the bellow links in order to understanding how Python_Simulation works:
 
 > Field:
 
@@ -44,13 +44,6 @@ Acess the bellow links in order to understanding how Python_Simulation works:
 > Star Menu:
 
 - [https://github.com/ppizarror/pygame-menu](https://github.com/ppizarror/pygame-menu)
-
-After install Pybox2D don't forget to use 
-```bash 
-python3 -m examples.top_down_car --backend=pygame
-```
-into the folder Pybox2D to see "top_dow_car.py" working.
-Python_Simulation is based on script top_down_car.py
 
 ## License ##
 

@@ -32,6 +32,7 @@ class PhysicsRobot(object):
         self.turn_torque = turn_torque
         self.max_forward_speed = max_forward_speed
         self.max_backward_speed = max_backward_speed
+        self.max_angular_speed = 20
         self.max_drive_force = max_drive_force
         self.max_lateral_impulse = max_lateral_impulse
         self.ground_areas = []
