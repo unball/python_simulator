@@ -32,7 +32,7 @@ class PhysicsRobot(object):
         self.turn_torque = turn_torque
         self.max_forward_speed = max_forward_speed
         self.max_backward_speed = max_backward_speed
-        self.max_angular_speed = 20
+        self.max_angular_speed = 2
         self.max_drive_force = max_drive_force
         self.max_lateral_impulse = max_lateral_impulse
         self.ground_areas = []
@@ -102,11 +102,12 @@ class PhysicsRobot(object):
         elif desired_angular_velocity < 0 and desired_angular_velocity < self.max_backward_speed:
             desired_angular_velocity = self.max_angular_speed
 
-        torque = 0.0
-        if desired_angular_velocity > self.body.angularVelocity:
-            torque = self.turn_torque
-        elif desired_angular_velocity < self.body.angularVelocity:
-            torque = -self.turn_torque
+        applied_velocity = self.world.angularVelocity - desired_angular_velocity
+        desired_inpulse = 0.1 * self.world.inertia * applied_velocity 
+        #if desired_angular_velocity > self.body.angularVelocity:
+        #    torque = self.turn_torque
+        #elif desired_angular_velocity < self.body.angularVelocity:
+        #    torque = -self.turn_torque
         
         #if 'left' in keys:
         #    desired_torque = self.turn_torque
@@ -115,8 +116,8 @@ class PhysicsRobot(object):
         #else:
         #    return
         #self.body.angularVelocity - desired_angular_velocity
-        self.body.ApplyTorque(torque, True)
-        #self.body.ApplyAngularInpulse(inpulse=desired_inpulse, True)
+        #self.body.ApplyTorque(torque, True)
+        self.body.ApplyAngularImpulse(desired_inpulse, True)
 
 
     def update_traction(self):

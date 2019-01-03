@@ -13,15 +13,15 @@ import math
     
 
 class Ball(PhysicsBall):
-    def __init__(self, world, color, density=1, position=(0 , 0)):
+    def __init__(self, world, color, density=1, position=(0, 0)):
         self.body = world.CreateDynamicBody(
             fixtures=b2FixtureDef(shape=b2CircleShape(radius=2.135), 
-                                  density=1.0,
                                   friction=0.1,
                                   restitution=0.1),
             bullet=True,
             position=position)
         self.body.userData = {'obj': self}
+        self.body.mass = MASS_BALL
         self.color = color
         super(Ball, self).__init__(self.body)
 

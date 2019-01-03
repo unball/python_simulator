@@ -13,8 +13,8 @@ def talker():
     msg = comm_msg()
 
     for x in range(3):
-        msg.MotorA[x] = 250
-        msg.MotorB[x] = 250
+        msg.MotorA[x] = 130
+        msg.MotorB[x] = 150
 
     pub = rospy.Publisher('radio_topic', comm_msg, queue_size=10)
 

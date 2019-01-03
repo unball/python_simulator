@@ -12,6 +12,11 @@ MAX_ROBOTS_ALLIES = 3
 CENTER_AXIS_X = -75
 CENTER_AXIS_Y = 65
 
+# Proprerties of bodies
+MASS_BALL = 0.046	# Kg
+MASS_ROBOT = 0,200	# Kg (adjust later)
+
+
 # --- Colors ---
 ORANGE = (255,165,0)
 BLUE = (0,0,255)
