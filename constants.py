@@ -17,6 +17,7 @@ MASS_BALL = 0.046	# Kg
 MASS_ROBOT = 0,200	# Kg (adjust later)
 
 
+
 # --- Colors ---
 ORANGE = (255,165,0)
 BLUE = (0,0,255)

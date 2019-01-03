@@ -9,6 +9,58 @@
 import math as m
 from constants import *
 
+#max_tics is the maximum number of tics per second the encoder can read. This parameter depends on 
+#which microcontroller is used reduction is the motor to wheels reduction. This paramter depends on
+#the physical structure of the robot encoder is the encoder resolution. This parameter depends on 
+#which motor brand and model is used
+def motor_voltage_to_wheels_speed(motorA,motorB,max_tics=(700/0.01),reduction=(1./1.),encoder=512.*19.):
+    motorA_rad_per_s = (motorA/255.0)*(max_tics/encoder)*m.pi;
+    wheelA = motorA_rad_per_s*reduction;
+    motorB_rad_per_s = (motorB/255.0)*(max_tics/encoder)*m.pi;
+    wheelB = motorB_rad_per_s*reduction;
+
+    return wheelA, wheelB
+
+#wheel_radius is the wheel radius. It depends on the robot
+#robot_lenght is the distance from one wheel to the other. It depends on the robot
+def wheels_speeds_to_robots_speeds(wheelA,wheelB,wheel_radius=0.03,robot_lenght=0.075):
+    angular_speed = wheel_radius*(wheelA - wheelB)/robot_lenght;
+    linear_speed = wheel_radius*(wheelA + wheelB)/2;
+
+    return angular_speed, linear_speed*CORRECTION_FATOR_METER_TO_CM
+
+
+def actual_axis_to_axis_unball(pos_robots_allies, pos_robots_opponents, pos_ball):
+    new_pos_robots_allies = []
+    new_pos_robots_opponents = []
+
+    for x in range(len(pos_robots_allies)):
+        new_pos_robots_allies.append(((pos_robots_allies[x][0][0] - CENTER_AXIS_X, 
+                                      pos_robots_allies[x][0][1] - CENTER_AXIS_Y), 
+                                      pos_robots_allies[x][1]))
+
+    for x in range(len(pos_robots_opponents)):
+        new_pos_robots_opponents.append(((pos_robots_opponents[x][0][0] - CENTER_AXIS_X, 
+                                      pos_robots_opponents[x][0][1] - CENTER_AXIS_Y), 
+                                      pos_robots_opponents[x][1]))
+
+    new_pos_ball = (pos_ball[0] - CENTER_AXIS_X, pos_ball[1] - CENTER_AXIS_Y)
+
+    return new_pos_robots_allies, new_pos_robots_opponents, new_pos_ball
+
+
+
+class MaxSpeed(object):
+	var = (motor_voltage_to_wheels_speed(255, 255))
+	linear = wheels_speeds_to_robots_speeds(var[0], var[1])[1]
+
+	var = (motor_voltage_to_wheels_speed(255, -255))
+	angular = wheels_speeds_to_robots_speeds(var[0], var[1])[0]
+
+	def __init__(self):
+		pass
+
+
 class PhysicsBall(object):
 
     def __init__(self, body):
@@ -26,7 +78,7 @@ class PhysicsRobot(object):
                  turn_torque, max_lateral_impulse,
                  density, position):
 
-        self.world = robot
+        self.body = robot
 
         self.current_traction = 1
         self.turn_torque = turn_torque
@@ -39,13 +91,13 @@ class PhysicsRobot(object):
 
     @property
     def forward_velocity(self):
-        body = self.world
+        body = self.body
         current_normal = body.GetWorldVector((1, 0))
         return current_normal.dot(body.linearVelocity) * current_normal
 
     @property
     def lateral_velocity(self):
-        body = self.world
+        body = self.body
 
         right_normal = body.GetWorldVector((0, -1))
         return right_normal.dot(body.linearVelocity) * right_normal
@@ -102,8 +154,8 @@ class PhysicsRobot(object):
         elif desired_angular_velocity < 0 and desired_angular_velocity < self.max_backward_speed:
             desired_angular_velocity = self.max_angular_speed
 
-        applied_velocity = self.world.angularVelocity - desired_angular_velocity
-        desired_inpulse = 0.1 * self.world.inertia * applied_velocity 
+        applied_velocity = self.body.angularVelocity - desired_angular_velocity
+        desired_inpulse = 0.1 * self.body.inertia * applied_velocity 
         #if desired_angular_velocity > self.body.angularVelocity:
         #    torque = self.turn_torque
         #elif desired_angular_velocity < self.body.angularVelocity:
@@ -132,41 +184,3 @@ class PhysicsRobot(object):
         #        self.current_traction = max_mod
 
 
-#max_tics is the maximum number of tics per second the encoder can read. This parameter depends on 
-#which microcontroller is used reduction is the motor to wheels reduction. This paramter depends on
-#the physical structure of the robot encoder is the encoder resolution. This parameter depends on 
-#which motor brand and model is used
-def motor_voltage_to_wheels_speed(motorA,motorB, max_tics=(700/0.01),reduction=(1./1.),encoder=512.*19.):
-    motorA_rad_per_s = (motorA/255.0)*(max_tics/encoder)*m.pi;
-    wheelA = motorA_rad_per_s*reduction;
-    motorB_rad_per_s = (motorB/255.0)*(max_tics/encoder)*m.pi;
-    wheelB = motorB_rad_per_s*reduction;
-
-    return wheelA, wheelB
-
-#wheel_radius is the wheel radius. It depends on the robot
-#robot_lenght is the distance from one wheel to the other. It depends on the robot
-def wheels_speeds_to_robots_speeds(wheelA,wheelB,wheel_radius=0.03,robot_lenght=0.075):
-    angular_speed = wheel_radius*(wheelA - wheelB)/robot_lenght;
-    linear_speed = wheel_radius*(wheelA + wheelB)/2;
-
-    return angular_speed*CORRECTION_FATOR_METER_TO_CM, linear_speed*CORRECTION_FATOR_METER_TO_CM
-
-
-def actual_axis_to_axis_unball(pos_robots_allies, pos_robots_opponents, pos_ball):
-    new_pos_robots_allies = []
-    new_pos_robots_opponents = []
-
-    for x in range(len(pos_robots_allies)):
-        new_pos_robots_allies.append(((pos_robots_allies[x][0][0] - CENTER_AXIS_X, 
-                                      pos_robots_allies[x][0][1] - CENTER_AXIS_Y), 
-                                      pos_robots_allies[x][1]))
-
-    for x in range(len(pos_robots_opponents)):
-        new_pos_robots_opponents.append(((pos_robots_opponents[x][0][0] - CENTER_AXIS_X, 
-                                      pos_robots_opponents[x][0][1] - CENTER_AXIS_Y), 
-                                      pos_robots_opponents[x][1]))
-
-    new_pos_ball = (pos_ball[0] - CENTER_AXIS_X, pos_ball[1] - CENTER_AXIS_Y)
-
-    return new_pos_robots_allies, new_pos_robots_opponents, new_pos_ball
