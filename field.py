@@ -74,5 +74,5 @@ class Field(PygameFramework, RunRos):
                     self.robots_opponents[x].body.angle%(2*math.pi)) for x in range(self.num_opponents)]
 
         RunRos.update(self, robots_allies, robots_opponents, self.ball.body.position)
-
+        print("angular_simulator>>>", self.robots_allies[0].body.angularVelocity)
         super(Field, self).Step(settings)

@@ -63,4 +63,4 @@ class RunRos(object):
         self.vision_message.ball_x = pos_ball[0]
         self.vision_message.ball_y = pos_ball[1]
 
-        print(self.vision_message)
+        #print(self.vision_message)

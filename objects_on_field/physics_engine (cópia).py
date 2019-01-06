@@ -21,19 +21,11 @@ class PhysicsBall(object):
 
 class PhysicsRobot(object):
 
-    def __init__(self, robot, max_forward_speed,
-                 max_backward_speed, max_drive_force,
-                 turn_torque, max_lateral_impulse,
-                 density, position):
+    def __init__(self, robot, max_lateral_impulse, position):
 
         self.body = robot
 
         self.current_traction = 1
-        self.turn_torque = turn_torque
-        self.max_forward_speed = max_forward_speed
-        self.max_backward_speed = max_backward_speed
-        self.max_angular_speed = 2
-        self.max_drive_force = max_drive_force
         self.max_lateral_impulse = max_lateral_impulse
         self.ground_areas = []
 
@@ -73,25 +65,20 @@ class PhysicsRobot(object):
     def update_drive(self, desired_linear_velocity):
 
         # Saturation
-        if desired_linear_velocity > 0 and desired_linear_velocity > self.max_forward_speed:
-            desired_linear_velocity = self.max_forward_speed
-        elif desired_linear_velocity < 0 and desired_linear_velocity < self.max_backward_speed:
-            desired_linear_velocity = self.max_backward_speed
+        #if desired_linear_velocity > 0 and desired_linear_velocity > self.max_forward_speed:
+        #    desired_linear_velocity = self.max_forward_speed
+        #elif desired_linear_velocity < 0 and desired_linear_velocity < self.max_backward_speed:
+        #    desired_linear_velocity = self.max_backward_speed
         
         # find the current speed in the forward direction
         current_forward_normal = self.body.GetWorldVector((1, 0))
         current_speed = self.forward_velocity.dot(current_forward_normal)
 
         # apply necessary force
-        force = 0.0
-        if desired_linear_velocity > current_speed:
-            force = self.max_drive_force
-        elif desired_linear_velocity < current_speed:
-            force = -self.max_drive_force
-        else:
-            return
-
-        self.body.ApplyForce(self.current_traction * force * current_forward_normal,
+        linear_velocity_difference = desired_linear_velocity - current_speed
+        desired_inpulse = 0.5 * self.body.mass * linear_velocity_difference
+        
+        self.body.ApplyLinearImpulse(desired_inpulse * current_forward_normal,
                              self.body.worldCenter, True)
 
     def update_turn(self, desired_angular_velocity):

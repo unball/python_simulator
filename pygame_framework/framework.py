@@ -276,7 +276,7 @@ class FrameworkBase(b2ContactListener):
                 bodyA=self.groundbody,
                 bodyB=body,
                 target=p,
-                maxForce=1000.0 * body.mass)
+                maxForce=10000000000.0 * body.mass)
             body.awake = True
 
     def MouseUp(self, p):

@@ -14,7 +14,7 @@ CENTER_AXIS_Y = 65
 
 # Proprerties of bodies
 MASS_BALL = 0.046	# Kg
-MASS_ROBOT = 0,200	# Kg (adjust later)
+MASS_ROBOT = 1.00	# Kg (adjust later)
 
 
 
