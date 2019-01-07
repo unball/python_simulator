@@ -54,7 +54,7 @@ class Field(PygameFramework, RunRos):
     def KeyboardUp(self, key):
         super(Field, self).KeyboardUp(key)
 
-    def Step(self, settings):
+    def update_all(self, settings):
         if not self.pause:
             for x in range(self.num_allies):
                 self.robots_allies[x].update(self.ang_and_lin_speed[x], settings.hz)
@@ -75,4 +75,25 @@ class Field(PygameFramework, RunRos):
 
         RunRos.update(self, robots_allies, robots_opponents, self.ball.body.position)
         print("angular_simulator>>>", self.robots_allies[0].body.angularVelocity)
+
+    def Step(self, settings):
+        self.update_all(settings)
+
+        # colors = {
+        # staticBody: (255, 255, 255, 255),
+        # dynamicBody: (127, 127, 127, 255),
+        # }
+
+        # transform = sweepB.GetTransform(1.0)
+        # self.renderer.DrawPolygon([self.renderer.to_screen(transform * v)
+        #                            for v in self.shapeB.vertices],
+        #                           b2Color(0.9, 0.5, 0.5))
+
+        # Let's play with extending the shape classes to draw for us.
+        # def my_draw_polygon(polygon, body, fixture):
+        #     vertices = [(body.transform * v) * PPM for v in polygon.vertices]
+        #     vertices = [(v[0], SCREEN_HEIGHT - v[1]) for v in vertices]
+        #     pygame.draw.polygon(self.screen, b2Color(0.2,0.6,0), vertices)
+        # polygonShape.draw = my_draw_polygon
+
         super(Field, self).Step(settings)

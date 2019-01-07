@@ -94,6 +94,7 @@ class FrameworkBase(b2ContactListener):
     description = None
     TEXTLINE_START = 30
     colors = {
+        # 'static_body': b2Color(0.7, 1, 0.4),
         'mouse_point': b2Color(0, 1, 0),
         'joint_line': b2Color(0.8, 0.8, 0.8),
         'contact_add': b2Color(0.3, 0.95, 0.3),
@@ -157,8 +158,6 @@ class FrameworkBase(b2ContactListener):
             else:
                 timeStep = 0.0
 
-            #self.Print("****PAUSED****", (200, 0, 0))
-
         # Set the flags based on what the settings show
         if renderer:
             # convertVertices is only applicable when using b2DrawExtended.  It
@@ -212,24 +211,6 @@ class FrameworkBase(b2ContactListener):
                 renderer.DrawPoint(p2, settings.pointSize,
                                    self.colors['mouse_point'])
                 renderer.DrawSegment(p1, p2, self.colors['joint_line'])
-
-            # Draw each of the contact points in different colors.
-            if self.settings.drawContactPoints:
-                for point in self.points:
-                    if point['state'] == b2_addState:
-                        renderer.DrawPoint(renderer.to_screen(point['position']),
-                                           settings.pointSize,
-                                           self.colors['contact_add'])
-                    elif point['state'] == b2_persistState:
-                        renderer.DrawPoint(renderer.to_screen(point['position']),
-                                           settings.pointSize,
-                                           self.colors['contact_persist'])
-
-            if settings.drawContactNormals:
-                for point in self.points:
-                    p1 = renderer.to_screen(point['position'])
-                    p2 = renderer.axisScale * point['normal'] + p1
-                    renderer.DrawSegment(p1, p2, self.colors['contact_normal'])
 
             renderer.EndDraw()
             t_draw = time() - t_draw
@@ -299,20 +280,6 @@ class FrameworkBase(b2ContactListener):
         """
         The main simulation loop. Don't override this, override Step instead.
         """
-
-        # Reset the text line to start the text from the top
-        self.textLine = self.TEXTLINE_START
-
-        # Draw the name of the test running
-        #self.Print(self.name, (127, 127, 255))
-
-        #if self.description:
-            # Draw the name of the test running
-         #   for s in self.description.split('\n'):
-         #       self.Print(s, (127, 255, 127))
-
-        # Do the main physics step
-
         
         self.Step(self.settings)
 
@@ -363,7 +330,9 @@ class FrameworkBase(b2ContactListener):
                             for i, point in enumerate(state2)])
 
     def destroy_bodies(self):
-        """Finish the bodies into world when quit button is pressed"""
+        """
+        Finish the bodies into world when quit button is pressed
+        """
         for body in self.world.bodies:
             self.world.DestroyBody(body)
 

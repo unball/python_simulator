@@ -36,7 +36,7 @@ from __future__ import (print_function, absolute_import, division)
 import sys
 import warnings
 from constants import *
-from Box2D import b2Color
+from Box2D import (b2Color, b2PolygonShape)
 import rospy
 
 try:
@@ -164,10 +164,12 @@ class PygameDraw(b2DrawExtended):
         else:
             pygame.draw.polygon(self.surface, color.bytes, vertices, 1)
 
-    def DrawSolidPolygon(self, vertices, color):
+    def DrawSolidPolygon(self, vertices, color, body=''):
         """
         Draw a filled polygon given the screen vertices with the specified color.
         """
+        if body:
+            print("eu existo>>>>>>>>>>>")
         if not vertices:
             return
 

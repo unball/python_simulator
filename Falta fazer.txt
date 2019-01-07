@@ -1,4 +1,4 @@
-  - ajustar constantes;
+ *- ajustar constantes;
   - colocar cor no time;
  *- colocar física na bola;
  *- ajustar ângulo inicial dos robôs;

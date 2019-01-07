@@ -57,29 +57,7 @@ class fwSettings(object):
     # testing)
     onlyInit = False
 
-#             text                  variable
-checkboxes = (("Warm Starting", "enableWarmStarting"),
-              ("Time of Impact", "enableContinuous"),
-              ("Sub-Stepping", "enableSubStepping"),
-              ("Draw", None),
-              ("Shapes", "drawShapes"),
-              ("Joints", "drawJoints"),
-              ("AABBs", "drawAABBs"),
-              ("Pairs", "drawPairs"),
-              ("Contact Points", "drawContactPoints"),
-              ("Contact Normals", "drawContactNormals"),
-              ("Center of Masses", "drawCOMs"),
-              ("Statistics", "drawStats"),
-              ("FPS", "drawFPS"),
-              ("Control", None),
-              ("Pause", "pause"),
-              ("Single Step", "singleStep"))
 
-sliders = [
-    {'name': 'hz', 'text': 'Hertz', 'min': 5, 'max': 200},
-    {'name': 'positionIterations', 'text': 'Pos Iters', 'min': 0, 'max': 100},
-    {'name': 'velocityIterations', 'text': 'Vel Iters', 'min': 1, 'max': 500},
-]
 
 from optparse import OptionParser
 

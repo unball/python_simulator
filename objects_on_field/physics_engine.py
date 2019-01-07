@@ -21,8 +21,7 @@ class PhysicsBall(object):
 
 class PhysicsRobot(object):
 
-    def __init__(self, robot, max_lateral_impulse,
-                 density, position):
+    def __init__(self, robot, max_lateral_impulse, position):
 
         self.body = robot
         self.current_traction = 1

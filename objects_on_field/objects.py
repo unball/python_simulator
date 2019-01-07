@@ -22,6 +22,7 @@ class Ball(PhysicsBall):
             position=position)
         self.body.userData = {'obj': self}
         self.body.mass = MASS_BALL
+        self.body.bullet = True
         self.color = color
         super(Ball, self).__init__(self.body)
 
@@ -87,16 +88,17 @@ class Robot(PhysicsRobot):
     dimensions = (3.75, 3.75)
     position = [('', 0), ('', -10), ('', 10)]
 
-    def __init__(self, world, max_lateral_impulse=20,
-                density=0.01, position=(0, 0), angle=0):
+    def __init__(self, world, max_lateral_impulse=30, position=(0, 0), angle=0):
 
         self.main_world = world
         self.body = world.CreateDynamicBody(position=(position[0], Robot.position[position[1]][1]))
-        self.body.CreatePolygonFixture(box=Robot.dimensions, density=density)
+        self.body.CreatePolygonFixture(box=Robot.dimensions,
+                                      density=(MASS_ROBOT/
+                                        (((self.__class__.dimensions[0]*2)**3)*(10**(-2)))))
         self.body.userData = {'obj': self}
+        self.body.bullet = True
 
-        super(Robot, self).__init__(self.body, max_lateral_impulse, 
-                                    density, position)
+        super(Robot, self).__init__(self.body, max_lateral_impulse, position)
         self.body.angle = angle
 
     def update(self, desired_velocity, hz): 

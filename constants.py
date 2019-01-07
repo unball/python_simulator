@@ -14,9 +14,7 @@ CENTER_AXIS_Y = 65
 
 # Proprerties of bodies
 MASS_BALL = 0.046	# Kg
-MASS_ROBOT = 0.100	# Kg (adjust later)
-
-
+MASS_ROBOT = 5.100	# Kg (adjust later)
 
 # --- Colors ---
 ORANGE = (255,165,0)
