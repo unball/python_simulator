@@ -79,7 +79,8 @@ dt = 1 / FPS
 # Global variables
 num_allies = 0
 num_opponents = 0
-team_color = BLUE
+team_color = 0  # blue   = 0
+                # yellow = 1
 publish_topic = 'vision_output_topic'
 field_side = 'left'
 
@@ -160,8 +161,8 @@ run_simulation.add_selector('Number opponents', [('0', 0),
                                              ('3', 3)],
                         onreturn=None,
                         onchange=change_num_opponents)               
-run_simulation.add_selector('Team color', [('Blue', BLUE),
-                                             ('Yellow', YELLOW)],
+run_simulation.add_selector('Team color', [('Blue', 0),
+                                             ('Yellow', 1)],
                         onreturn=None,
                         onchange=change_team_color)                                          
 run_simulation.add_selector('Field side', [('left', 'left'),

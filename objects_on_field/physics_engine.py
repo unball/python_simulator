@@ -21,7 +21,7 @@ class PhysicsBall(object):
 
 class PhysicsRobot(object):
 
-    def __init__(self, robot, max_lateral_impulse, position):
+    def __init__(self, robot, max_lateral_impulse, position, angle):
 
         self.body = robot
         self.current_traction = 1
@@ -31,14 +31,14 @@ class PhysicsRobot(object):
     @property
     def forward_velocity(self):
         body = self.body
-        current_normal = body.GetWorldVector((1, 0))
+        current_normal = body.GetWorldVector((m.cos(angle), m.sin(angle)))
         return current_normal.dot(body.linearVelocity) * current_normal
 
     @property
     def lateral_velocity(self):
         body = self.body
 
-        right_normal = body.GetWorldVector((0, -1))
+        right_normal = body.GetWorldVector((m.cos(angle + (m.pi/2)), m.sin(angle)))
         return right_normal.dot(body.linearVelocity) * right_normal
 
 

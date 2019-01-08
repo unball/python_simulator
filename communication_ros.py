@@ -59,8 +59,8 @@ class RunRos(object):
             self.vision_message.y[x + MAX_ROBOTS_ALLIES] = pos_robots_opponents[x][0][1]
             self.vision_message.th[x + MAX_ROBOTS_ALLIES] = pos_robots_opponents[x][1]
             self.vision_message.found[x + MAX_ROBOTS_ALLIES] = True
-
+        
         self.vision_message.ball_x = pos_ball[0]
         self.vision_message.ball_y = pos_ball[1]
 
-        #print(self.vision_message)
+        print(self.vision_message)

@@ -17,12 +17,6 @@ MASS_BALL = 0.046	# Kg
 MASS_ROBOT = 5.100	# Kg (adjust later)
 
 # --- Colors ---
-ORANGE = (255,165,0)
-BLUE = (0,0,255)
-YELLOW = (255,255,0)
-WHITE = b2Color(1, 1, 1)
-OPPON_COLOR = (123, 122, 6)
-BACKGROUND_COLOR = '#e2873c'
-UnBall_blue  = (3, 63, 118) 
-UnBall_green = (2, 128, 54) 
-
+BLUE = b2Color(0,0,1)
+YELLOW = b2Color(1,1,0)
+WHITE = b2Color(1,1,1)

@@ -9,7 +9,7 @@ from pygame_framework.framework import *
 from pygame_framework.backends.pygame_framework import *
 from objects_on_field.physics_engine import *
 from constants import *
-import math
+import math as m
     
 
 class Ball(PhysicsBall):
@@ -88,7 +88,7 @@ class Robot(PhysicsRobot):
     dimensions = (3.75, 3.75)
     position = [('', 0), ('', -10), ('', 10)]
 
-    def __init__(self, world, max_lateral_impulse=30, position=(0, 0), angle=0):
+    def __init__(self, world, color, max_lateral_impulse=30, position=(0, 0), angle=0):
 
         self.main_world = world
         self.body = world.CreateDynamicBody(position=(position[0], Robot.position[position[1]][1]))
@@ -97,9 +97,16 @@ class Robot(PhysicsRobot):
                                         (((self.__class__.dimensions[0]*2)**3)*(10**(-2)))))
         self.body.userData = {'obj': self}
         self.body.bullet = True
+        self.color = YELLOW if color else BLUE
 
-        super(Robot, self).__init__(self.body, max_lateral_impulse, position)
-        self.body.angle = angle
+        super(Robot, self).__init__(self.body, max_lateral_impulse, position, angle)
+        # self.body.angle = angle
+
+    def update_colors(self):
+        ball = self.main_world.renderer.DrawSolidCircle(
+                                self.main_world.renderer.to_screen(self.body.position),
+                                3, (-m.cos(self.body.angle), -m.sin(self.body.angle)), self.color)
+
 
     def update(self, desired_velocity, hz): 
         """
@@ -110,3 +117,4 @@ class Robot(PhysicsRobot):
         if desired_velocity:
             super(Robot, self).update_turn(desired_velocity[0])
             super(Robot, self).update_drive(desired_velocity[1])
+
