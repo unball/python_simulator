@@ -21,7 +21,7 @@ class PhysicsBall(object):
 
 class PhysicsRobot(object):
 
-    def __init__(self, robot, max_lateral_impulse, position, angle):
+    def __init__(self, robot, max_lateral_impulse, position):
 
         self.body = robot
         self.current_traction = 1
@@ -31,14 +31,14 @@ class PhysicsRobot(object):
     @property
     def forward_velocity(self):
         body = self.body
-        current_normal = body.GetWorldVector((m.cos(angle), m.sin(angle)))
+        current_normal = body.GetWorldVector((1, 0))
         return current_normal.dot(body.linearVelocity) * current_normal
 
     @property
     def lateral_velocity(self):
         body = self.body
 
-        right_normal = body.GetWorldVector((m.cos(angle + (m.pi/2)), m.sin(angle)))
+        right_normal = body.GetWorldVector((0, 1))
         return right_normal.dot(body.linearVelocity) * right_normal
 
 
@@ -50,8 +50,8 @@ class PhysicsRobot(object):
         current_forward_normal = self.forward_velocity
         current_forward_speed = current_forward_normal.Normalize()
 
-        drag_force_magnitude = -2 * current_forward_speed
-        self.body.ApplyForce(self.current_traction * drag_force_magnitude * current_forward_normal,
+        drag_force_magnitude =  0* current_forward_speed
+        self.body.ApplyForce(drag_force_magnitude * current_forward_normal,
                              self.body.worldCenter, True)
 
         impulse = -self.lateral_velocity * self.body.mass
@@ -65,6 +65,7 @@ class PhysicsRobot(object):
 
         # find the current speed in the forward direction
         current_forward_normal = self.body.GetWorldVector((1, 0))
+        print(current_forward_normal)
         current_speed = self.forward_velocity.dot(current_forward_normal)
 
         # apply necessary force
