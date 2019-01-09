@@ -49,14 +49,12 @@ class PhysicsRobot(object):
         current_forward_normal = self.forward_velocity
         current_forward_speed = current_forward_normal.Normalize()
 
-        drag_force_magnitude =  0* current_forward_speed
+        drag_force_magnitude =  0 * current_forward_speed
         self.body.ApplyForce(drag_force_magnitude * current_forward_normal,
                              self.body.worldCenter, True)
 
         impulse = -self.lateral_velocity * self.body.mass
-        #if impulse.length > self.max_lateral_impulse:
-        #    impulse *= self.max_lateral_impulse / impulse.length
-
+        
         self.body.ApplyLinearImpulse(self.current_traction * impulse,
                                      self.body.worldCenter, True)
 
