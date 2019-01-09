@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 #   -*- coding: utf-8 -*-
 #      @author: UnBall (equipe.unball@gmail.com)
-# @description: This module have the only purpose simulate the system unball and publish velocitys
+# @description: This module have the only purpose simulate the system unball and publish velocities
 #               in node radio_topic
 
 

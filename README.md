@@ -45,5 +45,3 @@ Python_Simulation is based on script top_down_car.py, so access the bellow links
 
 - [https://github.com/ppizarror/pygame-menu](https://github.com/ppizarror/pygame-menu)
 
-## License ##
-
