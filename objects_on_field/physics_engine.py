@@ -21,11 +21,10 @@ class PhysicsBall(object):
 
 class PhysicsRobot(object):
 
-    def __init__(self, robot, max_lateral_impulse, position):
+    def __init__(self, robot, position):
 
         self.body = robot
         self.current_traction = 1
-        self.max_lateral_impulse = max_lateral_impulse
         self.ground_areas = []
 
     @property
@@ -55,8 +54,8 @@ class PhysicsRobot(object):
                              self.body.worldCenter, True)
 
         impulse = -self.lateral_velocity * self.body.mass
-        if impulse.length > self.max_lateral_impulse:
-            impulse *= self.max_lateral_impulse / impulse.length
+        #if impulse.length > self.max_lateral_impulse:
+        #    impulse *= self.max_lateral_impulse / impulse.length
 
         self.body.ApplyLinearImpulse(self.current_traction * impulse,
                                      self.body.worldCenter, True)

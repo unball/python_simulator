@@ -88,7 +88,7 @@ class Robot(PhysicsRobot):
     dimensions = (3.75, 3.75)
     position = [('', 0), ('', -10), ('', 10)]
 
-    def __init__(self, world, color, side, max_lateral_impulse=30, position=(0, 0)):
+    def __init__(self, world, color, side, position=(0, 0)):
 
         self.main_world = world
         self.body = world.CreateDynamicBody(position=(position[0], Robot.position[position[1]][1]))
@@ -100,7 +100,7 @@ class Robot(PhysicsRobot):
         self.body.angle = 0 if side == 'left' else m.pi
         self.color = YELLOW if color else BLUE
 
-        super(Robot, self).__init__(self.body, max_lateral_impulse, position)
+        super(Robot, self).__init__(self.body, position)
 
     def update_colors(self):
         ball = self.main_world.renderer.DrawSolidCircle(
