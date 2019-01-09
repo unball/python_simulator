@@ -133,7 +133,7 @@ class PygameDraw(b2DrawExtended):
         pygame.draw.circle(self.surface, color.bytes,
                            center, radius, drawwidth)
 
-    def DrawSolidCircle(self, center, radius, axis, color):
+    def DrawSolidCircle(self, center, radius, axis, color, color_line=(255, 0, 0)):
         """
         Draw a solid circle given the center, radius, axis of orientation and
         color.
@@ -147,7 +147,7 @@ class PygameDraw(b2DrawExtended):
         pygame.draw.circle(self.surface, (color / 2).bytes + [127],
                            center, radius, 0)
         pygame.draw.circle(self.surface, color.bytes, center, radius, 1)
-        pygame.draw.aaline(self.surface, (255, 0, 0), center,
+        pygame.draw.aaline(self.surface, color_line, center,
                            (center[0] - radius * axis[0],
                             center[1] + radius * axis[1]))
 

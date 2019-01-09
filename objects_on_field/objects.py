@@ -87,6 +87,7 @@ class Ground(object):
 class Robot(PhysicsRobot):
     dimensions = (3.75, 3.75)
     position = [('', 0), ('', -10), ('', 10)]
+    color_line = [(255,0,0), (0,255,0), (0,0,255)]
 
     def __init__(self, world, color, side, position=(0, 0)):
 
@@ -99,13 +100,15 @@ class Robot(PhysicsRobot):
         self.body.bullet = True
         self.body.angle = 0 if side == 'left' else m.pi
         self.color = YELLOW if color else BLUE
+        self.num_robot = position[1]
 
         super(Robot, self).__init__(self.body, position)
 
     def update_colors(self):
         ball = self.main_world.renderer.DrawSolidCircle(
                                 self.main_world.renderer.to_screen(self.body.position),
-                                3, (-m.cos(self.body.angle), -m.sin(self.body.angle)), self.color)
+                                3, (-m.cos(self.body.angle), -m.sin(self.body.angle)), self.color,
+                                color_line=Robot.color_line[self.num_robot])
 
 
     def update(self, desired_velocity, hz): 
