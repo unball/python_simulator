@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 #   -*- coding: utf-8 -*-
-#      @author: UnBall (equipe.unball@gmail.com)
+#      @author: Hiago dos Santos Rabelo (hiagop22@gmail.com)
 # @description: This is the main-menu 
 # Based on Pablo Pizarro R. pygame-menu:
 # https://github.com/ppizarror/pygame-menu/blob/master/example2.py
@@ -39,9 +39,13 @@ import pygameMenu
 from pygameMenu.locals import *
 
 ABOUT = ['Python Simulation',
-         'Author: UnBall ',
          PYGAMEMENU_TEXT_NEWLINE,
-         'Email: equipe.unball@gmail.com']
+         'Property: UnBall ',
+         'Email: equipe.unball@gmail.com',
+         PYGAMEMENU_TEXT_NEWLINE,
+         'Developer: Hiago dos Santos Rabelo',
+         'Email: hiagop22@gmail.com'
+         ]
 HELP = ['>>MENU',
         'Press UP/DOWN to navigate on menu',
         'Press LEFT/RIGHT to change the option',

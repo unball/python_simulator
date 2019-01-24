@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 #   -*- coding: utf-8 -*-
-#      @author: UnBall (equipe.unball@gmail.com)
+#      @author: Hiago dos Santos Rabelo (hiagop22@gmail.com)
 # Based on Chris Campbell's tutorial from iforce2d.net:
 # http://www.iforce2d.net/b2dtut/top-down-car
 

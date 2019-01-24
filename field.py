@@ -1,6 +1,6 @@
 #!usr/bin/env python3
 #   -*- coding: utf-8 -*-
-#      @author: UnBall (equipe.unball@gmail.com)
+#      @author: Hiago dos Santos Rabelo (hiagop22@gmail.com)
 # @description: This module describes the Class Field that has all necessary objects 
 #               on field.
 #               Based on Chris Campbell's tutorial from iforce2d.net:

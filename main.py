@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 #   -*- coding: utf-8 -*-
-#      @author: UnBall (equipe.unball@gmail.com)
+#      @author: Hiago dos Santos Rabelo (hiagop22@gmail.com)
 
 from start_menu import *
 
