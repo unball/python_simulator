@@ -114,20 +114,20 @@ def wheels_speeds_to_robots_speeds(wheelA,wheelB,wheel_radius=0.03,robot_lenght=
     return angular_speed, linear_speed*CORRECTION_FATOR_METER_TO_CM
 
 
-def actual_axis_to_axis_unball(pos_robots_allies, pos_robots_opponents, pos_ball):
-    new_pos_robots_allies = []
-    new_pos_robots_opponents = []
+# def actual_axis_to_axis_unball(pos_robots_allies, pos_robots_opponents, pos_ball):
+#     new_pos_robots_allies = []
+#     new_pos_robots_opponents = []
 
-    for x in range(len(pos_robots_allies)):
-        new_pos_robots_allies.append((((pos_robots_allies[x][0][0] - CENTER_AXIS_X)*(10**-2), 
-                                      -(pos_robots_allies[x][0][1] - CENTER_AXIS_Y)*(10**-2)), 
-                                      pos_robots_allies[x][1]))
+#     for x in range(len(pos_robots_allies)):
+#         new_pos_robots_allies.append((((pos_robots_allies[x][0][0] - CENTER_AXIS_X)*(10**-2), 
+#                                       -(pos_robots_allies[x][0][1] - CENTER_AXIS_Y)*(10**-2)), 
+#                                       pos_robots_allies[x][1]))
 
-    for x in range(len(pos_robots_opponents)):
-        new_pos_robots_opponents.append((((pos_robots_opponents[x][0][0] - CENTER_AXIS_X)*(10**-2), 
-                                      -(pos_robots_opponents[x][0][1] - CENTER_AXIS_Y)*(10**-2)), 
-                                      pos_robots_opponents[x][1]))
+#     for x in range(len(pos_robots_opponents)):
+#         new_pos_robots_opponents.append((((pos_robots_opponents[x][0][0] - CENTER_AXIS_X)*(10**-2), 
+#                                       -(pos_robots_opponents[x][0][1] - CENTER_AXIS_Y)*(10**-2)), 
+#                                       pos_robots_opponents[x][1]))
 
-    new_pos_ball = ((pos_ball[0] - CENTER_AXIS_X)*(10**-2), -(pos_ball[1] - CENTER_AXIS_Y)*(10**-2))
+#     new_pos_ball = ((pos_ball[0] - CENTER_AXIS_X)*(10**-2), -(pos_ball[1] - CENTER_AXIS_Y)*(10**-2))
 
-    return new_pos_robots_allies, new_pos_robots_opponents, new_pos_ball
+#     return new_pos_robots_allies, new_pos_robots_opponents, new_pos_ball

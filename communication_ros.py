@@ -10,8 +10,8 @@ from constants import *
 from python_simulator.msg import comm_msg
 from python_simulator.msg import VisionMessage
 from objects_on_field.physics_engine import (motor_voltage_to_wheels_speed, 
-                                            wheels_speeds_to_robots_speeds,
-                                            actual_axis_to_axis_unball)
+                                            wheels_speeds_to_robots_speeds)
+											# ,actual_axis_to_axis_unball)
 
 
 class RunRos(object):
@@ -44,9 +44,9 @@ class RunRos(object):
         self.pub.publish(self.vision_message)
 
     def update_vision_message(self, pos_robots_allies, pos_robots_opponents, pos_ball):
-        pos_robots_allies, pos_robots_opponents, pos_ball = actual_axis_to_axis_unball(pos_robots_allies, 
-                                                                                       pos_robots_opponents, 
-                                                                                       pos_ball)
+        # pos_robots_allies, pos_robots_opponents, pos_ball = actual_axis_to_axis_unball(pos_robots_allies, 
+                                                                                       # pos_robots_opponents, 
+                                                                                       # pos_ball)
 
         for x in range(self.num_allies):
             self.vision_message.x[x] = pos_robots_allies[x][0][0]
