@@ -66,10 +66,23 @@ class Field(PygameFramework, RunRos):
         self.ball.update()
         self.ground.update()
 
-        robots_allies = [(self.robots_allies[x].body.position, 
-                    self.robots_allies[x].body.angle%(2*math.pi)) for x in range(self.num_allies)]
-        robots_opponents = [(self.robots_opponents[x].body.position, 
-                    self.robots_opponents[x].body.angle%(2*math.pi)) for x in range(self.num_opponents)]
+        robots_allies = []
+        for allie in range(self.num_allies):
+        	self.robots_allies[allie].body.angle %= (2*math.pi)
+        	angle = self.robots_allies[allie].body.angle
+        	
+        	if angle > math.pi:
+        		angle = -(2*math.pi - angle)
+        	robots_allies.append((self.robots_allies[allie].body.position, angle))
+
+        robots_opponents = []
+        for opponent in range(self.num_opponents):
+        	self.robots_opponents[opponent].body.angle %= (2*math.pi)
+        	angle = self.robots_opponents[opponent].body.angle
+
+        	if angle > math.pi:
+        		angle = -(2*math.pi - angle)
+        	robots_opponents.append((self.robots_opponents[opponent].body.position, angle))
 
         RunRos.update(self, robots_allies, robots_opponents, self.ball.body.position)
         #print("angular_simulator>>>", self.robots_allies[0].body.angularVelocity)
