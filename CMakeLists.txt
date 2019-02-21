@@ -51,6 +51,7 @@ add_message_files(
    FILES
    comm_msg.msg
    VisionMessage.msg
+   robots_speeds_msg.msg
  )
 
 ## Generate services in the 'srv' folder
