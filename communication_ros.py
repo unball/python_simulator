@@ -23,7 +23,7 @@ class RunRos(object):
             pass # Inserir aqui o outro nó para ser publicado caso seja mudado no menu inicial
                  # Obs.: é necessário inserir a outra opção de nó tanto aqui quanto no menu inicial
 
-        self.sub = rospy.Subscriber('radio_topic', robots_speeds_msg, self.callback)
+        self.sub = rospy.Subscriber('robots_speeds', robots_speeds_msg, self.callback)
 
         self.num_allies = 0
         self.num_opponents = 0
