@@ -86,7 +86,7 @@ class Ground(object):
 
 class Robot(PhysicsRobot):
     dimensions = (3.75, 3.75)
-    position = [('', 0), ('', -10), ('', 10)]
+    position = [('', 0), ('', 0), ('', 0)]
     color_line = [(255,0,0), (0,255,0), (255,255,255)]
 
     def __init__(self, world, color, side, position=(0, 0)):
@@ -98,7 +98,13 @@ class Robot(PhysicsRobot):
                                         (((self.__class__.dimensions[0]*2)**3)*(10**(-2)))))
         self.body.userData = {'obj': self}
         self.body.bullet = True
-        self.body.angle = 0 if side == 'left' else m.pi
+        
+        if position[1] == 0:
+            self.body.angle = m.pi/2
+        elif side == 'left':
+            self.body.angle = 0
+        else:
+            self.body.angle = m.pi
         self.color = YELLOW if color else BLUE
         self.num_robot = position[1]
 

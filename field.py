@@ -32,16 +32,33 @@ class Field(PygameFramework, RunRos):
         self.ground = Ground(self.world)
         walls = Walls(self.world, BLUE)
         self.ball = Ball(self.world, BLUE)
+        
+        # left
+        # 0 : x = -63, y =0, theta = pi/2
+        # 1 : x = -58, y = 0, theta = 0
+        # 2 : x = -5, y = 0, theta = 0
+
+        # right
+        # 0 : x = +63, y =0, theta = -pi/2
+        # 1 : x = +58, y = 0, theta = -pi
+        # 2 : x = +5, y = 0, theta = -pi
+
+        self.init_x_position = ((65), (57) ,6)
 
         if field_side == 'left':
-            self.robots_allies = [Robot(self.world, team_color, 'left', position=(-10, x)
+            self.robots_allies = [Robot(self.world, team_color, 'left', 
+                                 position=(-self.init_x_position[x], x)
                                  ) for x in range(self.num_allies)]
-            self.robots_opponents = [Robot(self.world, not team_color, 'right', position=(10, x)
-                                 ) for x in range(self.num_opponents)]
+            
+            self.robots_opponents = [Robot(self.world, not team_color, 'right', 
+                                    position=(self.init_x_position[x], x)
+                                    ) for x in range(self.num_opponents)]
         else:
-            self.robots_allies = [Robot(self.world, team_color, 'right', position=(10, x)
+            self.robots_allies = [Robot(self.world, team_color, 'right', 
+                                 position=(self.init_x_position[x], x)
                                  ) for x in range(self.num_allies)]
-            self.robots_opponents = [Robot(self.world, not team_color, 'left', position=(-10, x)
+            self.robots_opponents = [Robot(self.world, not team_color, 'left', 
+                                 position=(-self.init_x_position[x], x) 
                                  ) for x in range(self.num_opponents)]
 
         super(Field, self).run()
