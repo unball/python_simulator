@@ -109,10 +109,10 @@ def change_field_side(d):
     global field_side
     field_side = d
 
-def change_publish_topic(d):
-    print ('Selected publish topic: {0}'.format(d))
-    global publish_topic
-    publish_topic = d
+# def change_publish_topic(d):
+#     print ('Selected publish topic: {0}'.format(d))
+#     global publish_topic
+#     publish_topic = d
 
 def play_function():
     main_menu.disable()
@@ -176,26 +176,26 @@ run_simulation.add_selector('Field side', [('left', 'left'),
 run_simulation.add_option('Return to main menu', PYGAME_MENU_BACK)
 
 # CONFIG MENU
-setting = pygameMenu.Menu(surface,
-                            bgfun=main_background,
-                            color_selected=COLOR_WHITE,
-                            font=pygameMenu.fonts.FONT_BEBAS,
-                            font_color=COLOR_BLACK,
-                            font_size=30,
-                            menu_alpha=100,
-                            menu_color=MENU_BACKGROUND_COLOR,
-                            menu_height=int(WINDOW_SIZE[1] * 0.8),
-                            menu_width=int(WINDOW_SIZE[0] * 0.8),
-                            onclose=PYGAME_MENU_DISABLE_CLOSE,
-                            option_shadow=False,
-                            title='Setting',
-                            window_height=WINDOW_SIZE[1],
-                            window_width=WINDOW_SIZE[0]
-                            )
-setting.add_selector('Publish topic', [('VisionMessage', 'vision_output_topic')],
-                        onreturn=None,
-                        onchange=change_publish_topic)
-setting.add_option('Return to main menu', PYGAME_MENU_BACK)
+# setting = pygameMenu.Menu(surface,
+#                             bgfun=main_background,
+#                             color_selected=COLOR_WHITE,
+#                             font=pygameMenu.fonts.FONT_BEBAS,
+#                             font_color=COLOR_BLACK,
+#                             font_size=30,
+#                             menu_alpha=100,
+#                             menu_color=MENU_BACKGROUND_COLOR,
+#                             menu_height=int(WINDOW_SIZE[1] * 0.8),
+#                             menu_width=int(WINDOW_SIZE[0] * 0.8),
+#                             onclose=PYGAME_MENU_DISABLE_CLOSE,
+#                             option_shadow=False,
+#                             title='Setting',
+#                             window_height=WINDOW_SIZE[1],
+#                             window_width=WINDOW_SIZE[0]
+#                             )
+# setting.add_selector('Publish topic', [('VisionMessage', 'vision_output_topic')],
+#                         onreturn=None,
+#                         onchange=change_publish_topic)
+# setting.add_option('Return to main menu', PYGAME_MENU_BACK)
 
 # ABOUT MENU
 about_menu = pygameMenu.TextMenu(surface,
@@ -265,7 +265,7 @@ main_menu = pygameMenu.Menu(surface,
                             window_width=WINDOW_SIZE[0]
                             )
 main_menu.add_option('Play', run_simulation)
-main_menu.add_option('Setting', setting)
+# main_menu.add_option('Setting', setting)
 main_menu.add_option('Help', help_menu)
 main_menu.add_option('About', about_menu)
 main_menu.add_option('Quit', PYGAME_MENU_EXIT)

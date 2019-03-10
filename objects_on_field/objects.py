@@ -100,11 +100,14 @@ class Robot(PhysicsRobot):
         self.body.bullet = True
         
         if position[1] == 0:
-            self.body.angle = m.pi/2
+            if side == 'left':
+                self.body.angle = m.pi/2
+            else:
+                self.body.angle = - m.pi/2
         elif side == 'left':
             self.body.angle = 0
         else:
-            self.body.angle = m.pi
+            self.body.angle = - m.pi
         self.color = YELLOW if color else BLUE
         self.num_robot = position[1]
 
