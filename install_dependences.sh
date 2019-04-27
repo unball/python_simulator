@@ -9,8 +9,6 @@ PYBOXDIR='pybox2d'
 dependency=(
     "sudo apt-get --yes --force-yes install python3"
     "sudo apt-get --yes --force-yes install python3-pip"
-    "sudo apt-get --yes --force-yes install python3-tk"
-    "sudo apt-get --yes --force-yes install python3-pil.imagetk"
     "sudo apt-get --yes --force-yes install swig"
     "sudo apt-get --yes --force-yes install swig3.0"
     "sudo apt-get --yes --force-yes install build-essential libssl-dev libffi-dev python3-dev"
