@@ -4,19 +4,13 @@ RED='\033[0;31m'
 BLUE='\033[0;34m'
 GREEN='\033[0;32m'
 NO_COLOR='\033[0m'
-PYBOXDIR='pybox2d'
 
 dependency=(
-    "sudo apt-get --yes --force-yes install python3"
-    "sudo apt-get --yes --force-yes install python3-pip"
-    "sudo apt-get --yes --force-yes install swig"
-    "sudo apt-get --yes --force-yes install swig3.0"
-    "sudo apt-get --yes --force-yes install build-essential libssl-dev libffi-dev python3-dev"
-    "sudo apt-get --yes --force-yes install python3-setuptools"
     "sudo pip3 install pygame"
     "sudo pip3 install box2d-py"
     "sudo pip3 install pygame-menu"
     "sudo pip3 install rospkg"
+    "source devel/setup.bash"
 )
 
 result(){
