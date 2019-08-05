@@ -34,7 +34,7 @@ class RunRos(object):
                                                      # for x in range(self.num_allies)]
         self.ang_and_lin_speed = [(data.angular_vel[x],
                                   data.linear_vel[x]*CORRECTION_FATOR_METER_TO_CM)
-                                  for x in range(self.num_allies)]
+                                  for x in range(self.num_allies + self.num_opponents)]
 
     def update(self, pos_robots_allies, pos_robots_opponents, pos_ball):
         self.update_vision_message(pos_robots_allies, pos_robots_opponents, pos_ball)
