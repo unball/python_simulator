@@ -43,7 +43,7 @@ class Field(PygameFramework, RunRos):
         # 1 : x = +58, y = 0, theta = -pi
         # 2 : x = +5, y = 0, theta = -pi
 
-        self.init_x_position = ((65), (57) ,6)
+        self.init_x_position = (65, 57 , 40, 30, 6)
 
         if field_side == 'left':
             self.robots_allies = [Robot(self.world, team_color, 'left', 

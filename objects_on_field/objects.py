@@ -86,8 +86,8 @@ class Ground(object):
 
 class Robot(PhysicsRobot):
     dimensions = (3.75, 3.75)
-    position = [('', 0), ('', 0), ('', 0)]
-    color_line = [(255,0,0), (0,255,0), (255,255,255)]
+    position = [('', 0), ('', 0), ('', 0),('', 0), ('', 0)]
+    color_line = [(255,0,0), (0,255,0), (255,255,255), (255,0,255), (0,255,255)]
 
     def __init__(self, world, color, side, position=(0, 0)):
 

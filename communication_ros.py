@@ -12,7 +12,8 @@ from vision.msg import VisionMessage
 class RunRos(object):
     def __init__(self, publish_topic):
         self.vision_message = VisionMessage()
-        self.ang_and_lin_speed = [(0,0), (0,0), (0,0), (0,0), (0,0), (0,0)]
+        self.ang_and_lin_speed = [(0,0), (0,0), (0,0), (0,0), (0,0), 
+                                 (0,0), (0,0), (0,0), (0,0), (0,0)]
 
         print('simulator node started....')
 
