@@ -32,6 +32,7 @@ class Field(PygameFramework, RunRos):
         self.ground = Ground(self.world)
         walls = Walls(self.world, BLUE)
         self.ball = Ball(self.world, BLUE)
+        self.trajectory = Trajectory(self.world, WHITE, 0.2)
         
         # left
         # 0 : x = -63, y =0, theta = pi/2
@@ -86,7 +87,7 @@ class Field(PygameFramework, RunRos):
 
         self.ball.update()
         self.ground.update()
-
+    
         robots_allies = []
         for allie in range(self.num_allies):
         	self.robots_allies[allie].body.angle %= (2*math.pi)
@@ -117,3 +118,5 @@ class Field(PygameFramework, RunRos):
             self.robots_allies[x].update_colors()
         for x in range(self.num_opponents):
             self.robots_opponents[x].update_colors()
+        # p = ((0.2,0.8,1.2, 1.6), (0.2,0.8,1.2, 1.6))
+        self.trajectory.update(self.trajectory_x, self.trajectory_y)

@@ -2,6 +2,7 @@ from Box2D import b2Color
 
 TARGET_FPS = 60
 TIME_STEP = 0.01 / TARGET_FPS 
+DRAW_GRAPHICS = True
 
 #TARGET_FPS = 60
 ZOOM = 5.0                      

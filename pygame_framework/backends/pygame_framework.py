@@ -169,7 +169,7 @@ class PygameDraw(b2DrawExtended):
         Draw a filled polygon given the screen vertices with the specified color.
         """
         if body:
-            print("eu existo>>>>>>>>>>>")
+            pass
         if not vertices:
             return
 

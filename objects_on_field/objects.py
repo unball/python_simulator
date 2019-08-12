@@ -83,6 +83,19 @@ class Ground(object):
                 self.world.renderer.to_screen(b2Vec2(Ground.pos_lines[x][1])), 
                 WHITE)
 
+class Trajectory(object):
+    def __init__(self, world, color, size):
+        self.world = world
+        self.color = color
+        self.size = size
+
+    def update(self, pos_x, pos_y):
+        # print(pos)
+        for x in range(len(pos_x)):
+            self.world.renderer.DrawPoint(
+                self.world.renderer.to_screen(b2Vec2(pos_x[x]*CORRECTION_FATOR_METER_TO_CM,
+                                                     pos_y[x]*CORRECTION_FATOR_METER_TO_CM)),
+                                         self.size, self.color)
 
 class Robot(PhysicsRobot):
     dimensions = (3.75, 3.75)

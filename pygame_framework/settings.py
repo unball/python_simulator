@@ -20,6 +20,7 @@
 # misrepresented as being the original software.
 # 3. This notice may not be removed or altered from any source distribution.
 
+from constants import *
 
 class fwSettings(object):
     # The default backend to use in (can be: pyglet, pygame, etc.)
@@ -35,8 +36,8 @@ class fwSettings(object):
     enableSubStepping = False
 
     # Drawing
-    drawStats = True
-    drawShapes = True
+    drawStats = False
+    drawShapes = DRAW_GRAPHICS
     drawJoints = True
     drawCoreShapes = False
     drawAABBs = False
