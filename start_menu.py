@@ -37,6 +37,7 @@ from constants import *
 # Import pygameMenu
 import pygameMenu
 from pygameMenu.locals import *
+TEXT_NEWLINE = '\n'
 
 ABOUT = ['Python Simulation',
          TEXT_NEWLINE,

@@ -106,7 +106,9 @@ class Field(PygameFramework, RunRos):
         		angle = -(2*math.pi - angle)
         	robots_opponents.append((self.robots_opponents[opponent].body.position, angle))
 
+        print("chegou aqui...1")
         RunRos.update(self, robots_allies, robots_opponents, self.ball.body.position)
+        print("chegou aqui...5")
         #print("angular_simulator>>>", self.robots_allies[0].body.angularVelocity)
 
     def Step(self, settings):

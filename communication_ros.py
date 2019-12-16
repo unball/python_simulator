@@ -45,16 +45,20 @@ class RunRos(object):
         self.trajectory_y = data.trajectory_y
 
     def update(self, pos_robots_allies, pos_robots_opponents, pos_ball):
+        print("chegou aqui...2")
         self.update_vision_message(pos_robots_allies, pos_robots_opponents, pos_ball)
         self.pub.publish(self.vision_message)
+        
 
     def update_vision_message(self, pos_robots_allies, pos_robots_opponents, pos_ball):                                                                                       # pos_ball)
-
+        print("chegou aqui...3")
         for x in range(self.num_allies):
             self.vision_message.x[x] = pos_robots_allies[x][0][0] * (10**-2)
             self.vision_message.y[x] = pos_robots_allies[x][0][1] * (10**-2)
             self.vision_message.th[x] = pos_robots_allies[x][1]
             self.vision_message.found[x] = True
+        print("chegou aqui...4")
+        print(self.vision_message)
 
         for x in range(self.num_opponents):
             self.vision_message.x[x + MAX_ROBOTS_ALLIES] = pos_robots_opponents[x][0][0] * (10**-2)
@@ -62,7 +66,10 @@ class RunRos(object):
             self.vision_message.th[x + MAX_ROBOTS_ALLIES] = pos_robots_opponents[x][1]
             self.vision_message.found[x + MAX_ROBOTS_ALLIES] = True
 
+        print("chegou aqui...5")
+
         self.vision_message.ball_x = pos_ball[0] * (10**-2)
         self.vision_message.ball_y = pos_ball[1] * (10**-2)
+        print("chegou aqui...6")
 
-        # print(self.vision_message)
+        print(self.vision_message)

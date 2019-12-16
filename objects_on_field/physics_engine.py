@@ -62,7 +62,7 @@ class PhysicsRobot(object):
 
         # find the current speed in the forward direction
         current_forward_normal = self.body.GetWorldVector((1, 0))
-        print(current_forward_normal)
+        # print(current_forward_normal)
         current_speed = self.forward_velocity.dot(current_forward_normal)
 
         # apply necessary force
