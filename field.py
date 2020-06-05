@@ -133,18 +133,21 @@ class Field(PygameFramework):
         '''
         It'll return the positions of all elements inside the field
         '''
-        # example: [robot1, angleRobot1, robot2, angleRobot2, ....., ballPosition]
+        # example: [xrobot1, yrobot1, angleRobot1, xrobot2, yrobot2, angleRobot2, ....., yballPosition]
         return_list = []
 
         for i in range(self.num_allies):
-            return_list.append(self.robots_allies[i].body.position*CORRECTION_FACTOR_CM_TO_METER)
+            return_list.append(self.robots_allies[i].body.position[0]*CORRECTION_FACTOR_CM_TO_METER)
+            return_list.append(self.robots_allies[i].body.position[1]*CORRECTION_FACTOR_CM_TO_METER)
             return_list.append(self.robots_allies[i].body.angle)
         
         for i in range(self.num_opponents):
-            return_list.append(self.robots_opponents[i].body.position*CORRECTION_FACTOR_CM_TO_METER)
+            return_list.append(self.robots_opponents[i].body.position[0]*CORRECTION_FACTOR_CM_TO_METER)
+            return_list.append(self.robots_opponents[i].body.position[1]*CORRECTION_FACTOR_CM_TO_METER)
             return_list.append(self.robots_opponents[i].body.angle)
                 
-        return_list.append(self.ball.body.position*CORRECTION_FACTOR_CM_TO_METER)
+        return_list.append(self.ball.body.position[0]*CORRECTION_FACTOR_CM_TO_METER)
+        return_list.append(self.ball.body.position[1]*CORRECTION_FACTOR_CM_TO_METER)
 
         return_array = np.array(return_list)
 

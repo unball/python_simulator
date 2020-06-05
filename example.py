@@ -11,14 +11,15 @@
 
 # %% [code]
 # Necessary for make main script import simulator
+try:
+    from distutils.dir_util import copy_tree
 
-from distutils.dir_util import copy_tree
+    fromDirectory = '../input/simulator'
+    toDirectory = ''
 
-fromDirectory = '../input/simulator'
-toDirectory = ''
-
-copy_tree(fromDirectory, toDirectory)
-
+    copy_tree(fromDirectory, toDirectory)
+except:
+    pass
 # %% [code]
 
 from field import *
@@ -59,7 +60,7 @@ for episode in range(MAX_EPISODES):
         for x in range(4):
             # insert here angular and linear velocities from the allie robots
             next_state, reward, done, _ = env.step([(3.14,0) for _ in range(5)])
-            # print(next_state)
+            print(next_state)
             # print(reward)
             # print(done)
             # state = next_state
