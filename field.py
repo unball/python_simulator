@@ -38,13 +38,15 @@ class Field(PygameFramework):
 
     name = "Python simulator"
 
-    def __init__(self, num_allies=3, num_opponents=3, team_color='blue', allied_field_side='left', render=False):
+    def __init__(self, num_allies=3, num_opponents=3, team_color='blue', allied_field_side='left', 
+                render=False, cloud=False):
 
         # Objects on field 
         self.num_allies = num_allies
         self.num_opponents = num_opponents
 
         self.render = render
+        self.cloud = cloud  # Tell us if we're running our code in a kernel cloud
 
         if team_color == 'blue': 
             self.team_color = 0
