@@ -70,7 +70,10 @@ class Field(PygameFramework):
         if self.render:
             # Set the icon for the application
             directory = sys.path[0]
-            logo = pygame.image.load(directory + '/images/UnBall.png') 
+            if directory[-1] == '/':
+                logo = pygame.image.load(directory + 'images/UnBall.png') 
+            else:
+                logo = pygame.image.load(directory + '/images/UnBall.png') 
             pygame.display.set_icon(logo)
 
     def reset(self):
