@@ -23,13 +23,8 @@ chmod +x install_dependences.sh
 sudo ./install_dependences.sh
 ```
 
-* Into the folder catkin_ws_unball run the script:
-
-> Ubuntu: 
-
-```bash 
-./run_strategy_and_pythonsimulator.sh
-```
+* Example:
+There is a script inside the python_simulator folder that contains an example called example.py explained how to run the simulator
 
 ## References ##
 Python_Simulation is based on script top_down_car.py, so access the bellow links in order to understanding how Python_Simulation works:
