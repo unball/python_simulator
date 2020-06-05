@@ -13,7 +13,6 @@ import sys
 import math
 import numpy as np
 from constants import *
-from communication_ros import *
 from objects_on_field.objects import *
 from pygame_framework.framework import *
 
