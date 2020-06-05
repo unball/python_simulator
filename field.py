@@ -28,16 +28,6 @@ import os
 
 # ----------------------------------------------------------
 
-# render = True
-# 
-# def config_render(render):
-#     """
-#     Disable or enable render mode. If you just want train a NN without see the training, call this function
-#     passing False as an argument.
-#     """
-#     if not render:
-#         render = False
-
 class Field(PygameFramework):
     """
     num_allies = from 0 to 5
@@ -59,10 +49,6 @@ class Field(PygameFramework):
     name = "Python simulator"
 
     def __init__(self, num_allies=3, num_opponents=3, team_color='blue', allied_field_side='left', render=True):
-        # PygameFramework.__init__(self)
-        # # RunRos.__init__(self, publish_topic)
-        # # Top-down -- no gravity in the screen plane
-        # self.world.gravity = (0, 0)
 
         # Objects on field 
         self.num_allies = num_allies
@@ -91,11 +77,11 @@ class Field(PygameFramework):
         self.action_size = ''
         self.state_size = ''
 
-        # self.ang_and_lin_speed = [(0,0) for _ in range(self.num_allies + self.num_opponents)]
-
-    # def adjust_render_mode(self):
-    #     # self.settings.drawShapes = self.render
-    #     self.settings.onlyInit = not self.render
+        if self.render:
+            # Set the icon for the application
+            directory = os.getcwd()
+            logo = pygame.image.load(directory + '/images/UnBall.png') 
+            pygame.display.set_icon(logo)
 
     def reset(self):
         """
@@ -103,10 +89,7 @@ class Field(PygameFramework):
         of them
         """
         PygameFramework.__init__(self, self.render)
-        # RunRos.__init__(self, publish_topic)
         # Top-down -- no gravity in the screen plane
-        # self.adjust_render_mode()
-
         self.world.gravity = (0, 0)
 
         self.ang_and_lin_speed = [(0,0) for _ in range(self.num_allies + self.num_opponents)]
@@ -147,10 +130,7 @@ class Field(PygameFramework):
                                  ) for x in range(self.num_allies)]
             self.robots_opponents = [Robot(self.world, not self.team_color, 'left', 
                                  start_position=(-self.init_x_position[x], x) 
-                                 ) for x in range(self.num_opponents)]
-
-        # super(Field, self).run()
-        
+                                 ) for x in range(self.num_opponents)]        
 
         return self.next_step()
 
@@ -265,8 +245,6 @@ class Field(PygameFramework):
         	# 	angle = -(2*math.pi - angle)
         	# robots_opponents.append((self.robots_opponents[opponent].body.position, angle))
 
-        # RunRos.update(self, robots_allies, robots_opponents, self.ball.body.position)
-
     def Step(self, settings):
         self.update_phisics(settings)
 
@@ -277,4 +255,3 @@ class Field(PygameFramework):
                 self.robots_allies[x].update_colors()
             for x in range(self.num_opponents):
                 self.robots_opponents[x].update_colors()
-            # p = ((0.2,0.8,1.2, 1.6), (0.2,0.8,1.2, 1.6))
