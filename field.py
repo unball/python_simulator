@@ -72,7 +72,7 @@ class Field(PygameFramework):
         if self.render:
             # Set the icon for the application
             directory = sys.path[0]
-            if directory[-1] == '/':
+            if self.cloud:
                 logo = pygame.image.load(directory + 'images/UnBall.png') 
             else:
                 logo = pygame.image.load(directory + '/images/UnBall.png') 
