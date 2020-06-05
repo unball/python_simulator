@@ -23,7 +23,7 @@ chmod +x install_dependences.sh
 sudo ./install_dependences.sh
 ```
 
-## Example ##:
+## Example ## 
 There is a script inside the python_simulator folder that contains an example called example.py explained how to run the simulator
 
 ## References ##
