@@ -16,8 +16,7 @@ class PhysicsBall(object):
 
     def update_friction(self):
         self.body.linearDamping = 0.2
-        self.body.angularDamping = 0.2
-
+        self.body.angularDamping = 0.0002
 
 class PhysicsRobot(object):
 

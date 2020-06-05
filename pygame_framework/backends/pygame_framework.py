@@ -39,16 +39,16 @@ from constants import *
 from Box2D import (b2Color, b2PolygonShape)
 # import rospy
 
-try:
-    import pygame_sdl2
-except ImportError:
-    if sys.platform in ('darwin', ):
-        warnings.warn('OSX has major issues with pygame/SDL 1.2 when used '
-                      'inside a virtualenv. If this affects you, try '
-                      'installing the updated pygame_sdl2 library.')
-else:
-    # pygame_sdl2 is backward-compatible with pygame:
-    pygame_sdl2.import_as_pygame()
+# try:
+#     import pygame_sdl2
+# except ImportError:
+#     if sys.platform in ('darwin', ):
+#         warnings.warn('OSX has major issues with pygame/SDL 1.2 when used '
+#                       'inside a virtualenv. If this affects you, try '
+#                       'installing the updated pygame_sdl2 library.')
+# else:
+#     # pygame_sdl2 is backward-compatible with pygame:
+#     pygame_sdl2.import_as_pygame()
 
 import pygame
 from pygame.locals import (QUIT, KEYDOWN, KEYUP, MOUSEBUTTONDOWN,
@@ -225,12 +225,16 @@ class PygameFramework(FrameworkBase):
         #self.gui_table = None
         self.setup_keys()
 
-    def __init__(self):
+    def __init__(self, render):
         super(PygameFramework, self).__init__()
 
         self.__reset()
-        if fwSettings.onlyInit:  # testing mode doesn't initialize pygame
-            return
+        # if self.settings.onlyInit:  # testing mode doesn't initialize pygame
+        #     return        
+        self.render = render
+        if not self.render:  # testing mode doesn't initialize pygame
+            return        
+        # raise KeyboardInterrupt
 
         print('Initializing pygame framework...')
         # Pygame Initialization
@@ -357,10 +361,12 @@ class PygameFramework(FrameworkBase):
         Continues to run while checkEvents indicates the user has
         requested to quit.
         """
-        clock = pygame.time.Clock()
+        if self.render:
+            clock = pygame.time.Clock()
         try:   
-            self.keep_running = self.checkEvents()
-            self.screen.fill((0, 0, 0))
+            if self.render:
+                self.keep_running = self.checkEvents()
+                self.screen.fill((0, 0, 0))
 
             # Check keys that should be checked every loop (not only on initial
             # keydown)
@@ -369,16 +375,18 @@ class PygameFramework(FrameworkBase):
             # Run the simulation loop
             self.SimulationLoop()
 
-            pygame.display.flip()
-            clock.tick(self.settings.hz)
-            self.fps = clock.get_fps()
+            if self.render:
+                pygame.display.flip()
+                clock.tick(self.settings.hz)
+                self.fps = clock.get_fps()
             
         except Exception as inst:
             print(inst)
             exit(1)
             
     def close(self):
-        pygame.quit()
+        if self.render:
+            pygame.quit()
         super(PygameFramework, self).destroy_bodies()
         self.world.contactListener = None
         self.world.destructionListener = None

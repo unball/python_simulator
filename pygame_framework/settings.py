@@ -37,8 +37,8 @@ class fwSettings(object):
 
     # Drawing
     drawStats = False
-    drawShapes = DRAW_GRAPHICS
-    drawJoints = True
+    drawShapes = True
+    drawJoints = False
     drawCoreShapes = False
     drawAABBs = False
     drawOBBs = False
@@ -57,8 +57,6 @@ class fwSettings(object):
     # run the test's initialization without graphics, and then quit (for
     # testing)
     onlyInit = False
-
-
 
 from optparse import OptionParser
 

@@ -23,6 +23,7 @@ class Field(PygameFramework):
     num_opponents = from 0 to 5
     team_color = "blue" or "yellow"
     allied_field_side = "left" or "right"
+    render = False to run simulation without graphics
 
     >>SIMULATION (Options into Render mode):
     Press SPACE to Pause/Play into Simulation 
@@ -45,6 +46,9 @@ class Field(PygameFramework):
         # Objects on field 
         self.num_allies = num_allies
         self.num_opponents = num_opponents
+
+        self.render = render
+
         if team_color == 'blue': 
             self.team_color = 0
         elif team_color == 'yellow':
@@ -68,14 +72,20 @@ class Field(PygameFramework):
 
         # self.ang_and_lin_speed = [(0,0) for _ in range(self.num_allies + self.num_opponents)]
 
+    # def adjust_render_mode(self):
+    #     # self.settings.drawShapes = self.render
+    #     self.settings.onlyInit = not self.render
+
     def reset(self):
         """
         Create the objects that will be simulated and return a list containing the position and angle
         of them
         """
-        PygameFramework.__init__(self)
+        PygameFramework.__init__(self, self.render)
         # RunRos.__init__(self, publish_topic)
         # Top-down -- no gravity in the screen plane
+        # self.adjust_render_mode()
+
         self.world.gravity = (0, 0)
 
         self.ang_and_lin_speed = [(0,0) for _ in range(self.num_allies + self.num_opponents)]
@@ -209,7 +219,9 @@ class Field(PygameFramework):
                     self.robots_opponents[x].update((0, 0), settings.hz)
 
         self.ball.update()
-        self.ground.update()
+
+        if self.render:
+            self.ground.update()
     
         # robots_allies = []
         for allie in range(self.num_allies):
@@ -236,8 +248,9 @@ class Field(PygameFramework):
 
         super(Field, self).Step(settings)
 
-        for x in range(self.num_allies):
-            self.robots_allies[x].update_colors()
-        for x in range(self.num_opponents):
-            self.robots_opponents[x].update_colors()
-        # p = ((0.2,0.8,1.2, 1.6), (0.2,0.8,1.2, 1.6))
+        if self.render:
+            for x in range(self.num_allies):
+                self.robots_allies[x].update_colors()
+            for x in range(self.num_opponents):
+                self.robots_opponents[x].update_colors()
+            # p = ((0.2,0.8,1.2, 1.6), (0.2,0.8,1.2, 1.6))

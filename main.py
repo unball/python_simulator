@@ -9,19 +9,19 @@ import os
 # os.environ['SDL_VIDEO_CENTERED'] = '1'
 
 # ------------ Set the icon for the application ------------
-directory = os.getcwd()
-logo = pygame.image.load(directory + '/images/UnBall.png') 
-pygame.display.set_icon(logo)
+# directory = os.getcwd()
+# logo = pygame.image.load(directory + '/images/UnBall.png') 
+# pygame.display.set_icon(logo)
 
 # ----------------------------------------------------------
 
-render = True
-
-def config_render(render):
-    """
-    Disable or enable render mode. If you just want train a NN without see the training, call this function
-    passing False as an argument.
-    """
-    if not render:
-        render = False
+# render = True
+# 
+# def config_render(render):
+#     """
+#     Disable or enable render mode. If you just want train a NN without see the training, call this function
+#     passing False as an argument.
+#     """
+#     if not render:
+#         render = False
 

@@ -16,7 +16,7 @@ class Ball(PhysicsBall):
     def __init__(self, world, color, density=1, position=(0, 0)):
         self.body = world.CreateDynamicBody(
             fixtures=b2FixtureDef(shape=b2CircleShape(radius=2.135), 
-                                  friction=0.4,
+                                  friction=0.15,
                                   restitution=0.4),
             bullet=True,
             position=position)
@@ -42,7 +42,7 @@ class Walls(object):
                                [(-68, 65), (-75, 58), (-75, 65)],
                                [(-68, -65), (-75, -58), (-75, -65)]]
 
-    def __init__(self, world, color, friction=0.8):
+    def __init__(self, world, color, friction=0.15):
         super(Walls, self).__init__()
 
         self.body = ''
