@@ -35,8 +35,4 @@ Python_Simulation is based on script top_down_car.py, so access the bellow links
 - [http://www.iforce2d.net/b2dtut/constant-speed](http://www.iforce2d.net/b2dtut/constant-speed)
 - [http://www.iforce2d.net/b2dtut/top-down-car](http://www.iforce2d.net/b2dtut/top-down-car)
 - [https://github.com/pybox2d/pybox2d/blob/master/examples/top_down_car.py](https://github.com/pybox2d/pybox2d/blob/master/examples/top_down_car.py)
- 
-> Star Menu:
-
-- [https://github.com/ppizarror/pygame-menu](https://github.com/ppizarror/pygame-menu)
 
