@@ -18,16 +18,6 @@ from pygame_framework.framework import *
 
 import os
 
-# # -----------------------------------------------------------------------------
-# os.environ['SDL_VIDEO_CENTERED'] = '1'
-
-# ------------ Set the icon for the application ------------
-# directory = os.getcwd()
-# logo = pygame.image.load(directory + '/images/UnBall.png') 
-# pygame.display.set_icon(logo)
-
-# ----------------------------------------------------------
-
 class Field(PygameFramework):
     """
     num_allies = from 0 to 5
@@ -79,7 +69,7 @@ class Field(PygameFramework):
 
         if self.render:
             # Set the icon for the application
-            directory = os.getcwd()
+            directory = sys.path[0]
             logo = pygame.image.load(directory + '/images/UnBall.png') 
             pygame.display.set_icon(logo)
 
