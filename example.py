@@ -39,6 +39,7 @@ for episode in range(MAX_EPISODES):
             next_state, reward, done, _ = env.step([(3.14,0) for _ in range(5)])
             # print(next_state)
             # print(reward)
+            print(done)
         state = next_state
 
     # Deallocate memory allocated for objects, because the of Box2D run using C++, and it allocate memory. So

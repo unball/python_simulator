@@ -255,7 +255,6 @@ class PygameFramework(FrameworkBase):
         # Tell us if there's some event to quit the simulation, such as, close buttom pressed
         self.keep_running = True
 
-
     def setCenter(self, value):
         """
         Updates the view offset based on the center of the screen.

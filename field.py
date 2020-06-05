@@ -194,7 +194,10 @@ class Field(PygameFramework):
         return reward
 
     def done(self):
-        pass
+        """
+        Return True if ball center of mass enter inside the goal
+        """
+        return True if abs(self.ball.body.position[0]*CORRECTION_FACTOR_CM_TO_METER) > abs(self.x_goal_allied) else False
         
     def Keyboard(self, key):
         super(Field, self).Keyboard(key)
