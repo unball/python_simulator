@@ -16,6 +16,28 @@ from constants import *
 from objects_on_field.objects import *
 from pygame_framework.framework import *
 
+import os
+
+# # -----------------------------------------------------------------------------
+# os.environ['SDL_VIDEO_CENTERED'] = '1'
+
+# ------------ Set the icon for the application ------------
+# directory = os.getcwd()
+# logo = pygame.image.load(directory + '/images/UnBall.png') 
+# pygame.display.set_icon(logo)
+
+# ----------------------------------------------------------
+
+# render = True
+# 
+# def config_render(render):
+#     """
+#     Disable or enable render mode. If you just want train a NN without see the training, call this function
+#     passing False as an argument.
+#     """
+#     if not render:
+#         render = False
+
 class Field(PygameFramework):
     """
     num_allies = from 0 to 5

@@ -8,7 +8,7 @@
     methods into the field class that you'll need to train a neural network based on the enviroment.
 """
 
-from main import *
+from field import *
 
 MAX_EPISODES = 1
 MAX_ONE_GAME_DURATION = 120 # seconds
