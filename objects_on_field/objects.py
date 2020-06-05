@@ -16,8 +16,8 @@ class Ball(PhysicsBall):
     def __init__(self, world, color, density=1, position=(0, 0)):
         self.body = world.CreateDynamicBody(
             fixtures=b2FixtureDef(shape=b2CircleShape(radius=2.135), 
-                                  friction=0.1,
-                                  restitution=0.1),
+                                  friction=0.4,
+                                  restitution=0.4),
             bullet=True,
             position=position)
         self.body.userData = {'obj': self}
@@ -99,20 +99,20 @@ class Trajectory(object):
 
 class Robot(PhysicsRobot):
     dimensions = (3.75, 3.75)
-    position = [('', 0), ('', 0), ('', 0),('', 0), ('', 0)]
+    start_position = [('', 0), ('', 0), ('', 0),('', 0), ('', 0)]
     color_line = [(255,0,0), (0,255,0), (255,255,255), (255,0,255), (0,255,255)]
 
-    def __init__(self, world, color, side, position=(0, 0)):
+    def __init__(self, world, color, side, start_position=(0, 0)):
 
         self.main_world = world
-        self.body = world.CreateDynamicBody(position=(position[0], Robot.position[position[1]][1]))
+        self.body = world.CreateDynamicBody(position=(start_position[0], Robot.start_position[start_position[1]][1]))
         self.body.CreatePolygonFixture(box=Robot.dimensions,
                                       density=(MASS_ROBOT/
                                         (((self.__class__.dimensions[0]*2)**3)*(10**(-2)))))
         self.body.userData = {'obj': self}
         self.body.bullet = True
         
-        if position[1] == 0:
+        if start_position[1] == 0:
             if side == 'left':
                 self.body.angle = m.pi/2
             else:
@@ -122,9 +122,10 @@ class Robot(PhysicsRobot):
         else:
             self.body.angle = - m.pi
         self.color = YELLOW if color else BLUE
-        self.num_robot = position[1]
+        self.num_robot = start_position[1]
 
-        super(Robot, self).__init__(self.body, position)
+        # super(Robot, self).__init__(self.body, start_position)
+        super(Robot, self).__init__(self.body)
 
     def update_colors(self):
         ball = self.main_world.renderer.DrawSolidCircle(

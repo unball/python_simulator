@@ -72,7 +72,8 @@ os.environ['SDL_VIDEO_CENTERED'] = '1'
 
 # Create pygame screen and objects
 directory = os.getcwd()
-logo = pygame.image.load(directory + '/src/python_simulator/images/UnBall.png') 
+# logo = pygame.image.load(directory + '/src/python_simulator/images/UnBall.png') 
+logo = pygame.image.load(directory + '/images/UnBall.png') 
 pygame.display.set_icon(logo)
 
 surface = pygame.display.set_mode(WINDOW_SIZE)

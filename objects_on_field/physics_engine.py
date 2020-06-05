@@ -21,7 +21,8 @@ class PhysicsBall(object):
 
 class PhysicsRobot(object):
 
-    def __init__(self, robot, position):
+    # def __init__(self, robot, position):
+    def __init__(self, robot):
 
         self.body = robot
         self.current_traction = 1
@@ -39,7 +40,6 @@ class PhysicsRobot(object):
 
         right_normal = body.GetWorldVector((0, 1))
         return right_normal.dot(body.linearVelocity) * right_normal
-
 
     def update_friction(self):
         aimp = 0.1 * self.current_traction * \

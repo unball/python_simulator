@@ -1,14 +1,14 @@
 from Box2D import b2Color
 
-TARGET_FPS = 60
+TARGET_FPS = 60.0
 TIME_STEP = 0.01 / TARGET_FPS 
 DRAW_GRAPHICS = True
 
-#TARGET_FPS = 60
 ZOOM = 5.0                      
 FIELD_H = (174)  # (1) Height of the screen pygame with the Box2D 
 FIELD_W = (134)  # (2) Width of the screen pygame with the Box2D
 CORRECTION_FATOR_METER_TO_CM = 10**2 # <==== Very important: 1 m = 1*10^2 cm
+CORRECTION_FACTOR_CM_TO_METER = (10**-2)
 MAX_ROBOTS_ALLIES = 5
 # CENTER_AXIS_X = -0
 # CENTER_AXIS_Y = 0

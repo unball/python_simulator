@@ -8,9 +8,10 @@ NO_COLOR='\033[0m'
 dependency=(
     "sudo pip3 install pygame"
     "sudo pip3 install box2d-py"
-    "sudo pip3 install pygame-menu"
-    "sudo pip3 install rospkg"
-    "source devel/setup.bash"
+    "sudo pip3 install Box2D"
+    # "sudo pip3 install pygame-menu"
+    # "sudo pip3 install rospkg"
+    # "source devel/setup.bash"
 )
 
 result(){

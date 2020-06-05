@@ -37,7 +37,7 @@ import sys
 import warnings
 from constants import *
 from Box2D import (b2Color, b2PolygonShape)
-import rospy
+# import rospy
 
 try:
     import pygame_sdl2
@@ -248,6 +248,9 @@ class PygameFramework(FrameworkBase):
         self.viewCenter = (0, 0)
         self.groundbody = self.world.CreateBody()
 
+        # Tell us if there's some event to quit the simulation, such as, close buttom pressed
+        self.keep_running = True
+
 
     def setCenter(self, value):
         """
@@ -317,43 +320,69 @@ class PygameFramework(FrameworkBase):
 
         return True
 
+    # def run(self):
+    #     """
+    #     Main loop.
+
+    #     Continues to run while checkEvents indicates the user has
+    #     requested to quit.
+    #     """
+
+    #     running = True
+    #     clock = pygame.time.Clock()
+    #     try:   
+    #         while running:
+    #             running = self.checkEvents()
+    #             self.screen.fill((0, 0, 0))
+
+    #             # Check keys that should be checked every loop (not only on initial
+    #             # keydown)
+    #             #self.CheckKeys()
+
+    #             # Run the simulation loop
+    #             self.SimulationLoop()
+
+    #             pygame.display.flip()
+    #             clock.tick(self.settings.hz)
+    #             self.fps = clock.get_fps()
+                
+    #     except Exception as inst:
+    #         print(inst)
+    #         exit(1)
+
     def run(self):
         """
-        Main loop.
+        Put it in a Main loop.
 
         Continues to run while checkEvents indicates the user has
         requested to quit.
         """
-
-        running = True
         clock = pygame.time.Clock()
-        try:
-            while running and not rospy.is_shutdown():
-                running = self.checkEvents()
-                self.screen.fill((0, 0, 0))
+        try:   
+            self.keep_running = self.checkEvents()
+            self.screen.fill((0, 0, 0))
 
-                # Check keys that should be checked every loop (not only on initial
-                # keydown)
-                #self.CheckKeys()
+            # Check keys that should be checked every loop (not only on initial
+            # keydown)
+            #self.CheckKeys()
 
-                # Run the simulation loop
-                self.SimulationLoop()
+            # Run the simulation loop
+            self.SimulationLoop()
 
-                pygame.display.flip()
-                clock.tick(self.settings.hz)
-                self.fps = clock.get_fps()
-                
+            pygame.display.flip()
+            clock.tick(self.settings.hz)
+            self.fps = clock.get_fps()
+            
         except Exception as inst:
             print(inst)
             exit(1)
             
-        #pygame.quit()
+    def close(self):
+        pygame.quit()
         super(PygameFramework, self).destroy_bodies()
         self.world.contactListener = None
         self.world.destructionListener = None
         self.world.renderer = None
-
-
 
     def _Keyboard_Event(self, key, down=True):
         """
