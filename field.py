@@ -38,7 +38,7 @@ class Field(PygameFramework):
 
     name = "Python simulator"
 
-    def __init__(self, num_allies=3, num_opponents=3, team_color='blue', allied_field_side='left', render=True):
+    def __init__(self, num_allies=3, num_opponents=3, team_color='blue', allied_field_side='left', render=False):
 
         # Objects on field 
         self.num_allies = num_allies
