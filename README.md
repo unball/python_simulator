@@ -2,7 +2,7 @@
 
 Simulator is a open-source executable made with python language to simulate the field of **[UnBall team](http://equipeunball.com.br/)**, in order to make it possible test the vision and also test the strategy.
 
--> Simulator was create using the libraries [Box-2D](https://github.com/pybox2d/pybox2d), [pygame](https://www.pygame.org/news) and [pygame-menu](https://github.com/ppizarror/pygame-menu).
+-> Simulator was created using the libraries [Box-2D](https://github.com/pybox2d/pybox2d) and [pygame](https://www.pygame.org/news).
 
 ## Installation ##
 Into the folder that contains the simulator
@@ -25,6 +25,20 @@ sudo ./install_dependences.sh
 
 ## Example ## 
 There is a script inside the python_simulator folder that contains an example called example.py explained how to run the simulator
+
+## Running the simulator with Kaggle ##
+To run the python simulator using a clould kernel like [kaggle](https://www.kaggle.com/), follow the above instructions:
+- Click on '+ Add data' on the right side of the screen;
+- Choose 'Your Datasets' as your main filter;
+- Click on 'Upload' and choose Github mode as the way to make the upload;
+- This part is very important, write 'simulator' into the dataset title, without quotation masks
+  and paste the link of simulator stored in Github, i.e. 'https://github.com/unball/python_simulator' without quotation masks
+
+- You've added the libraries like a dataset in order to make possible import the simulator. Now you just need
+  run the necessary cells to make all work well.
+  If you didn't have any problem congratualions. Now, you can code you own code using the python_simulator 
+  as an enviroment.... ;D
+
 
 ## References ##
 Python_Simulation is based on script top_down_car.py, so access the bellow links in order to understanding how Python_Simulation works:

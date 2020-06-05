@@ -1,3 +1,4 @@
+# %% [code]
 #!usr/bin/env python3
 #-*- coding: utf-8 -*-
 """
@@ -8,10 +9,30 @@
     methods into the field class that you'll need to train a neural network based on the enviroment.
 """
 
+# %% [code]
+# Necessary for make main script import simulator
+
+from distutils.dir_util import copy_tree
+
+fromDirectory = '../input/simulator'
+toDirectory = ''
+
+copy_tree(fromDirectory, toDirectory)
+
+# %% [code]
+
 from field import *
 
-MAX_EPISODES = 2
-MAX_STEPS_ONE_GAME = 5000 # steps
+import os
+try:
+    # Show is there's some device avaiable
+    print(os.environ["DISPLAY"])
+except:
+    # If any device is avaiable, this bellow line avoid errors been raised     
+    os.environ["SDL_VIDEODRIVER"] = "dummy"
+
+MAX_EPISODES = 1
+MAX_STEPS_ONE_GAME = 50 # steps
 
 steps_game = 0  # Use it to bound the maximum steps during a one_game_duration
                 # IMPORTANT: FPS doesn't mean a faster simulation, just a more
@@ -20,7 +41,7 @@ steps_game = 0  # Use it to bound the maximum steps during a one_game_duration
                 # run the simulation without graphics, use a GPU or parallel processing !!!!
 
 # Field is the enviroment and into there you'll find all necessary methods as reset, step, render and close.
-env = Field(num_allies=5, num_opponents=5, team_color='blue', allied_field_side='right', render=True)
+env = Field(num_allies=5, num_opponents=5, team_color='blue', allied_field_side='right', render=True, cloud=False)
 
 # Main Loop
 for episode in range(MAX_EPISODES):
@@ -41,7 +62,7 @@ for episode in range(MAX_EPISODES):
             # print(next_state)
             # print(reward)
             # print(done)
-        state = next_state
+            # state = next_state
 
         if done: break
 
