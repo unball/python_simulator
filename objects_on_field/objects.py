@@ -136,11 +136,11 @@ class Robot(PhysicsRobot):
 
     def update(self, desired_velocity, hz): 
         """
-        desired_velocity[0] = angular velocity
-        desired_velocity[1] = linear velocity
+        desired_velocity[0] = linear velocity
+        desired_velocity[1] = angular velocity
         """
         super(Robot, self).update_friction()
         if desired_velocity:
-            super(Robot, self).update_turn(desired_velocity[0])
-            super(Robot, self).update_drive(desired_velocity[1])
+            super(Robot, self).update_drive(desired_velocity[0])
+            super(Robot, self).update_turn(desired_velocity[1])
 

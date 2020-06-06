@@ -42,7 +42,7 @@ steps_game = 0  # Use it to bound the maximum steps during a one_game_duration
                 # run the simulation without graphics, use a GPU or parallel processing !!!!
 
 # Field is the enviroment and into there you'll find all necessary methods as reset, step, render and close.
-env = Field(num_allies=5, num_opponents=5, team_color='blue', allied_field_side='right', render=True, cloud=False)
+env = Field(num_allies=5, num_opponents=5, team_color='blue', allied_field_side='left', render=True, cloud=False)
 
 # Main Loop
 for episode in range(MAX_EPISODES):
@@ -60,7 +60,7 @@ for episode in range(MAX_EPISODES):
         # It doesn't happen imediately
         for x in range(4):
             # insert here angular and linear velocities from the allie robots
-            next_state, reward, done, _ = env.step([(3.14,0) for _ in range(5)])
+            next_state, reward, done, _ = env.step([(0,3.14) for _ in range(5)])
             # print(next_state)
             # print(reward)
             # print(done)

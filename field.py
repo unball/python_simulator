@@ -88,7 +88,7 @@ class Field(PygameFramework):
         # Top-down -- no gravity in the screen plane
         self.world.gravity = (0, 0)
 
-        self.ang_and_lin_speed = [(0,0) for _ in range(self.num_allies + self.num_opponents)]
+        self.lin_and_ang_speed = [(0,0) for _ in range(self.num_allies + self.num_opponents)]
 
         self.ground = Ground(self.world)
         walls = Walls(self.world, BLUE)
@@ -174,7 +174,7 @@ class Field(PygameFramework):
         Actions are w and v velocities of the allies robots
         """
         for robot in range(self.num_allies):
-            self.ang_and_lin_speed[robot] = action[robot]
+            self.lin_and_ang_speed[robot] = action[robot]
 
         super(Field, self).run()
 
@@ -216,10 +216,10 @@ class Field(PygameFramework):
         
         if not self.pause:
             for x in range(self.num_allies):
-                self.robots_allies[x].update(self.ang_and_lin_speed[x], settings.hz)
+                self.robots_allies[x].update(self.lin_and_ang_speed[x], settings.hz)
 
             for x in range(self.num_opponents):
-                self.robots_opponents[x].update(self.ang_and_lin_speed[self.num_allies +x], 
+                self.robots_opponents[x].update(self.lin_and_ang_speed[self.num_allies +x], 
                                                 settings.hz)
         else:
             for x in range(self.num_allies):
