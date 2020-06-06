@@ -25,6 +25,7 @@ class Field(PygameFramework):
     team_color = "blue" or "yellow"
     allied_field_side = "left" or "right"
     render = False to run simulation without graphics
+    cloud = True if you'are running on a online kernel
 
     >>SIMULATION (Options into Render mode):
     Press SPACE to Pause/Play into Simulation 
@@ -133,28 +134,35 @@ class Field(PygameFramework):
         '''
         It'll return the positions of all elements inside the field
         '''
-        # example: [xrobot1, yrobot1, angleRobot1, xrobot2, yrobot2, angleRobot2, ....., yballPosition]
+        # example: [[xrobot1,     xrobot2,      ....., xballPosition]
+        #           [yrobot1,     yrobot2,      ....., yballPosition]
+        #           [angleRobot1, angleRobot2,  .....,      0       ]]
         return_list = []
-
-        for i in range(self.num_allies):
-            return_list.append(self.robots_allies[i].body.position[0]*CORRECTION_FACTOR_CM_TO_METER)
-            return_list.append(self.robots_allies[i].body.position[1]*CORRECTION_FACTOR_CM_TO_METER)
-            return_list.append(self.robots_allies[i].body.angle)
         
-        for i in range(self.num_opponents):
-            return_list.append(self.robots_opponents[i].body.position[0]*CORRECTION_FACTOR_CM_TO_METER)
-            return_list.append(self.robots_opponents[i].body.position[1]*CORRECTION_FACTOR_CM_TO_METER)
-            return_list.append(self.robots_opponents[i].body.angle)
-                
-        return_list.append(self.ball.body.position[0]*CORRECTION_FACTOR_CM_TO_METER)
-        return_list.append(self.ball.body.position[1]*CORRECTION_FACTOR_CM_TO_METER)
+        # Inserting x position into the list
+        pos_allies = [self.robots_allies[i].body.position[0]*CORRECTION_FACTOR_CM_TO_METER for i in range(self.num_allies)]
+        pos_opponents = [self.robots_opponents[i].body.position[0]*CORRECTION_FACTOR_CM_TO_METER for i in range(self.num_opponents)]
+
+        return_list.append(pos_allies + pos_opponents + [self.ball.body.position[0]*CORRECTION_FACTOR_CM_TO_METER])
+
+        # Inserting y position into the list
+        pos_allies = [self.robots_allies[i].body.position[1]*CORRECTION_FACTOR_CM_TO_METER for i in range(self.num_allies)]
+        pos_opponents = [self.robots_opponents[i].body.position[1]*CORRECTION_FACTOR_CM_TO_METER for i in range(self.num_opponents)]
+
+        return_list.append(pos_allies + pos_opponents + [self.ball.body.position[1]*CORRECTION_FACTOR_CM_TO_METER])
+
+        # Inserting thetha angle into the list
+        pos_allies = [self.robots_allies[i].body.angle*CORRECTION_FACTOR_CM_TO_METER for i in range(self.num_allies)]
+        pos_opponents = [self.robots_opponents[i].body.angle*CORRECTION_FACTOR_CM_TO_METER for i in range(self.num_opponents)]
+
+        return_list.append(pos_allies + pos_opponents + [0])
 
         return_array = np.array(return_list)
-
+        
         # Numpy creates an array with zero dimension, vector wich is seen as a scalar. So,
         # to create an array wich 1 row of dimension use the bellow command
         # To see more detais look the shape of array before and after the command bellow
-        return_array = np.expand_dims(return_array, axis=0)
+        # return_array = np.expand_dims(return_array, axis=0)
 
         return return_array
 

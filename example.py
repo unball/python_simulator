@@ -26,7 +26,7 @@ from field import *
 
 import os
 try:
-    # Show is there's some device avaiable
+    # Show is there's some device available
     print(os.environ["DISPLAY"])
 except:
     # If any device is avaiable, this bellow line avoid errors been raised     
@@ -47,6 +47,7 @@ env = Field(num_allies=5, num_opponents=5, team_color='blue', allied_field_side=
 # Main Loop
 for episode in range(MAX_EPISODES):
     state = env.reset()
+    print(state)
     env.keep_running = True
     steps_game = 0
     # env.keep_running return False if some event such as quit buttom is pressed
@@ -60,7 +61,7 @@ for episode in range(MAX_EPISODES):
         for x in range(4):
             # insert here angular and linear velocities from the allie robots
             next_state, reward, done, _ = env.step([(3.14,0) for _ in range(5)])
-            print(next_state)
+            # print(next_state)
             # print(reward)
             # print(done)
             # state = next_state
