@@ -10,6 +10,15 @@
 """
 
 # %% [code]
+# Install necessary dependences
+import os
+try:
+    os.system('pip install pygame')
+    os.system('pip install box2d-py')
+    os.system('pip install Box2D')
+except:
+    pass
+
 # Necessary for make main script import simulator
 try:
     from distutils.dir_util import copy_tree
@@ -24,7 +33,6 @@ except:
 
 from field import *
 
-import os
 try:
     # Show is there's some device available
     print(os.environ["DISPLAY"])
@@ -60,7 +68,7 @@ for episode in range(MAX_EPISODES):
         # It doesn't happen imediately
         for x in range(4):
             # insert here angular and linear velocities from the allie robots
-            next_state, reward, done, _ = env.step([(0,3.14) for _ in range(5)])
+            next_state, reward, done = env.step([(0,3.14) for _ in range(5)])
             # print(next_state)
             # print(reward)
             # print(done)

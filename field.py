@@ -174,11 +174,11 @@ class Field(PygameFramework):
         Actions are w and v velocities of the allies robots
         """
         for robot in range(self.num_allies):
-            self.lin_and_ang_speed[robot] = action[robot]
+            self.lin_and_ang_speed[robot] = (action[robot][0]*CORRECTION_FATOR_METER_TO_CM, action[robot][1])
 
         super(Field, self).run()
 
-        return (self.next_step(), self.reward(), self.done(), '')
+        return (self.next_step(), self.reward(), self.done())
     
     def reward(self):
         """
