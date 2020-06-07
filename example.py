@@ -69,10 +69,10 @@ for episode in range(MAX_EPISODES):
         for x in range(4):
             # insert here angular and linear velocities from the allie robots
             next_state, reward, done = env.step([(0,3.14) for _ in range(5)])
-            # print(next_state)
-            # print(reward)
-            # print(done)
-            # state = next_state
+        # print(next_state)
+        # print(reward)
+        # print(done)
+        # state = next_state
 
         if done: break
 
