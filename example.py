@@ -55,7 +55,7 @@ env = Field(num_allies=5, num_opponents=5, team_color='blue', allied_field_side=
 # Main Loop
 for episode in range(MAX_EPISODES):
     state = env.reset()
-    print(state)
+    print(state, end='\n\n')
     env.keep_running = True
     steps_game = 0
     # env.keep_running return False if some event such as quit buttom is pressed

@@ -152,8 +152,8 @@ class Field(PygameFramework):
         return_list.append(pos_allies + pos_opponents + [self.ball.body.position[1]*CORRECTION_FACTOR_CM_TO_METER])
 
         # Inserting thetha angle into the list
-        pos_allies = [self.robots_allies[i].body.angle*CORRECTION_FACTOR_CM_TO_METER for i in range(self.num_allies)]
-        pos_opponents = [self.robots_opponents[i].body.angle*CORRECTION_FACTOR_CM_TO_METER for i in range(self.num_opponents)]
+        pos_allies = [self.robots_allies[i].body.angle for i in range(self.num_allies)]
+        pos_opponents = [self.robots_opponents[i].body.angle for i in range(self.num_opponents)]
 
         return_list.append(pos_allies + pos_opponents + [0])
 
