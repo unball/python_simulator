@@ -280,7 +280,7 @@ class FrameworkBase(b2ContactListener):
 
         if query.fixture:
             body = query.fixture.body
-            body.ApplyAngularImpulse(10**3, True)
+            body.ApplyAngularImpulse(15**3, True)
 
     def rotateRight(self, p):
         """
@@ -300,7 +300,7 @@ class FrameworkBase(b2ContactListener):
 
         if query.fixture:
             body = query.fixture.body
-            body.ApplyAngularImpulse(-10**3, True)
+            body.ApplyAngularImpulse(-15**3, True)
 
 
     def MouseUp(self, p):

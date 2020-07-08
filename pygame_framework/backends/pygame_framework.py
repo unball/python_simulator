@@ -280,6 +280,9 @@ class PygameFramework(FrameworkBase):
         Check for pygame events (mainly keyboard/mouse events).
         Passes the events onto the GUI also.
         """
+        if not self.keep_running:
+            return False
+
         for event in pygame.event.get():
             if event.type == QUIT or (event.type == KEYDOWN and event.key == Keys.K_ESCAPE):
                 return False
@@ -370,6 +373,8 @@ class PygameFramework(FrameworkBase):
         try:   
             if self.render:
                 self.keep_running = self.checkEvents()
+                if not self.keep_running:
+                    raise KeyboardInterrupt
                 self.screen.fill((0, 0, 0))
 
             # Check keys that should be checked every loop (not only on initial
@@ -383,10 +388,11 @@ class PygameFramework(FrameworkBase):
                 pygame.display.flip()
                 clock.tick(self.settings.hz)
                 self.fps = clock.get_fps()
-            
+        except KeyboardInterrupt:
+            pass
         except Exception as inst:
             print(inst)
-            exit(1)
+            pass
             
     def close(self):
         if self.render:
@@ -405,7 +411,11 @@ class PygameFramework(FrameworkBase):
         """
         if down:
             if key == Keys.K_SPACE:
-                self.pause = not self.pause
+                self.pause = not self.pause 
+            # if key == Keys.K_ESCAPE:
+            #     self.keep_running = not self.keep_running
+
+            # if event.type == QUIT or (event.type == KEYDOWN and event.key == Keys.K_ESCAPE)
             #if key == Keys.K_z:       # Zoom in
             #    self.viewZoom = min(1.1 * self.viewZoom, 50.0)
             #elif key == Keys.K_x:     # Zoom out

@@ -10,6 +10,7 @@ from pygame_framework.backends.pygame_framework import *
 from objects_on_field.physics_engine import *
 from constants import *
 import math as m
+import numpy as np
     
 
 class Ball(PhysicsBall):
@@ -70,9 +71,14 @@ class Ground(object):
                 ((75,35), (60, 35)), ((-75,35), (-60, 35)),
                 ((75,-35), (60, -35)), ((-75,-35), (-60, -35)))
 
-
-    def __init__(self, world, friction_modifier = ''):
+    def __init__(self, world, friction_modifier = '', draw_field=False):
         self.world = world
+        self.draw_field = draw_field
+        self.arrow_step = 7
+        if draw_field:
+            self.pos_fild = self.calculate_pos_fild()
+            self.angle_field = np.zeros(self.pos_fild.shape[0], dtype=float)
+            
 
     def update(self):
         self.world.renderer.DrawCircle(self.world.renderer.to_screen(b2Vec2(0,0)),
@@ -83,10 +89,46 @@ class Ground(object):
                 self.world.renderer.to_screen(b2Vec2(Ground.pos_lines[x][1])), 
                 WHITE)
         
-        # arrow = self.world.renderer.DrawSegment(
-        #     self.world.renderer.to_screen((0, 1.5)),
-        #     self.world.renderer.to_screen((3, 1.5)), WHITE)
-        # arrow = self.world.renderer.DrawPoint(self.world.renderer.to_screen((3, 1.5)),2, WHITE)
+        if self.draw_field:
+            self.draw_field_on_ground()
+
+    def calculate_pos_fild(self):
+        x = np.arange(-FIELD_H/2, FIELD_H/2, self.arrow_step)
+        y = np.arange(-FIELD_W/2, FIELD_W/2, self.arrow_step)
+        X,Y = np.meshgrid(x, y)
+        XY = np.array([X.flatten(), Y.flatten()]).T
+
+        return XY
+    
+    def draw_field_on_ground(self):        
+        for i in range(len(self.pos_fild)):
+            theta = self.angle_field[i]
+            c, s = np.cos(theta), np.sin(theta)
+            R = np.array(((c, -s), (s, c)))
+            v2_ = self.pos_fild[i] + np.dot(R, np.array([self.pos_fild[i][0]-(self.arrow_step/2),self.pos_fild[i][1]]) - self.pos_fild[i] )
+            v1_ = self.pos_fild[i] + np.dot(R, np.array([self.pos_fild[i][0]+(self.arrow_step/2), self.pos_fild[i][1]]) - self.pos_fild[i])
+            arrow = self.world.renderer.DrawSegment(
+                self.world.renderer.to_screen((
+                    v2_
+                    )),
+                self.world.renderer.to_screen((
+                    v1_
+                    )) , WHITE)
+            arrow = self.world.renderer.DrawPoint(self.world.renderer.to_screen((
+                v1_
+            )),2, WHITE)
+            
+            # arrow = self.world.renderer.DrawSegment(
+            #     self.world.renderer.to_screen((
+            #         self.pos_fild[i] + np.dot(R, (self.pos_fild[i] - np.array([self.pos_fild[i][0]-(self.arrow_step/2),self.pos_fild[i][1]])))
+            #         self.pos_fild[i][0]-(self.arrow_step/2),self.pos_fild[i][1]
+            #         )),
+            #     self.world.renderer.to_screen((
+            #         self.pos_fild[i][0]+(self.arrow_step/2), self.pos_fild[i][1]
+            #         )) , WHITE)
+            # arrow = self.world.renderer.DrawPoint(self.world.renderer.to_screen((
+            #     self.pos_fild[i][0]+(self.arrow_step/2), self.pos_fild[i][1]
+            # )),2, WHITE)
 
 class Trajectory(object):
     def __init__(self, world, color, size):
