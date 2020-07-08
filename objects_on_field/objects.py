@@ -82,10 +82,11 @@ class Ground(object):
                 self.world.renderer.to_screen(b2Vec2(Ground.pos_lines[x][0])), 
                 self.world.renderer.to_screen(b2Vec2(Ground.pos_lines[x][1])), 
                 WHITE)
-        arrow = self.world.renderer.DrawSegment(
-            self.world.renderer.to_screen((0, 1.5)),
-            self.world.renderer.to_screen((3, 1.5)), WHITE)
-        arrow = self.world.renderer.DrawPoint(self.world.renderer.to_screen((3, 1.5)),2, WHITE)
+        
+        # arrow = self.world.renderer.DrawSegment(
+        #     self.world.renderer.to_screen((0, 1.5)),
+        #     self.world.renderer.to_screen((3, 1.5)), WHITE)
+        # arrow = self.world.renderer.DrawPoint(self.world.renderer.to_screen((3, 1.5)),2, WHITE)
 
 class Trajectory(object):
     def __init__(self, world, color, size):
