@@ -12,23 +12,23 @@
 # %% [code]
 # Install necessary dependences
 import os
-try:
-    os.system('pip install pygame')
-    os.system('pip install box2d-py')
-    os.system('pip install Box2D')
-except:
-    pass
+# try:
+#     os.system('pip install pygame')
+#     os.system('pip install box2d-py')
+#     os.system('pip install Box2D')
+# except:
+#     pass
 
-# Necessary for make main script import simulator
-try:
-    from distutils.dir_util import copy_tree
+# # Necessary for make main script import simulator
+# try:
+#     from distutils.dir_util import copy_tree
 
-    fromDirectory = '../input/simulator'
-    toDirectory = ''
+#     fromDirectory = '../input/simulator'
+#     toDirectory = ''
 
-    copy_tree(fromDirectory, toDirectory)
-except:
-    pass
+#     copy_tree(fromDirectory, toDirectory)
+# except:
+#     pass
 # %% [code]
 
 from field import *
@@ -41,7 +41,7 @@ except:
     os.environ["SDL_VIDEODRIVER"] = "dummy"
 
 MAX_EPISODES = 1
-MAX_STEPS_ONE_GAME = 50 # steps
+MAX_STEPS_ONE_GAME = 100 # steps
 
 steps_game = 0  # Use it to bound the maximum steps during a one_game_duration
                 # IMPORTANT: FPS doesn't mean a faster simulation, just a more
@@ -63,7 +63,8 @@ for episode in range(MAX_EPISODES):
     # End the game if the simulation
     # You also can remove env.keep_runing bellow and put it above inside an if to break all iterations, instead
     # break just one episode
-    while env.keep_running and steps_game < MAX_STEPS_ONE_GAME: 
+    # while env.keep_running and steps_game < MAX_STEPS_ONE_GAME: 
+    while env.keep_running: 
         # we use 4 loops to give a time to the simulator reach the desired velocit. Beacause
         # It doesn't happen imediately
         for x in range(4):

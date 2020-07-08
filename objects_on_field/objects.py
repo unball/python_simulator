@@ -82,6 +82,10 @@ class Ground(object):
                 self.world.renderer.to_screen(b2Vec2(Ground.pos_lines[x][0])), 
                 self.world.renderer.to_screen(b2Vec2(Ground.pos_lines[x][1])), 
                 WHITE)
+        arrow = self.world.renderer.DrawSegment(
+            self.world.renderer.to_screen((0, 1.5)),
+            self.world.renderer.to_screen((3, 1.5)), WHITE)
+        arrow = self.world.renderer.DrawPoint(self.world.renderer.to_screen((3, 1.5)),2, WHITE)
 
 class Trajectory(object):
     def __init__(self, world, color, size):
@@ -132,7 +136,7 @@ class Robot(PhysicsRobot):
                                 self.main_world.renderer.to_screen(self.body.position),
                                 3, (-m.cos(self.body.angle), -m.sin(self.body.angle)), self.color,
                                 color_line=Robot.color_line[self.num_robot])
-
+        
 
     def update(self, desired_velocity, hz): 
         """

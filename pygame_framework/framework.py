@@ -33,6 +33,8 @@ from Box2D import (b2_addState, b2_dynamicBody, b2_epsilon, b2_persistState)
 
 from .settings import fwSettings
 
+import math as m
+
 
 class fwDestructionListener(b2DestructionListener):
     """
@@ -259,6 +261,47 @@ class FrameworkBase(b2ContactListener):
                 target=p,
                 maxForce=(100.0**3) * body.mass)
             body.awake = True
+
+    def rotateLeft(self, p):
+        """
+        Indicates that there was a left click at point p (world coordinates)
+        """
+        # if self.mouseJoint is not None:
+        #     return
+
+        # Create a mouse joint on the selected body (assuming it's dynamic)
+        # Make a small box.
+        aabb = b2AABB(lowerBound=p - (0.001, 0.001),
+                      upperBound=p + (0.001, 0.001))
+
+        # Query the world for overlapping shapes.
+        query = fwQueryCallback(p)
+        self.world.QueryAABB(query, aabb)
+
+        if query.fixture:
+            body = query.fixture.body
+            body.ApplyAngularImpulse(10**3, True)
+
+    def rotateRight(self, p):
+        """
+        Indicates that there was a left click at point p (world coordinates)
+        """
+        # if self.mouseJoint is not None:
+        #     return
+
+        # Create a mouse joint on the selected body (assuming it's dynamic)
+        # Make a small box.
+        aabb = b2AABB(lowerBound=p - (0.001, 0.001),
+                      upperBound=p + (0.001, 0.001))
+
+        # Query the world for overlapping shapes.
+        query = fwQueryCallback(p)
+        self.world.QueryAABB(query, aabb)
+
+        if query.fixture:
+            body = query.fixture.body
+            body.ApplyAngularImpulse(-10**3, True)
+
 
     def MouseUp(self, p):
         """
