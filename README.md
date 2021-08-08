@@ -4,23 +4,13 @@ Simulator is a open-source executable made with python language to simulate the 
 
 -> Simulator was created using the libraries [Box-2D](https://github.com/pybox2d/pybox2d) and [pygame](https://www.pygame.org/news).
 
-## Installation ##
-Into the folder that contains the simulator
+## Dependencies ##
 
-* Make the script install_dependences executable :
+To install the dependecies, run
 
->Ubuntu:
-    
-```bash
-chmod +x install_dependences.sh
+>Ubuntu:    
 ```
-
-* Run the script install_dependences
-
->Ubuntu:
-
-```bash 
-sudo ./install_dependences.sh
+pip3 install -r requirements.txt
 ```
 
 ## Example ## 

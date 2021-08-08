@@ -9,8 +9,11 @@
 
 
 
+from numpy.lib.function_base import place
+from kdtree import KDTree
 import sys
 import math
+import random
 import numpy as np
 from constants import *
 from objects_on_field.objects import *
@@ -70,6 +73,8 @@ class Field(PygameFramework):
         self.action_size = ''
         self.state_size = ''
 
+        self.previous_ball_potential = None
+
         if self.render:
             # Set the icon for the application
             directory = sys.path[0]
@@ -79,7 +84,7 @@ class Field(PygameFramework):
                 logo = pygame.image.load(directory + '/images/UnBall.png') 
             pygame.display.set_icon(logo)
 
-    def reset(self):
+    def reset_larc_rules(self):
         """
         Create the objects that will be simulated and return a list containing the position and angle
         of them
@@ -130,41 +135,111 @@ class Field(PygameFramework):
 
         return self.next_step()
 
+    def reset_random_init_pos(self):
+        """
+        Create the objects that will be simulated and return a list containing the position and angle
+        of them
+        """
+        PygameFramework.__init__(self, self.render)
+        # Top-down -- no gravity in the screen plane
+        def x(): return random.uniform(-self.ground.length/2 + 10,
+                                       self.ground.length/2 - 10)
+
+        def y(): return random.uniform(-self.ground.width/2 + 10,
+                                       self.ground.width/2 - 10)
+
+        def theta(): return random.uniform(0, 2*math.pi)
+
+        self.world.gravity = (0, 0)
+
+        self.lin_and_ang_speed = [(0,0) for _ in range(self.num_allies + self.num_opponents)]
+
+        self.ground = Ground(self.world)
+        walls = Walls(self.world, BLUE)
+        ball_pos = [x(), y()]
+        self.ball = Ball(self.world, BLUE, position=ball_pos)
+
+        init_pos = [ball_pos]
+
+        min_dist = 10
+        places = KDTree()
+        places.insert(ball_pos)
+
+        for i in range(self.num_allies):
+            pos = [x(), y()]
+            while places.get_nearest(pos)[1] < min_dist:
+                pos = [x(), y()]
+
+            places.insert(pos)
+            init_pos.append(pos)
+        
+        for i in range(self.num_opponents):
+            pos = [x(), y()]
+            while places.get_nearest(pos)[1] < min_dist:
+                pos = [x(), y()]
+
+            places.insert(pos)
+            init_pos.append(pos)
+
+        self.robots_allies = [Robot(self.world, self.team_color, num_robot=x,
+                                start_position=init_pos[1 + x], angle=theta(), 
+                                y_predefined=False) for x in range(self.num_allies)]
+        
+        self.robots_opponents = [Robot(self.world, not self.team_color, num_robot=x, 
+                                start_position=init_pos[1 + self.num_allies + x], angle=theta(),y_predefined=False,
+                                ) for x in range(self.num_opponents)]
+
+        return self.next_step()
+
+
     def next_step(self):
         '''
         It'll return the positions of all elements inside the field
         '''
-        # example: [[xrobot1,     xrobot2,      ....., xballPosition]
-        #           [yrobot1,     yrobot2,      ....., yballPosition]
-        #           [angleRobot1, angleRobot2,  .....,      0       ]]
-        return_list = []
+        return_dict = {'allies': {}, 'opponents': {}, 'ball': {}}
         
-        # Inserting x position into the list
-        pos_allies = [self.robots_allies[i].body.position[0]*CORRECTION_FACTOR_CM_TO_METER for i in range(self.num_allies)]
-        pos_opponents = [self.robots_opponents[i].body.position[0]*CORRECTION_FACTOR_CM_TO_METER for i in range(self.num_opponents)]
+        # X, y positions
+        pos_x_allies = [self.robots_allies[i].body.position[0]*CORRECTION_FACTOR_CM_TO_METER for i in range(self.num_allies)]
+        pos_y_allies = [self.robots_allies[i].body.position[1]*CORRECTION_FACTOR_CM_TO_METER for i in range(self.num_allies)]
+        
+        pos_x_opponents = [self.robots_opponents[i].body.position[0]*CORRECTION_FACTOR_CM_TO_METER for i in range(self.num_opponents)]
+        pos_y_opponents = [self.robots_opponents[i].body.position[1]*CORRECTION_FACTOR_CM_TO_METER for i in range(self.num_opponents)]
+     
+        # [self.ball.body.position[0]*CORRECTION_FACTOR_CM_TO_METER] + pos_allies + pos_opponents
 
-        return_list.append(pos_allies + pos_opponents + [self.ball.body.position[0]*CORRECTION_FACTOR_CM_TO_METER])
+        # Angular and linear velocities
+        v_allies = [self.robots_allies[i].body.linearVelocity*CORRECTION_FACTOR_CM_TO_METER for i in range(self.num_allies)]
+        w_allies = [self.robots_allies[i].body.angularVelocity for i in range(self.num_allies)]
 
-        # Inserting y position into the list
-        pos_allies = [self.robots_allies[i].body.position[1]*CORRECTION_FACTOR_CM_TO_METER for i in range(self.num_allies)]
-        pos_opponents = [self.robots_opponents[i].body.position[1]*CORRECTION_FACTOR_CM_TO_METER for i in range(self.num_opponents)]
+        v_opponents = [self.robots_opponents[i].body.linearVelocity*CORRECTION_FACTOR_CM_TO_METER for i in range(self.num_opponents)]
+        w_opponents = [self.robots_opponents[i].body.angularVelocity for i in range(self.num_opponents)]   
 
-        return_list.append(pos_allies + pos_opponents + [self.ball.body.position[1]*CORRECTION_FACTOR_CM_TO_METER])
+        # Theta angles
+        theta_allies = [self.robots_allies[i].body.angle for i in range(self.num_allies)]
+        theta_opponents = [self.robots_opponents[i].body.angle for i in range(self.num_opponents)]
 
-        # Inserting thetha angle into the list
-        pos_allies = [self.robots_allies[i].body.angle for i in range(self.num_allies)]
-        pos_opponents = [self.robots_opponents[i].body.angle for i in range(self.num_opponents)]
-
-        return_list.append(pos_allies + pos_opponents + [0])
-
-        return_array = np.array(return_list)
+        # return_array = np.array(return_list)
         
         # Numpy creates an array with zero dimension, vector wich is seen as a scalar. So,
         # to create an array wich 1 row of dimension use the bellow command
         # To see more detais look the shape of array before and after the command bellow
         # return_array = np.expand_dims(return_array, axis=0)
 
-        return return_array
+        for i in range(self.num_allies):
+            return_dict['allies'][i] = {'pos_xy': (pos_x_allies[i], pos_y_allies[i]), 
+                                        'theta': theta_allies[i], 'v': v_allies[i], 'w': w_allies[i]}
+
+        for i in range(self.num_opponents):
+            return_dict['opponents'][i] = {'pos_xy': (pos_x_opponents[i], pos_y_opponents[i]), 
+                                        'theta': theta_opponents[i], 'v': v_opponents[i], 'w': w_opponents[i]}
+        
+        return_dict['ball'] = {'pos_xy':(self.ball.body.position[0]*CORRECTION_FACTOR_CM_TO_METER, 
+                                        self.ball.body.position[1]*CORRECTION_FACTOR_CM_TO_METER), 
+                            'theta': self.ball.body.angle, 
+                            'v': self.ball.body.linearVelocity*CORRECTION_FACTOR_CM_TO_METER, 
+                            'w': self.ball.body.angularVelocity}
+                                        
+        return return_dict
 
     def close(self):
         super(Field, self).close()
@@ -173,11 +248,15 @@ class Field(PygameFramework):
         """
         Actions are w and v velocities of the allies robots
         """
+        # if False:
         for robot in range(self.num_allies):
             self.lin_and_ang_speed[robot] = (action[robot][0]*CORRECTION_FATOR_METER_TO_CM, action[robot][1])
 
-        super(Field, self).run()
-
+        # we use 4 loops to give a time to the simulator reach the desired velocit. Because
+        # It doesn't happen imediately
+        for _ in range(4):
+            super(Field, self).run()
+        
         return (self.next_step(), self.reward(), self.done())
     
     def reward(self):
@@ -187,16 +266,19 @@ class Field(PygameFramework):
         """
         reward = 0
 
-        if self.allied_field_side == 'left':
-            if (self.ball.body.position[0]*CORRECTION_FACTOR_CM_TO_METER > self.x_goal_opponent):
-                reward = 1
-            elif (self.ball.body.position[0]*CORRECTION_FACTOR_CM_TO_METER < self.x_goal_allied):
-                reward = -1 
-        else:
-            if (self.ball.body.position[0]*CORRECTION_FACTOR_CM_TO_METER < self.x_goal_opponent):
-                reward = 1
-            elif (self.ball.body.position[0]*CORRECTION_FACTOR_CM_TO_METER > self.x_goal_allied):
-                reward = -1 
+        w_move = 0.2
+        w_ball_grad = 0.8
+        w_energy = 2e-4
+
+        # Calculate ball potential
+        grad_ball_potential = self.__ball_grad()
+        # Calculate Move ball
+        move_reward = self.__move_reward()
+        # Calculate Energy penalty
+        energy_penalty = self.__energy_penalty()
+
+        reward = w_move * move_reward + w_ball_grad * grad_ball_potential + \
+                    w_energy * energy_penalty 
         
         return reward
 
@@ -252,12 +334,75 @@ class Field(PygameFramework):
         	# robots_opponents.append((self.robots_opponents[opponent].body.position, angle))
 
     def Step(self, settings):
+        
         self.update_phisics(settings)
-
+        
         super(Field, self).Step(settings)
-
+        
         if self.render:
             for x in range(self.num_allies):
+                
+                
                 self.robots_allies[x].update_colors()
+            
             for x in range(self.num_opponents):
                 self.robots_opponents[x].update_colors()
+    
+    def __ball_grad(self):
+        '''Calculate ball potential gradient
+        Difference of potential of the ball in time_step seconds.
+        '''
+        # Calculate ball potential
+        length_cm = self.ground.length
+        half_lenght = (self.ground.length*CORRECTION_FACTOR_CM_TO_METER / 2.0)\
+            + self.ground.goal_depth*CORRECTION_FACTOR_CM_TO_METER
+
+        # distance to defence
+        dx_d = (half_lenght + self.ball.body.position[0]*CORRECTION_FACTOR_CM_TO_METER)
+        # distance to attack
+        dx_a = (half_lenght - self.ball.body.position[0]*CORRECTION_FACTOR_CM_TO_METER)
+        dy = (self.ball.body.position[1]*CORRECTION_FACTOR_CM_TO_METER)
+
+        dist_1 = -math.sqrt(dx_a ** 2 + 2 * dy ** 2)
+        dist_2 = math.sqrt(dx_d ** 2 + 2 * dy ** 2)
+        ball_potential = ((dist_1 + dist_2) / length_cm - 1) / 2
+
+        grad_ball_potential = 0
+        # Calculate ball potential gradient
+        # = actual_potential - previous_potential
+        if self.previous_ball_potential is not None:
+            diff = ball_potential - self.previous_ball_potential
+            grad_ball_potential = np.clip(diff * 3 / TIME_STEP,
+                                          -5.0, 5.0)
+
+        self.previous_ball_potential = ball_potential
+
+        return grad_ball_potential
+
+    def __move_reward(self):
+        '''Calculate Move to ball reward
+        Cosine between the robot vel vector and the vector robot -> ball.
+        This indicates rather the robot is moving towards the ball or not.
+        '''
+
+        ball = np.array([self.ball.body.position[0]*CORRECTION_FACTOR_CM_TO_METER, self.ball.body.position[1]*CORRECTION_FACTOR_CM_TO_METER])
+        robot = np.array([self.robots_allies[0].body.position[0]*CORRECTION_FACTOR_CM_TO_METER,
+                          self.robots_allies[0].body.position[0]*CORRECTION_FACTOR_CM_TO_METER])
+        robot_vel = np.array([math.cos(self.robots_allies[0].body.angle),
+                              math.sin(self.robots_allies[0].body.angle)])
+        robot_ball = ball - robot
+        robot_ball = robot_ball/np.linalg.norm(robot_ball)
+
+        move_reward = np.dot(robot_ball, robot_vel)
+
+        move_reward = np.clip(move_reward / 0.4, -5.0, 5.0)
+        return move_reward
+
+    def __energy_penalty(self):
+        '''Calculates the energy penalty'''
+
+        linearVelocity = math.sqrt(self.robots_allies[0].body.linearVelocity[0]**2 + self.robots_allies[0].body.linearVelocity[1]**2)
+        en_penalty_1 = abs(linearVelocity*CORRECTION_FACTOR_CM_TO_METER)
+        en_penalty_2 = abs(self.robots_allies[0].body.angularVelocity)
+        energy_penalty = - (en_penalty_1 + en_penalty_2)
+        return energy_penalty

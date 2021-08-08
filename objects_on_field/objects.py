@@ -75,6 +75,9 @@ class Ground(object):
         self.world = world
         self.draw_field = draw_field
         self.arrow_step = 7
+        self.length = 150
+        self.goal_depth = 10
+        self.width = 130
         if draw_field:
             self.pos_fild = self.calculate_pos_fild()
             self.angle_field = np.zeros(self.pos_fild.shape[0], dtype=float)
@@ -149,27 +152,34 @@ class Robot(PhysicsRobot):
     start_position = [('', 0), ('', 0), ('', 0),('', 0), ('', 0)]
     color_line = [(255,0,0), (0,255,0), (255,255,255), (255,0,255), (0,255,255)]
 
-    def __init__(self, world, color, side, start_position=(0, 0)):
+    def __init__(self, world, color, num_robot, side='left', start_position=(0, 0),angle=0, y_predefined=True):
 
         self.main_world = world
-        self.body = world.CreateDynamicBody(position=(start_position[0], Robot.start_position[start_position[1]][1]))
+        self.y_predefined = y_predefined
+        if self.y_predefined:
+            self.body = world.CreateDynamicBody(position=(start_position[0], Robot.start_position[start_position[1]][1]))
+        else:
+            self.body = world.CreateDynamicBody(position=(start_position[0], start_position[1]))
         self.body.CreatePolygonFixture(box=Robot.dimensions,
                                       density=(MASS_ROBOT/
                                         (((self.__class__.dimensions[0]*2)**3)*(10**(-2)))))
         self.body.userData = {'obj': self}
         self.body.bullet = True
         
-        if start_position[1] == 0:
-            if side == 'left':
-                self.body.angle = m.pi/2
-            else:
-                self.body.angle = - m.pi/2
-        elif side == 'left':
-            self.body.angle = 0
+        if not self.y_predefined:
+            self.body.angle = angle
         else:
-            self.body.angle = - m.pi
+            if start_position[1] == 0:
+                if side == 'left':
+                    self.body.angle = m.pi/2
+                else:
+                    self.body.angle = - m.pi/2
+            elif side == 'left':
+                self.body.angle = 0
+            else:
+                self.body.angle = - m.pi
         self.color = YELLOW if color else BLUE
-        self.num_robot = start_position[1]
+        self.num_robot = num_robot
 
         # super(Robot, self).__init__(self.body, start_position)
         super(Robot, self).__init__(self.body)
