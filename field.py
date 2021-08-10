@@ -71,7 +71,7 @@ class Field(PygameFramework):
         self.robots_allies    = ''
 
         self.max_v = 200 # cm/s
-        self.max_w = 4*math.pi
+        self.max_w = 15*math.pi
 
         self.action_size = self.num_allies*2 # num_allies * v,w
         self.state_size = ''
@@ -390,7 +390,7 @@ class Field(PygameFramework):
 
         ball = np.array([self.ball.body.position[0]*CORRECTION_FACTOR_CM_TO_METER, self.ball.body.position[1]*CORRECTION_FACTOR_CM_TO_METER])
         robot = np.array([self.robots_allies[0].body.position[0]*CORRECTION_FACTOR_CM_TO_METER,
-                          self.robots_allies[0].body.position[0]*CORRECTION_FACTOR_CM_TO_METER])
+                          self.robots_allies[0].body.position[1]*CORRECTION_FACTOR_CM_TO_METER])
         robot_vel = np.array([math.cos(self.robots_allies[0].body.angle),
                               math.sin(self.robots_allies[0].body.angle)])
         robot_ball = ball - robot
