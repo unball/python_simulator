@@ -269,9 +269,9 @@ class Field(PygameFramework):
         """
         reward = 0
 
-        if self.ball.body.position[0]*CORRECTION_FACTOR_CM_TO_METER > abs(self.x_goal_allied):
+        if self.ball.body.position[0]*CORRECTION_FACTOR_CM_TO_METER > self.x_goal_opponent:
             reward = 10
-        elif self.ball.body.position[0]*CORRECTION_FACTOR_CM_TO_METER < abs(self.x_goal_allied):
+        elif self.ball.body.position[0]*CORRECTION_FACTOR_CM_TO_METER < self.x_goal_allied:
             reward = -10  
         else:
 
