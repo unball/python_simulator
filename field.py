@@ -269,20 +269,26 @@ class Field(PygameFramework):
         """
         reward = 0
 
-        w_move = 0.2
-        w_ball_grad = 0.8
-        w_energy = 2e-4
+        if self.ball.body.position[0]*CORRECTION_FACTOR_CM_TO_METER > abs(self.x_goal_allied):
+            reward = 10
+        elif self.ball.body.position[0]*CORRECTION_FACTOR_CM_TO_METER < abs(self.x_goal_allied):
+            reward = -10  
+        else:
 
-        # Calculate ball potential
-        grad_ball_potential = self.__ball_grad()
-        # Calculate Move ball
-        move_reward = self.__move_reward()
-        # Calculate Energy penalty
-        energy_penalty = self.__energy_penalty()
+            w_move = 0.2
+            w_ball_grad = 0.8
+            w_energy = 2e-4
 
-        reward = w_move * move_reward + w_ball_grad * grad_ball_potential + \
-                    w_energy * energy_penalty 
-        
+            # Calculate ball potential
+            grad_ball_potential = self.__ball_grad()
+            # Calculate Move ball
+            move_reward = self.__move_reward()
+            # Calculate Energy penalty
+            energy_penalty = self.__energy_penalty()
+
+            reward = w_move * move_reward + w_ball_grad * grad_ball_potential + \
+                        w_energy * energy_penalty 
+            
         return reward
 
     def done(self):
