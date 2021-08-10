@@ -253,7 +253,7 @@ class Field(PygameFramework):
         """
         # if False:
         for robot in range(self.num_allies):
-            self.lin_and_ang_speed[robot] = (actions[robot][0]*CORRECTION_FATOR_METER_TO_CM*self.max_v, actions[robot][1]*self.max_w)
+            self.lin_and_ang_speed[robot] = (actions[robot][0]*self.max_v, actions[robot][1]*self.max_w)
 
         # we use 4 loops to give a time to the simulator reach the desired velocit. Because
         # It doesn't happen imediately
