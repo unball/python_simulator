@@ -70,7 +70,7 @@ class Field(PygameFramework):
         self.robots_opponents = ''
         self.robots_allies    = ''
 
-        self.action_size = ''
+        self.action_size = self.num_allies*2 # num_allies * v,w
         self.state_size = ''
 
         self.previous_ball_potential = None
@@ -96,7 +96,7 @@ class Field(PygameFramework):
         self.lin_and_ang_speed = [(0,0) for _ in range(self.num_allies + self.num_opponents)]
 
         self.ground = Ground(self.world)
-        walls = Walls(self.world, BLUE)
+        self.walls = Walls(self.world, BLUE)
         self.ball = Ball(self.world, BLUE)
         
         # ------------------ Initial Coordinates ------------------
@@ -155,7 +155,7 @@ class Field(PygameFramework):
         self.lin_and_ang_speed = [(0,0) for _ in range(self.num_allies + self.num_opponents)]
 
         self.ground = Ground(self.world)
-        walls = Walls(self.world, BLUE)
+        self.walls = Walls(self.world, BLUE)
         ball_pos = [x(), y()]
         self.ball = Ball(self.world, BLUE, position=ball_pos)
 
@@ -196,7 +196,7 @@ class Field(PygameFramework):
         '''
         It'll return the positions of all elements inside the field
         '''
-        return_dict = {'allies': {}, 'opponents': {}, 'ball': {}}
+        return_dict = {'allie': {}, 'opponent': {}, 'ball': {}}
         
         # X, y positions
         pos_x_allies = [self.robots_allies[i].body.position[0]*CORRECTION_FACTOR_CM_TO_METER for i in range(self.num_allies)]
@@ -204,8 +204,6 @@ class Field(PygameFramework):
         
         pos_x_opponents = [self.robots_opponents[i].body.position[0]*CORRECTION_FACTOR_CM_TO_METER for i in range(self.num_opponents)]
         pos_y_opponents = [self.robots_opponents[i].body.position[1]*CORRECTION_FACTOR_CM_TO_METER for i in range(self.num_opponents)]
-     
-        # [self.ball.body.position[0]*CORRECTION_FACTOR_CM_TO_METER] + pos_allies + pos_opponents
 
         # Angular and linear velocities
         v_allies = [self.robots_allies[i].body.linearVelocity*CORRECTION_FACTOR_CM_TO_METER for i in range(self.num_allies)]
@@ -226,31 +224,33 @@ class Field(PygameFramework):
         # return_array = np.expand_dims(return_array, axis=0)
 
         for i in range(self.num_allies):
-            return_dict['allies'][i] = {'pos_xy': (pos_x_allies[i], pos_y_allies[i]), 
-                                        'theta': theta_allies[i], 'v': v_allies[i], 'w': w_allies[i]}
+            return_dict['allie'][i] = {'pos_xy': np.array([pos_x_allies[i], pos_y_allies[i]]), 
+                                        'theta': theta_allies[i], 
+                                        'v': np.linalg.norm((v_allies[i][0],v_allies[i][1])),
+                                        'w': w_allies[i]}
 
         for i in range(self.num_opponents):
-            return_dict['opponents'][i] = {'pos_xy': (pos_x_opponents[i], pos_y_opponents[i]), 
-                                        'theta': theta_opponents[i], 'v': v_opponents[i], 'w': w_opponents[i]}
+            return_dict['opponent'][i] = {'pos_xy': np.array([pos_x_opponents[i], pos_y_opponents[i]]), 
+                                        'theta': theta_opponents[i], 
+                                        'v': np.linalg.norm((v_opponents[i][0],v_opponents[i][1])),
+                                        'w': w_opponents[i]}
         
-        return_dict['ball'] = {'pos_xy':(self.ball.body.position[0]*CORRECTION_FACTOR_CM_TO_METER, 
-                                        self.ball.body.position[1]*CORRECTION_FACTOR_CM_TO_METER), 
-                            'theta': self.ball.body.angle, 
-                            'v': self.ball.body.linearVelocity*CORRECTION_FACTOR_CM_TO_METER, 
-                            'w': self.ball.body.angularVelocity}
+        return_dict['ball'] = {'pos_xy':np.array([self.ball.body.position[0]*CORRECTION_FACTOR_CM_TO_METER, 
+                                        self.ball.body.position[1]*CORRECTION_FACTOR_CM_TO_METER]), 
+                                'v': np.linalg.norm(self.ball.body.linearVelocity)*CORRECTION_FACTOR_CM_TO_METER}
                                         
         return return_dict
 
     def close(self):
         super(Field, self).close()
 
-    def step(self, action):
+    def step(self, actions):
         """
         Actions are w and v velocities of the allies robots
         """
         # if False:
         for robot in range(self.num_allies):
-            self.lin_and_ang_speed[robot] = (action[robot][0]*CORRECTION_FATOR_METER_TO_CM, action[robot][1])
+            self.lin_and_ang_speed[robot] = (actions[robot][0]*CORRECTION_FATOR_METER_TO_CM, actions[robot][1])
 
         # we use 4 loops to give a time to the simulator reach the desired velocit. Because
         # It doesn't happen imediately

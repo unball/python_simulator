@@ -10,8 +10,9 @@
 """
 
 # %% [code]
-# Install necessary dependences
-import os
+# --> Uncomment the lines bellow to use the simulator in Kaggle
+
+# import os
 # try:
 #     os.system('pip install pygame')
 #     os.system('pip install box2d-py')
@@ -19,7 +20,7 @@ import os
 # except:
 #     pass
 
-# # Necessary for make main script import simulator
+## Necessary to make main script import simulator
 # try:
 #     from distutils.dir_util import copy_tree
 
@@ -30,13 +31,6 @@ import os
 # except:
 #     pass
 # %% [code]
-
-
-import threading
-import time
-
-
-
 
 from field import *
 
@@ -58,11 +52,11 @@ def game():
                     # To improve the time simulation find a method to improve the MAIN LOOP bellow, such as
                     # run the simulation without graphics, use a GPU or parallel processing 
 
+    # To use Field in kaggle change render to False and Cloud to True
     # Field is the enviroment and into there you'll find all necessary methods as reset, step, render and close.
     env = Field(num_allies=2, num_opponents=2, team_color='blue', allied_field_side='left', render=True, cloud=False)
 
-    # Main Loop
-    for episode in range(MAX_EPISODES):
+    for _ in range(MAX_EPISODES):
         state = env.reset_random_init_pos()
         print(state, end='\n\n')
         env.keep_running = True
@@ -79,7 +73,7 @@ def game():
             # print(next_state)
             print(reward)
             # print(done)
-            # state = next_state
+            state = next_state
 
             if done: break
 

@@ -17,7 +17,7 @@ pip3 install -r requirements.txt
 There is a script inside the python_simulator folder that contains an example called example.py explained how to run the simulator
 
 ## Running the simulator with Kaggle ##
-To run the python simulator using a clould kernel like [kaggle](https://www.kaggle.com/), follow the above instructions:
+To run the python simulator using a clould kernel like [kaggle](https://www.kaggle.com/), follow the bellow instructions:
 - Click on '+ Add data' on the right side of the screen;
 - Choose 'Your Datasets' as your main filter;
 - Click on 'Upload' and choose Github mode as the way to make the upload;
