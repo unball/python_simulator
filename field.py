@@ -71,7 +71,7 @@ class Field(PygameFramework):
         self.robots_allies    = ''
 
         self.max_v = 200 # cm/s
-        self.max_w = 15*math.pi
+        self.max_w = 10*2*math.pi
 
         self.action_size = self.num_allies*2 # num_allies * v,w
         self.state_size = ''
