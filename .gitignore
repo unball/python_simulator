@@ -8,6 +8,7 @@ __pycache__/
 
 # Neural Network - UnBall IA
 main.py
+main*.py
 Models/*
 
 # Distribution / packaging
