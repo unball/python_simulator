@@ -18,6 +18,7 @@ import numpy as np
 from constants import *
 from objects_on_field.objects import *
 from pygame_framework.framework import *
+import time
 
 import os
 
@@ -168,6 +169,7 @@ class Field(PygameFramework):
         places = KDTree()
         places.insert(ball_pos)
 
+        self.BeginningEpisode = time.time()
         for i in range(self.num_allies):
             pos = [x(), y()]
             while places.get_nearest(pos)[1] < min_dist:
@@ -229,18 +231,19 @@ class Field(PygameFramework):
         for i in range(self.num_allies):
             return_dict['allie'][i] = {'pos_xy': np.array([pos_x_allies[i], pos_y_allies[i]]), 
                                         'theta': theta_allies[i], 
-                                        'v': np.linalg.norm((v_allies[i][0],v_allies[i][1])),
+                                        'v': np.array([v_allies[i][0],v_allies[i][1]]),
                                         'w': w_allies[i]}
 
         for i in range(self.num_opponents):
             return_dict['opponent'][i] = {'pos_xy': np.array([pos_x_opponents[i], pos_y_opponents[i]]), 
                                         'theta': theta_opponents[i], 
-                                        'v': np.linalg.norm((v_opponents[i][0],v_opponents[i][1])),
+                                        'v': np.array([v_opponents[i][0],v_opponents[i][1]]),
                                         'w': w_opponents[i]}
         
         return_dict['ball'] = {'pos_xy':np.array([self.ball.body.position[0]*CORRECTION_FACTOR_CM_TO_METER, 
                                         self.ball.body.position[1]*CORRECTION_FACTOR_CM_TO_METER]), 
-                                'v': np.linalg.norm(self.ball.body.linearVelocity)*CORRECTION_FACTOR_CM_TO_METER}
+                                'v': np.array([self.ball.body.linearVelocity[0]*CORRECTION_FACTOR_CM_TO_METER,
+                                            self.ball.body.linearVelocity[1]*CORRECTION_FACTOR_CM_TO_METER])}
                                         
         return return_dict
 
@@ -251,7 +254,28 @@ class Field(PygameFramework):
         """
         Actions are w and v velocities of the allies robots
         """
-        # if False:
+        timeOutSpin = 40*TIME_STEP
+        if time.time() - self.BeginningEpisode > 40*TIME_STEP:
+            if not self.robots_allies[0].isAlive() and not self.robots_allies[0].spin:
+                if time.time() - self.robots_allies[0].lastSpin > 80*TIME_STEP:
+                    self.robots_allies[0].lastSpin = time.time()
+                    self.robots_allies[0].spin = True
+                    # print('Spin TRue')
+
+            # print(self.robots_allies[0].body.linearVelocity)
+
+            if self.robots_allies[0].spin == True:
+                if time.time() - self.robots_allies[0].lastSpin < timeOutSpin:
+                    actions[0][1] = 2
+                    if not self.robots_allies[0].dir_changed:
+                        actions[0][0] *= -1
+                        self.robots_allies[0].dir_changed = True
+                    # self.robots_allies[0].body.angle *= -1
+                else: 
+                    self.robots_allies[0].dir_changed = False
+                    self.robots_allies[0].spin = False
+                    # print('Spin False')
+
         for robot in range(self.num_allies):
             self.lin_and_ang_speed[robot] = (actions[robot][0]*self.max_v, actions[robot][1]*self.max_w)
 
@@ -285,6 +309,8 @@ class Field(PygameFramework):
             move_reward = self.__move_reward()
             # Calculate Energy penalty
             energy_penalty = self.__energy_penalty()
+            # Calculate allignment robotball ballgoal
+            proj_robotball_ballgoal = self.__robotball_ballgoal()
 
             reward = w_move * move_reward + w_ball_grad * grad_ball_potential + \
                         w_energy * energy_penalty 
@@ -351,7 +377,6 @@ class Field(PygameFramework):
         if self.render:
             for x in range(self.num_allies):
                 
-                
                 self.robots_allies[x].update_colors()
             
             for x in range(self.num_opponents):
@@ -406,6 +431,26 @@ class Field(PygameFramework):
 
         move_reward = np.clip(move_reward / 0.4, -5.0, 5.0)
         return move_reward
+
+    def __robotball_ballgoal(self):
+        '''Calculate Robot and ball Move to goal reward
+        Cosine between the robotball vel vector and the vector ball -> goal.
+        This indicates rather the robot and ball is moving towards the goal or not.
+        '''
+
+        # ball = np.array([self.ball.body.position[0]*CORRECTION_FACTOR_CM_TO_METER, self.ball.body.position[1]*CORRECTION_FACTOR_CM_TO_METER])
+        # robot = np.array([self.robots_allies[0].body.position[0]*CORRECTION_FACTOR_CM_TO_METER,
+        #                   self.robots_allies[0].body.position[1]*CORRECTION_FACTOR_CM_TO_METER])
+        # robot_vel = np.array([math.cos(self.robots_allies[0].body.angle),
+        #                       math.sin(self.robots_allies[0].body.angle)])
+        # robot_ball = ball - robot
+        # robot_ball = robot_ball/np.linalg.norm(robot_ball)
+
+        # move_reward = np.dot(robot_ball, robot_vel)
+
+        # move_reward = np.clip(move_reward / 0.4, -5.0, 5.0)
+        # return move_reward
+        return 0
 
     def __energy_penalty(self):
         '''Calculates the energy penalty'''
