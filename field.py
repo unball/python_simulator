@@ -155,6 +155,7 @@ class Field(PygameFramework):
         def theta(): return random.uniform(0, 2*math.pi)
 
         self.world.gravity = (0, 0)
+        self.init_time_episode = time.time()
 
         self.lin_and_ang_speed = [(0,0) for _ in range(self.num_allies + self.num_opponents)]
 
@@ -302,6 +303,7 @@ class Field(PygameFramework):
             w_move = 0.2
             w_ball_grad = 0.8
             w_energy = 2e-4
+            w_time = 2e-4
 
             # Calculate ball potential
             grad_ball_potential = self.__ball_grad()
@@ -312,8 +314,8 @@ class Field(PygameFramework):
             # Calculate allignment robotball ballgoal
             proj_robotball_ballgoal = self.__robotball_ballgoal()
 
-            reward = w_move * move_reward + w_ball_grad * grad_ball_potential + \
-                        w_energy * energy_penalty 
+            reward = (1/(1+(w_time*(time.time() - self.init_time_episode))))*(w_move * move_reward + w_ball_grad * grad_ball_potential + \
+                        w_energy * energy_penalty) 
             
         return reward
 
