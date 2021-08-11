@@ -69,7 +69,7 @@ def game():
         # while env.keep_running and steps_game < MAX_STEPS_ONE_GAME: 
         while env.keep_running: 
 
-            next_state, reward, done = env.step([(0,3.14) for _ in range(6)])
+            next_state, reward, done = env.step([(0,0.5) for _ in range(6)])
             # print(next_state)
             print(reward)
             # print(done)

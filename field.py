@@ -266,9 +266,9 @@ class Field(PygameFramework):
 
             if self.robots_allies[0].spin == True:
                 if time.time() - self.robots_allies[0].lastSpin < timeOutSpin:
-                    actions[0][1] = 2
+                    actions[0] = (actions[0][0], 2)
                     if not self.robots_allies[0].dir_changed:
-                        actions[0][0] *= -1
+                        actions[0] = (-actions[0][0], actions[0][1])
                         self.robots_allies[0].dir_changed = True
                     # self.robots_allies[0].body.angle *= -1
                 else: 
