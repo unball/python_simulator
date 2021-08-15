@@ -158,7 +158,7 @@ class Robot(PhysicsRobot):
         self.y_predefined = y_predefined
         self.spin = False
         self.dir_changed = False
-        self.lastSpin = 0
+        self.last_step_spin = 0
         if self.y_predefined:
             self.body = world.CreateDynamicBody(position=(start_position[0], Robot.start_position[start_position[1]][1]))
         else:
@@ -188,9 +188,8 @@ class Robot(PhysicsRobot):
         super(Robot, self).__init__(self.body)
 
     def isAlive(self):
-        if abs(np.linalg.norm(self.body.linearVelocity)) < .2:
+        if abs(np.linalg.norm(self.body.linearVelocity)) < .2 and abs(np.linalg.norm(self.body.angularVelocity)) < 2:
             return False
-            print('Not Alive')
         
         return True
 

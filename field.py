@@ -155,6 +155,8 @@ class Field(PygameFramework):
         def theta(): return random.uniform(0, 2*math.pi)
 
         self.world.gravity = (0, 0)
+        self.step_episode = 0
+
         self.init_time_episode = time.time()
 
         self.lin_and_ang_speed = [(0,0) for _ in range(self.num_allies + self.num_opponents)]
@@ -170,7 +172,6 @@ class Field(PygameFramework):
         places = KDTree()
         places.insert(ball_pos)
 
-        self.BeginningEpisode = time.time()
         for i in range(self.num_allies):
             pos = [x(), y()]
             while places.get_nearest(pos)[1] < min_dist:
@@ -255,19 +256,19 @@ class Field(PygameFramework):
         """
         Actions are w and v velocities of the allies robots
         """
-        timeOutSpin = 40*TIME_STEP
-        if time.time() - self.BeginningEpisode > 40*TIME_STEP:
+        stepOutSpin = 4
+        if self.step_episode > 12:
             if not self.robots_allies[0].isAlive() and not self.robots_allies[0].spin:
-                if time.time() - self.robots_allies[0].lastSpin > 80*TIME_STEP:
-                    self.robots_allies[0].lastSpin = time.time()
+                if self.step_episode - self.robots_allies[0].last_step_spin > 8:
+                    self.robots_allies[0].last_step_spin = self.step_episode
                     self.robots_allies[0].spin = True
                     # print('Spin TRue')
 
             # print(self.robots_allies[0].body.linearVelocity)
 
             if self.robots_allies[0].spin == True:
-                if time.time() - self.robots_allies[0].lastSpin < timeOutSpin:
-                    actions[0] = (actions[0][0], 2)
+                if self.step_episode - self.robots_allies[0].last_step_spin < stepOutSpin:
+                    actions[0] = (actions[0][0], 1.5)
                     if not self.robots_allies[0].dir_changed:
                         actions[0] = (-actions[0][0], actions[0][1])
                         self.robots_allies[0].dir_changed = True
@@ -285,6 +286,8 @@ class Field(PygameFramework):
         for _ in range(4):
             super(Field, self).run()
         
+        self.step_episode += 1
+
         return (self.next_step(), self.reward(), self.done())
     
     def reward(self):
@@ -303,7 +306,7 @@ class Field(PygameFramework):
             w_move = 0.2
             w_ball_grad = 0.8
             w_energy = 2e-4
-            w_time = 2e-4
+            w_time = 2e-2
 
             # Calculate ball potential
             grad_ball_potential = self.__ball_grad()
