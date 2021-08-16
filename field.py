@@ -256,27 +256,24 @@ class Field(PygameFramework):
         """
         Actions are w and v velocities of the allies robots
         """
-        stepOutSpin = 4
-        if self.step_episode > 12:
-            if not self.robots_allies[0].isAlive() and not self.robots_allies[0].spin:
-                if self.step_episode - self.robots_allies[0].last_step_spin > 8:
-                    self.robots_allies[0].last_step_spin = self.step_episode
-                    self.robots_allies[0].spin = True
-                    # print('Spin TRue')
 
-            # print(self.robots_allies[0].body.linearVelocity)
+        # SPIN 
+        # stepOutSpin = 4
+        # if self.step_episode > 12:
+        #     if not self.robots_allies[0].isAlive() and not self.robots_allies[0].spin:
+        #         if self.step_episode - self.robots_allies[0].last_step_spin > 8:
+        #             self.robots_allies[0].last_step_spin = self.step_episode
+        #             self.robots_allies[0].spin = True
 
-            if self.robots_allies[0].spin == True:
-                if self.step_episode - self.robots_allies[0].last_step_spin < stepOutSpin:
-                    actions[0] = (actions[0][0], 1.5)
-                    if not self.robots_allies[0].dir_changed:
-                        actions[0] = (-actions[0][0], actions[0][1])
-                        self.robots_allies[0].dir_changed = True
-                    # self.robots_allies[0].body.angle *= -1
-                else: 
-                    self.robots_allies[0].dir_changed = False
-                    self.robots_allies[0].spin = False
-                    # print('Spin False')
+        #     if self.robots_allies[0].spin == True:
+        #         if self.step_episode - self.robots_allies[0].last_step_spin < stepOutSpin:
+        #             actions[0] = (actions[0][0], 1.5)
+        #             if not self.robots_allies[0].dir_changed:
+        #                 actions[0] = (-actions[0][0], actions[0][1])
+        #                 self.robots_allies[0].dir_changed = True
+        #         else: 
+        #             self.robots_allies[0].dir_changed = False
+        #             self.robots_allies[0].spin = False
 
         for robot in range(self.num_allies):
             self.lin_and_ang_speed[robot] = (actions[robot][0]*self.max_v, actions[robot][1]*self.max_w)
