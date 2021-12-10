@@ -10,14 +10,14 @@
 
 
 from numpy.lib.function_base import place
-from kdtree import KDTree
+from .kdtree import KDTree
 import sys
 import math
 import random
 import numpy as np
-from constants import *
-from objects_on_field.objects import *
-from pygame_framework.framework import *
+from .constants import *
+from .objects_on_field.objects import *
+from .pygame_framework.framework import *
 import time
 
 import os
