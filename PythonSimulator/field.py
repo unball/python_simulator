@@ -22,7 +22,7 @@ import time
 
 import os
 
-class Field(PygameFramework):
+class Env(PygameFramework):
     """
     num_allies = from 0 to 5
     num_opponents = from 0 to 5

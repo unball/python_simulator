@@ -52,9 +52,9 @@ def game():
                     # To improve the time simulation find a method to improve the MAIN LOOP bellow, such as
                     # run the simulation without graphics, use a GPU or parallel processing 
 
-    # To use Field in kaggle change render to False and Cloud to True
-    # Field is the enviroment and into there you'll find all necessary methods as reset, step, render and close.
-    env = Field(num_allies=2, num_opponents=2, team_color='blue', allied_field_side='left', render=True, cloud=False)
+    # To use Env in kaggle change render to False and Cloud to True
+    # Env is the enviroment and into there you'll find all necessary methods as reset, step, render and close.
+    env = Env(num_allies=2, num_opponents=2, team_color='blue', allied_field_side='left', render=True, cloud=False)
 
     for _ in range(MAX_EPISODES):
         state = env.reset_random_init_pos()

@@ -35,7 +35,7 @@ Mouse:
 from __future__ import (print_function, absolute_import, division)
 import sys
 import warnings
-from constants import *
+from ...constants import *
 from Box2D import (b2Color, b2PolygonShape)
 # import rospy
 
@@ -54,8 +54,8 @@ import pygame
 from pygame.locals import (QUIT, KEYDOWN, KEYUP, MOUSEBUTTONDOWN,
                            MOUSEBUTTONUP, MOUSEMOTION, KMOD_LSHIFT)
 
-from pygame_framework.framework import (FrameworkBase, Keys)
-from pygame_framework.settings import fwSettings
+from ..framework import (FrameworkBase, Keys)
+from ..settings import fwSettings
 from Box2D import (b2DrawExtended, b2Vec2)
 
 class PygameDraw(b2DrawExtended):

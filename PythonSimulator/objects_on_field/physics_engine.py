@@ -7,7 +7,7 @@
 
 
 import math as m
-from constants import *
+from ..constants import *
 
 class PhysicsBall(object):
 
