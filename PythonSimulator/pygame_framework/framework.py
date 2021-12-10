@@ -419,6 +419,6 @@ class FrameworkBase(b2ContactListener):
 # framework, then your file should be 'backends/foobar_framework.py' and you
 # should have a class 'FoobarFramework' that subclasses FrameworkBase. Ensure
 # proper capitalization for portability.
-from . import backends
+# from . import backends
 
 from .backends.pygame_framework import PygameFramework
