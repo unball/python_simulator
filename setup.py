@@ -9,7 +9,7 @@ setup(
     author="Hiago dos Santos",
     author_email="hiagop22@gmail.com",
     url="https://unball.github.io/",
-    packages=["PythonSimulator"],
+    packages=["PythonSimulator", "PythonSimulator.field.Field"],
     install_requires=[
         "box2d>=2.3.10",
         "pygame>=2.0.0",
