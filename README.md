@@ -6,11 +6,11 @@ Simulator is a open-source executable made with python language to simulate the 
 
 ## Dependencies ##
 
-To install the dependecies, run
+To install the simulator, run
 
 >Ubuntu:    
 ```
-pip3 install -r requirements.txt
+pip install git+https://github.com/unball/python_simulator@master
 ```
 
 ## Example ## 
