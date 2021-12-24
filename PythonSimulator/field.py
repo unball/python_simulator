@@ -250,7 +250,7 @@ class Env(PygameFramework):
         return return_dict
 
     def close(self):
-        super(Field, self).close()
+        super(Env, self).close()
 
     def step(self, actions):
         """
@@ -281,7 +281,7 @@ class Env(PygameFramework):
         # we use 4 loops to give a time to the simulator reach the desired velocit. Because
         # It doesn't happen imediately
         for _ in range(4):
-            super(Field, self).run()
+            super(Env, self).run()
         
         self.step_episode += 1
 
@@ -326,10 +326,10 @@ class Env(PygameFramework):
         return True if abs(self.ball.body.position[0]*CORRECTION_FACTOR_CM_TO_METER) > abs(self.x_goal_allied) else False
         
     def Keyboard(self, key):
-        super(Field, self).Keyboard(key)
+        super(Env, self).Keyboard(key)
 
     def KeyboardUp(self, key):
-        super(Field, self).KeyboardUp(key)
+        super(Env, self).KeyboardUp(key)
 
     def update_phisics(self, settings):
         
@@ -374,7 +374,7 @@ class Env(PygameFramework):
         
         self.update_phisics(settings)
         
-        super(Field, self).Step(settings)
+        super(Env, self).Step(settings)
         
         if self.render:
             for x in range(self.num_allies):
