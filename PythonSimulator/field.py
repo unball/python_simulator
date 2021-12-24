@@ -280,8 +280,9 @@ class Env(PygameFramework):
 
         # we use 4 loops to give a time to the simulator reach the desired velocit. Because
         # It doesn't happen imediately
-        for _ in range(4):
-            super(Env, self).run()
+#         for _ in range(4):
+#             super(Env, self).run()
+        super(Env, self).run()
         
         self.step_episode += 1
 
