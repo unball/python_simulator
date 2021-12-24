@@ -44,7 +44,7 @@ class Env(PygameFramework):
     name = "Python simulator"
 
     def __init__(self, num_allies=3, num_opponents=3, team_color='blue', allied_field_side='left', 
-                render=False, cloud=False):
+                render=False, cloud=False, max_steps_episode=-1):
 
         # Objects on field 
         self.num_allies = num_allies
@@ -52,6 +52,8 @@ class Env(PygameFramework):
 
         self.render = render
         self.cloud = cloud  # Tell us if we're running our code in a kernel cloud
+        self.max_steps_episode = max_steps_episode
+        self.step_episode = 0
 
         if team_color == 'blue': 
             self.team_color = 0
@@ -324,6 +326,10 @@ class Env(PygameFramework):
         """
         Return True if ball center of mass enter inside the goal
         """
+        
+        if self.max_steps_episode > 0 and self.step_episode > self.max_steps_episode:
+            return True
+            
         return True if abs(self.ball.body.position[0]*CORRECTION_FACTOR_CM_TO_METER) > abs(self.x_goal_allied) else False
         
     def Keyboard(self, key):
