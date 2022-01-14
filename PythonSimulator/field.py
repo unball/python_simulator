@@ -168,7 +168,7 @@ class Env(PygameFramework):
         self.ground = Ground(self.world)
         self.walls = Walls(self.world, BLUE)
         ball_pos = [x(), y()]
-        self.ball = Ball(self.world, BLUE, position=ball_pos)
+        self.ball = Ball(self.world, BLUE, position=ball_pos, random_impulse=self.random_impulse_ball2goal)
 
         init_pos = [ball_pos]
 

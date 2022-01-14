@@ -25,18 +25,17 @@ class Ball(PhysicsBall):
         self.body.mass = MASS_BALL
         self.body.bullet = True
         self.color = color
+        self.random_impulse = random_impulse
+
         super(Ball, self).__init__(self.body)
 
-        self.random_impulse = random_impulse
     def update(self):
         self.update_friction()
-
-        # if self.random_impulse and np.random.rand() < 0.2:
-        #     ball2opponent=True
-        #     if np.random.rand() < 0.4:
-        #         ball2opponent=False
-            # self.apply_random_impulse(ball2opponent)
-        self.apply_random_impulse()
+        if self.random_impulse and np.random.rand() < 0.2:
+            ball2opponent=True
+            if np.random.rand() < 0.45:
+                ball2opponent=False
+            self.apply_random_impulse(ball2opponent)
     
 class Walls(object):
     """

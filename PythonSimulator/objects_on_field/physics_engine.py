@@ -14,24 +14,28 @@ class PhysicsBall(object):
     def __init__(self, body):
         self.body = body
 
-        self.desired_vel = 20
+        self.desired_vel = 5
 
     def update_friction(self):
         self.body.linearDamping = 0.3
         self.body.angularDamping = 0.0002
 
     def apply_random_impulse(self, ball2opponent=True):
-        ball2opponent_goal = (self.body.position - OPPONENT_GOAL).Normalize()
-        ball2ally_goal = (self.body.position - ALLY_GOAL).Normalize()
+        
+        ball2opponent_goal = (OPPONENT_GOAL - self.body.position)
+        ball2opponent_goal = ball2opponent_goal/m.sqrt(ball2opponent_goal.dot(ball2opponent_goal))
+        
+        ball2ally_goal = (ALLY_GOAL - self.body.position)
+        ball2ally_goal = ball2ally_goal/m.sqrt(ball2ally_goal.dot(ball2ally_goal))
 
-        delta_vel = self.desired_vel - self.body.linearVelocity
+        delta_vel = self.desired_vel - m.sqrt(self.body.linearVelocity.dot(self.body.linearVelocity))
         desired_inpulse = 0.5 * self.body.mass * delta_vel
         
         if ball2opponent:
-            self.body.ApplyLinearImpulse(desired_inpulse * ball2ally_goal,
+            self.body.ApplyLinearImpulse(desired_inpulse * ball2opponent_goal,
                              self.body.worldCenter, True)
         else:
-            self.body.ApplyLinearImpulse(desired_inpulse * ball2opponent_goal,
+            self.body.ApplyLinearImpulse(desired_inpulse * ball2ally_goal,
                              self.body.worldCenter, True)
 
     #           right_normal = body.GetWorldVector((0, 1))
@@ -78,7 +82,7 @@ class PhysicsRobot(object):
                              self.body.worldCenter, True)
 
         impulse = -self.lateral_velocity * self.body.mass
-        
+
         self.body.ApplyLinearImpulse(self.current_traction * impulse,
                                      self.body.worldCenter, True)
 
