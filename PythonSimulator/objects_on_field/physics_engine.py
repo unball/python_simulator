@@ -14,13 +14,37 @@ class PhysicsBall(object):
     def __init__(self, body):
         self.body = body
 
+        self.desired_vel = 10
     def update_friction(self):
         self.body.linearDamping = 0.3
         self.body.angularDamping = 0.0002
 
-class PhysicsRobot(object):
+    def apply_random_impulse(self, ball2opponent=True):
+        ball2opponent_goal = (self.body.position - OPPONENT_GOAL).Normalize()
+        ball2ally_goal = (self.body.position - ALLY_GOAL).Normalize()
 
-    # def __init__(self, robot, position):
+        delta_vel = self.body.linearVelocity - self.desired_vel
+        desired_inpulse = 0.5 * self.body.mass * delta_vel
+        
+        if ball2opponent:
+            self.body.ApplyLinearImpulse(desired_inpulse * ball2ally_goal,
+                             self.body.worldCenter, True)
+        else:
+            self.body.ApplyLinearImpulse(desired_inpulse * ball2opponent_goal,
+                             self.body.worldCenter, True)
+
+    #           right_normal = body.GetWorldVector((0, 1))
+    #     return right_normal.dot(body.linearVelocity) * right_normal
+
+    # def update_friction(self):
+    #     aimp = 0.1 * self.current_traction * \
+    #         self.body.inertia * -self.body.angularVelocity
+    #     self.body.ApplyAngularImpulse(aimp, True)
+
+    #     current_forward_normal = self.forward_velocity
+    #     current_forward_speed = current_forward_normal.Normalize()
+
+class PhysicsRobot(object):
     def __init__(self, robot):
 
         self.body = robot
@@ -61,7 +85,6 @@ class PhysicsRobot(object):
 
         # find the current speed in the forward direction
         current_forward_normal = self.body.GetWorldVector((1, 0))
-        # print(current_forward_normal)
         current_speed = self.forward_velocity.dot(current_forward_normal)
 
         # apply necessary force

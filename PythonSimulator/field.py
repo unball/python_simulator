@@ -44,7 +44,9 @@ class Env(PygameFramework):
     name = "Python simulator"
 
     def __init__(self, num_allies=3, num_opponents=3, team_color='blue', allied_field_side='left', 
-                render=False, cloud=False, max_steps_episode=-1):
+                render=False, cloud=False, max_steps_episode=-1, random_impulse_ball2goal=False):
+
+        self.random_impulse_ball2goal = random_impulse_ball2goal
 
         # Objects on field 
         self.num_allies = num_allies
@@ -103,7 +105,7 @@ class Env(PygameFramework):
 
         self.ground = Ground(self.world)
         self.walls = Walls(self.world, BLUE)
-        self.ball = Ball(self.world, BLUE)
+        self.ball = Ball(self.world, BLUE, random_impulse=self.random_impulse_ball2goal)
         
         # ------------------ Initial Coordinates ------------------
         # left
@@ -224,8 +226,6 @@ class Env(PygameFramework):
         # Theta angles
         theta_allies = [self.robots_allies[i].body.angle for i in range(self.num_allies)]
         theta_opponents = [self.robots_opponents[i].body.angle for i in range(self.num_opponents)]
-
-        # return_array = np.array(return_list)
         
         # Numpy creates an array with zero dimension, vector wich is seen as a scalar. So,
         # to create an array wich 1 row of dimension use the bellow command
@@ -259,32 +259,10 @@ class Env(PygameFramework):
         Actions are w and v velocities of the allies robots
         """
 
-        # SPIN 
-        # stepOutSpin = 4
-        # if self.step_episode > 12:
-        #     if not self.robots_allies[0].isAlive() and not self.robots_allies[0].spin:
-        #         if self.step_episode - self.robots_allies[0].last_step_spin > 8:
-        #             self.robots_allies[0].last_step_spin = self.step_episode
-        #             self.robots_allies[0].spin = True
-
-        #     if self.robots_allies[0].spin == True:
-        #         if self.step_episode - self.robots_allies[0].last_step_spin < stepOutSpin:
-        #             actions[0] = (actions[0][0], 1.5)
-        #             if not self.robots_allies[0].dir_changed:
-        #                 actions[0] = (-actions[0][0], actions[0][1])
-        #                 self.robots_allies[0].dir_changed = True
-        #         else: 
-        #             self.robots_allies[0].dir_changed = False
-        #             self.robots_allies[0].spin = False
-
         for robot in range(self.num_allies):
             self.lin_and_ang_speed[robot] = (np.clip(actions[robot][0]*CORRECTION_FATOR_METER_TO_CM, -self.max_v, self.max_v), 
                                             np.clip(actions[robot][1], -self.max_w, self.max_w))
 
-        # we use 4 loops to give a time to the simulator reach the desired velocit. Because
-        # It doesn't happen imediately
-#         for _ in range(4):
-#             super(Env, self).run()
         super(Env, self).run()
         
         self.step_episode += 1

@@ -14,7 +14,7 @@ import numpy as np
     
 
 class Ball(PhysicsBall):
-    def __init__(self, world, color, density=1, position=(0, 0)):
+    def __init__(self, world, color, density=1, position=(0, 0), random_impulse=False):
         self.body = world.CreateDynamicBody(
             fixtures=b2FixtureDef(shape=b2CircleShape(radius=2.135), 
                                   friction=0.15,
@@ -27,8 +27,15 @@ class Ball(PhysicsBall):
         self.color = color
         super(Ball, self).__init__(self.body)
 
+        self.random_impulse = random_impulse
     def update(self):
         self.update_friction()
+
+        if self.random_impulse and np.random.random() < 0.2:
+            ball2opponent=True
+            if np.random.random() < 0.4:
+                ball2opponent=False
+            self.apply_random_impulse(ball2opponent)
     
 class Walls(object):
     """
@@ -120,18 +127,6 @@ class Ground(object):
             arrow = self.world.renderer.DrawPoint(self.world.renderer.to_screen((
                 v1_
             )),2, WHITE)
-            
-            # arrow = self.world.renderer.DrawSegment(
-            #     self.world.renderer.to_screen((
-            #         self.pos_fild[i] + np.dot(R, (self.pos_fild[i] - np.array([self.pos_fild[i][0]-(self.arrow_step/2),self.pos_fild[i][1]])))
-            #         self.pos_fild[i][0]-(self.arrow_step/2),self.pos_fild[i][1]
-            #         )),
-            #     self.world.renderer.to_screen((
-            #         self.pos_fild[i][0]+(self.arrow_step/2), self.pos_fild[i][1]
-            #         )) , WHITE)
-            # arrow = self.world.renderer.DrawPoint(self.world.renderer.to_screen((
-            #     self.pos_fild[i][0]+(self.arrow_step/2), self.pos_fild[i][1]
-            # )),2, WHITE)
 
 class Trajectory(object):
     def __init__(self, world, color, size):
@@ -184,7 +179,6 @@ class Robot(PhysicsRobot):
         self.color = YELLOW if color else BLUE
         self.num_robot = num_robot
 
-        # super(Robot, self).__init__(self.body, start_position)
         super(Robot, self).__init__(self.body)
 
     def isAlive(self):

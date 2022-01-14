@@ -1,9 +1,12 @@
 from Box2D import b2Color
+from Box2D import b2Vec2
 
 TARGET_FPS = 60.0
 TIME_STEP = 0.01 / TARGET_FPS 
 DRAW_GRAPHICS = True
 
+OPPONENT_GOAL = b2Vec2(75,0)
+ALLY_GOAL = b2Vec2(-75,0)
 ZOOM = 5.0                      
 FIELD_H = (174)  # (1) Height of the screen pygame with the Box2D 
 FIELD_W = (134)  # (2) Width of the screen pygame with the Box2D
