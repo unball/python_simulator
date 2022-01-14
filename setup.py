@@ -4,7 +4,7 @@ from setuptools import setup
 
 setup(
     name="PythonSimulator",
-    version="0.0.6",
+    version="0.0.7",
     description="UnBall-IA Simulação de campo.",
     author="Hiago dos Santos",
     author_email="hiagop22@gmail.com",

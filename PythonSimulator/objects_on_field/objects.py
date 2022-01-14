@@ -31,9 +31,9 @@ class Ball(PhysicsBall):
     def update(self):
         self.update_friction()
 
-        if self.random_impulse and np.random.random() < 0.2:
+        if self.random_impulse and np.random.rand() < 0.2:
             ball2opponent=True
-            if np.random.random() < 0.4:
+            if np.random.rand() < 0.4:
                 ball2opponent=False
             self.apply_random_impulse(ball2opponent)
     

@@ -14,7 +14,8 @@ class PhysicsBall(object):
     def __init__(self, body):
         self.body = body
 
-        self.desired_vel = 10
+        self.desired_vel = 20
+
     def update_friction(self):
         self.body.linearDamping = 0.3
         self.body.angularDamping = 0.0002
@@ -23,7 +24,7 @@ class PhysicsBall(object):
         ball2opponent_goal = (self.body.position - OPPONENT_GOAL).Normalize()
         ball2ally_goal = (self.body.position - ALLY_GOAL).Normalize()
 
-        delta_vel = self.body.linearVelocity - self.desired_vel
+        delta_vel = self.desired_vel - self.body.linearVelocity
         desired_inpulse = 0.5 * self.body.mass * delta_vel
         
         if ball2opponent:
