@@ -395,7 +395,7 @@ class Env(PygameFramework):
         if self.previous_ball_potential is not None:
             diff = ball_potential - self.previous_ball_potential
             grad_ball_potential = np.clip(diff * 3 / TIME_STEP,
-                                          -5.0, 5.0)
+                                          -1.0, 1.0)
 
         self.previous_ball_potential = ball_potential
 
@@ -410,14 +410,14 @@ class Env(PygameFramework):
         ball = np.array([self.ball.body.position[0]*CORRECTION_FACTOR_CM_TO_METER, self.ball.body.position[1]*CORRECTION_FACTOR_CM_TO_METER])
         robot = np.array([self.robots_allies[0].body.position[0]*CORRECTION_FACTOR_CM_TO_METER,
                           self.robots_allies[0].body.position[1]*CORRECTION_FACTOR_CM_TO_METER])
-        robot_vel = np.array([math.cos(self.robots_allies[0].body.angle),
-                              math.sin(self.robots_allies[0].body.angle)])
+        robot_vel = np.array([self.robots_allies[0].body.linearVelocity[0]*CORRECTION_FACTOR_CM_TO_METER,
+                            self.robots_allies[0].body.linearVelocity[1]*CORRECTION_FACTOR_CM_TO_METER])
         robot_ball = ball - robot
         robot_ball = robot_ball/np.linalg.norm(robot_ball)
 
         move_reward = np.dot(robot_ball, robot_vel)
 
-        move_reward = np.clip(move_reward / 0.4, -5.0, 5.0)
+        move_reward = np.clip(move_reward / 0.4, -1.0, 1.0)
         return move_reward
 
     def __robotball_ballgoal(self):
