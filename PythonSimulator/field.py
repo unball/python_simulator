@@ -285,7 +285,9 @@ class Env(PygameFramework):
             w_move = 0.2
             w_ball_grad = 0.8
             w_energy = 2e-4
-            w_time = 2e-2
+            w_time=0
+#             w_time = 2e-2
+
 
             # Calculate ball potential
             grad_ball_potential = self.__ball_grad()
