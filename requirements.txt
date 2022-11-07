@@ -1,5 +1,5 @@
 Box2D==2.3.2
 Box2D-kengz==2.3.3
-numpy==1.21.1
+numpy==1.22.0
 pkg_resources==0.0.0
 pygame==2.0.1
